@@ -3,26 +3,13 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sps
 
-from utils.functions import evaluate_algorithm, generate_submission_csv
+from utils.functions import evaluate_algorithm, generate_submission_csv, read_data
 from utils.random_recommender import RandomRecommender
-from utils.top_pop_recommender import TopPopRecommender, TopPopRecommender2, TopPopRecommenderRemoved
+from utils.top_pop_recommender import TopPopRecommender
 
 
 def __main__():
-    data_file_path = 'input_files/data_train.csv'
-    users_file_path = 'input_files/data_target_users_test.csv'
-    URM_all_dataframe = pd.read_csv(filepath_or_buffer=data_file_path,
-                                    sep=',',
-                                    engine='python')
-    URM_all_dataframe.columns = ['UserID', 'ItemID', 'Data']
-    print(URM_all_dataframe.head())
-
-    test_users = pd.read_csv(filepath_or_buffer=users_file_path,
-                             sep=',',
-                             engine='python')
-    test_users.columns = ['UserID']
-    print(test_users.head())
-    users_list = test_users['UserID'].values
+    URM_all_dataframe, users_list = read_data()
 
     print("Number of items\t {}, Number of users\t {}".format(len(URM_all_dataframe['ItemID'].unique()),
                                                               len(URM_all_dataframe['UserID'].unique())))
@@ -38,8 +25,6 @@ def __main__():
 
     URM_all_dataframe['UserID'] = URM_all_dataframe['UserID'].map(user_original_ID_to_index)
     URM_all_dataframe['ItemID'] = URM_all_dataframe['ItemID'].map(item_original_ID_to_index)
-
-    print(URM_all_dataframe.head())
 
     userID_unique = URM_all_dataframe['UserID'].unique()
     itemID_unique = URM_all_dataframe['ItemID'].unique()
@@ -64,11 +49,6 @@ def __main__():
     item_popularity = np.ediff1d(URM_all.tocsc().indptr)
     item_popularity = np.sort(item_popularity)
 
-    pyplot.plot(item_popularity, 'ro')
-    pyplot.ylabel('Num Interactions ')
-    pyplot.xlabel('Item Index Sorted by Popularity')
-    pyplot.show()
-
     ten_percent = int(n_items / 10)
 
     print("Average per-item interactions over the whole dataset {:.2f}\n".format(item_popularity.mean()))
@@ -82,33 +62,21 @@ def __main__():
     user_activity = np.ediff1d(URM_all.tocsr().indptr)
     user_activity = np.sort(user_activity)
 
-    pyplot.plot(user_activity, 'ro')
-    pyplot.ylabel('Num Interactions ')
-    pyplot.xlabel('User Index Sorted by Popularity')
-    pyplot.show()
+    URM_train = sps.load_npz("input_files/URM_train.npz")
+    URM_test = sps.load_npz("input_files/URM_test.npz")
 
-    train_test_split = 0.8
-    n_interactions = URM_all.nnz
-    train_mask = np.random.choice([True, False], n_interactions, p=[train_test_split, 1 - train_test_split])
-
-    URM_all = URM_all.tocoo()
-    URM_train = sps.csr_matrix((URM_all.data[train_mask], (URM_all.row[train_mask], URM_all.col[train_mask])))
-
-    test_mask = np.logical_not(train_mask)
-    URM_test = sps.csr_matrix((URM_all.data[test_mask], (URM_all.row[test_mask], URM_all.col[test_mask])))
-
-    random_recommender = RandomRecommender()
-    random_recommender.fit(URM_train)
+    top_pop_recommender = TopPopRecommender()
+    top_pop_recommender.fit(URM_train)
 
     recommendations = []
 
     for user_id in users_list:
-        recommendation = random_recommender.recommend(user_id, at=10)[0]
+        recommendation = top_pop_recommender.recommend(user_id, at=10)[0]
         recommendations.append(recommendation)
 
-    generate_submission_csv("output_files/random_submission.csv", recommendations)
+    generate_submission_csv("output_files/top_pop_submission.csv", recommendations)
 
-    evaluate_algorithm(URM_test, random_recommender, at=10)
+    evaluate_algorithm(URM_test, top_pop_recommender, at=10)
 
 
 if __name__ == '__main__':
