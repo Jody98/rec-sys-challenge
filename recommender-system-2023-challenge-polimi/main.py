@@ -5,6 +5,7 @@ import scipy.sparse as sps
 
 from utils.functions import evaluate_algorithm, generate_submission_csv
 from utils.random_recommender import RandomRecommender
+from utils.top_pop_recommender import TopPopRecommender, TopPopRecommender2, TopPopRecommenderRemoved
 
 
 def __main__():
