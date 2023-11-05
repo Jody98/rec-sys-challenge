@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sps
 
-from utils.functions import evaluate_algorithm
+from utils.functions import evaluate_algorithm, generate_submission_csv
 from utils.random_recommender import RandomRecommender
 
 
@@ -105,7 +105,7 @@ def __main__():
         recommendation = random_recommender.recommend(user_id, at=10)[0]
         recommendations.append(recommendation)
 
-    random_recommender.generate_submission_csv("output_files/submisson_random.csv", recommendations)
+    generate_submission_csv("output_files/random_submission.csv", recommendations)
 
     evaluate_algorithm(URM_test, random_recommender, at=10)
 

@@ -50,3 +50,11 @@ def evaluate_algorithm(URM_test, recommender_object, at=5):
     print("Recommender performance is: Precision = {:.4f}, Recall = {:.4f}, MAP = {:.4f}".format(cumulative_precision,
                                                                                                  cumulative_recall,
                                                                                                  MAP))
+
+
+def generate_submission_csv(filename, recommendations):
+    with open(filename, 'w') as f:
+        f.write("user_id,item_list\n")
+        for recommendation in recommendations:
+            f.write("{},{}\n".format(recommendation["user_id"],
+                                     " ".join(str(x) for x in recommendation["item_list"])))

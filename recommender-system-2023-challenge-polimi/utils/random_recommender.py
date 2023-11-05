@@ -10,10 +10,3 @@ class RandomRecommender(object):
         recommended_items = np.random.choice(self.n_items, at)
         recommendation = {"user_id": user_id, "item_list": recommended_items}
         return recommendation, recommended_items
-
-    def generate_submission_csv(self, filename, recommendations):
-        with open(filename, 'w') as f:
-            f.write("user_id,item_list\n")
-            for recommendation in recommendations:
-                f.write("{},{}\n".format(recommendation["user_id"],
-                                         " ".join(str(x) for x in recommendation["item_list"])))
