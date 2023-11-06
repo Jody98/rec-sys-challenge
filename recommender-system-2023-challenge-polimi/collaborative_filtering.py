@@ -4,7 +4,7 @@ from matplotlib import pyplot
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
 from Evaluation.Evaluator import EvaluatorHoldout
-from recommenders.collaborative_filtering_recommender import ItemKNNCFRecommender
+from recommenders.collaborative_filtering_recommender import ItemKNNCFRecommender, UserKNNCFRecommender
 from utils.functions import read_data, evaluate_algorithm, generate_submission_csv
 
 
@@ -22,7 +22,7 @@ def __main__():
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     recommender = ItemKNNCFRecommender(URM_train)
-    # il miglior fit è dato da topK=10 e shrink=10.0
+    # il miglior fit è dato da topK=10, shrink=10.0 e similarity='cosine' (default)
     recommender.fit(shrink=10.0, topK=10)
 
     recommendations = []
@@ -32,6 +32,20 @@ def __main__():
         recommendations.append(recommendation)
 
     generate_submission_csv("output_files/IBCF_submission.csv", recommendations)
+
+    evaluate_algorithm(URM_test, recommender, at=10)
+
+    recommender = UserKNNCFRecommender(URM_train)
+    # il miglior fit è dato da topK=10, shrink=10.0 e similarity='cosine' (default)
+    recommender.fit(shrink=10.0, topK=10)
+
+    recommendations = []
+
+    for user_id in users_list:
+        recommendation = recommender.recommend(user_id, at=10)[0]
+        recommendations.append(recommendation)
+
+    generate_submission_csv("output_files/UBCF_submission.csv", recommendations)
 
     evaluate_algorithm(URM_test, recommender, at=10)
 
