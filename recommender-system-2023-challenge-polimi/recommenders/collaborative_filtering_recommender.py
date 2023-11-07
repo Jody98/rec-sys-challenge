@@ -1,4 +1,6 @@
 import numpy as np
+from scipy.sparse import lil_matrix
+from sklearn.metrics.pairwise import cosine_similarity
 
 from Recommenders.Similarity.Compute_Similarity_Python import Compute_Similarity_Python
 
@@ -58,7 +60,7 @@ class UserKNNCFRecommender(object):
 
         if exclude_seen:
             scores = self.filter_seen(user_id, scores)
-            
+
         ranking = scores.argsort()[::-1]
         recommended_items = ranking[:at]
         recommendation = {"user_id": user_id, "item_list": recommended_items}

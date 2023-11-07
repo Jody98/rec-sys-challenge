@@ -1,5 +1,4 @@
 import scipy.sparse as sps
-from matplotlib import pyplot
 
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
@@ -23,7 +22,7 @@ def __main__():
 
     recommender = ItemKNNCFRecommender(URM_train)
     # il miglior fit è dato da topK=10, shrink=10.0 e similarity='cosine' (default)
-    recommender.fit(shrink=10.0, topK=10)
+    recommender.fit(shrink=10.0, topK=10, similarity='cosine')
 
     recommendations = []
 
