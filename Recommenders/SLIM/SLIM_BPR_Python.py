@@ -1,12 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on 28 June 2017
-Updated on 28 November 2020
-
-@author: Maurizio Ferrari Dacrema
-"""
-
 import time
 import numpy as np
 import scipy.sparse as sps
@@ -117,4 +108,27 @@ class SLIM_BPR_Python(BaseItemSimilarityMatrixRecommender):
                 neg_item_selected = True
 
         return user_id, pos_item_id, neg_item_id
+
+    def recommend_items_for_user(self, user_id, at=10):
+        user_interacted_items = self.URM_train.indices[
+                                self.URM_train.indptr[user_id]:self.URM_train.indptr[user_id + 1]]
+
+        # Inizializza un dizionario per tenere traccia dei punteggi di raccomandazione per ciascun item
+        item_scores = {}
+
+        for item_i in range(self.n_items):
+            if item_i not in user_interacted_items:
+                # Calcola il punteggio di raccomandazione per l'item non interagito
+                recommendation_score = np.sum(self.W_sparse[item_i, user_interacted_items])
+                item_scores[item_i] = recommendation_score
+
+        # Ordina gli item in base ai punteggi di raccomandazione in ordine decrescente
+        sorted_items = sorted(item_scores.items(), key=lambda x: x[1], reverse=True)
+
+        # Seleziona i primi num_items_to_recommend item come raccomandazioni per l'utente
+        recommended_items = [item_id for item_id, _ in sorted_items[:at]]
+        recommendation = {"user_id": user_id, "item_list": recommended_items}
+
+        return recommended_items, recommendation
+
 
