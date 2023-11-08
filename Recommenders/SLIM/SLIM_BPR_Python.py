@@ -113,22 +113,18 @@ class SLIM_BPR_Python(BaseItemSimilarityMatrixRecommender):
         user_interacted_items = self.URM_train.indices[
                                 self.URM_train.indptr[user_id]:self.URM_train.indptr[user_id + 1]]
 
-        # Inizializza un dizionario per tenere traccia dei punteggi di raccomandazione per ciascun item
-        item_scores = {}
+        is_interacted = np.zeros(self.n_items, dtype=bool)
+        is_interacted[user_interacted_items] = True
 
-        for item_i in range(self.n_items):
-            if item_i not in user_interacted_items:
-                # Calcola il punteggio di raccomandazione per l'item non interagito
-                recommendation_score = np.sum(self.W_sparse[item_i, user_interacted_items])
-                item_scores[item_i] = recommendation_score
+        item_scores = np.sum(self.W_sparse[:, user_interacted_items], axis=1)
+        item_scores = item_scores[~is_interacted]
 
-        # Ordina gli item in base ai punteggi di raccomandazione in ordine decrescente
-        sorted_items = sorted(item_scores.items(), key=lambda x: x[1], reverse=True)
+        item_scores = np.asarray(item_scores).ravel()
 
-        # Seleziona i primi num_items_to_recommend item come raccomandazioni per l'utente
-        recommended_items = [item_id for item_id, _ in sorted_items[:at]]
+        ranking = item_scores.argsort()[::-1]
+
+        recommended_items = ranking[:at]
+
         recommendation = {"user_id": user_id, "item_list": recommended_items}
 
         return recommended_items, recommendation
-
-

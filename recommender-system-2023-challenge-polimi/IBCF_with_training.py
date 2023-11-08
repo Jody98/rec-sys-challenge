@@ -40,13 +40,11 @@ def __main__():
     recommendations = []
 
     for user_id in users_list:
-        recommendation = recommender.recommend_items_for_user(user_id, at=10)[1]
+        recommendation = recommender.recommend(user_id, at=10)[1]
         recommendations.append(recommendation)
         print(user_id)
 
     generate_submission_csv("output_files/SLIM_BPR_Python_submission.csv", recommendations)
-
-    evaluate_algorithm(URM_test, recommender, at=10)
 
 
 if __name__ == '__main__':
