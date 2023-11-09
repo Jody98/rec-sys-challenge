@@ -4,18 +4,21 @@
 @author: Massimo Quadrana, Cesare Bernardis
 """
 
+import sys
+import time
 
 import numpy as np
 import scipy.sparse as sps
-from Recommenders.Recommender_utils import check_matrix
+from sklearn.exceptions import ConvergenceWarning
 from sklearn.linear_model import ElasticNet
+from sklearn.utils._testing import ignore_warnings
+from tqdm import tqdm
+
 from Recommenders.BaseSimilarityMatrixRecommender import BaseItemSimilarityMatrixRecommender
+from Recommenders.Recommender_utils import check_matrix
 from Recommenders.Similarity.Compute_Similarity_Python import Incremental_Similarity_Builder
 from Utils.seconds_to_biggest_unit import seconds_to_biggest_unit
-import time, sys
-from tqdm import tqdm
-from sklearn.utils._testing import ignore_warnings
-from sklearn.exceptions import ConvergenceWarning
+
 
 # os.environ["PYTHONWARNINGS"] = ('ignore::exceptions.ConvergenceWarning:sklearn.linear_model')
 # os.environ["PYTHONWARNINGS"] = ('ignore:Objective did not converge:ConvergenceWarning:')
@@ -37,18 +40,18 @@ class SLIMElasticNetRecommender(BaseItemSimilarityMatrixRecommender):
 
     RECOMMENDER_NAME = "SLIMElasticNetRecommender"
 
-    def __init__(self, URM_train, verbose = True):
-        super(SLIMElasticNetRecommender, self).__init__(URM_train, verbose = verbose)
+    def __init__(self, URM_train, verbose=True):
+        super(SLIMElasticNetRecommender, self).__init__(URM_train, verbose=verbose)
 
     @ignore_warnings(category=ConvergenceWarning)
-    def fit(self, l1_ratio=0.1, alpha = 1.0, positive_only=True, topK = 100):
+    def fit(self, l1_ratio=0.1, alpha=1.0, positive_only=True, topK=10):
 
-        assert l1_ratio>= 0 and l1_ratio<=1, "{}: l1_ratio must be between 0 and 1, provided value was {}".format(self.RECOMMENDER_NAME, l1_ratio)
+        assert l1_ratio >= 0 and l1_ratio <= 1, "{}: l1_ratio must be between 0 and 1, provided value was {}".format(
+            self.RECOMMENDER_NAME, l1_ratio)
 
         self.l1_ratio = l1_ratio
         self.positive_only = positive_only
         self.topK = topK
-
 
         # initialize the ElasticNet model
         self.model = ElasticNet(alpha=alpha,
@@ -65,7 +68,8 @@ class SLIMElasticNetRecommender(BaseItemSimilarityMatrixRecommender):
 
         n_items = URM_train.shape[1]
 
-        similarity_builder = Incremental_Similarity_Builder(self.n_items, initial_data_block=self.n_items*self.topK, dtype = np.float32)
+        similarity_builder = Incremental_Similarity_Builder(self.n_items, initial_data_block=self.n_items * self.topK,
+                                                            dtype=np.float32)
 
         start_time = time.time()
         start_time_printBatch = start_time
@@ -94,14 +98,15 @@ class SLIMElasticNetRecommender(BaseItemSimilarityMatrixRecommender):
             # Check if there are more data points than topK, if so, extract the set of K best values
             if len(nonzero_model_coef_value) > self.topK:
                 # Partition the data because this operation does not require to fully sort the data
-                relevant_items_partition = np.argpartition(-np.abs(nonzero_model_coef_value), self.topK-1, axis=0)[0:self.topK]
+                relevant_items_partition = np.argpartition(-np.abs(nonzero_model_coef_value), self.topK - 1, axis=0)[
+                                           0:self.topK]
                 nonzero_model_coef_index = nonzero_model_coef_index[relevant_items_partition]
                 nonzero_model_coef_value = nonzero_model_coef_value[relevant_items_partition]
 
             similarity_builder.add_data_lists(row_list_to_add=nonzero_model_coef_index,
-                                              col_list_to_add=np.ones(len(nonzero_model_coef_index), dtype = np.int) * currentItem,
+                                              col_list_to_add=np.ones(len(nonzero_model_coef_index),
+                                                                      dtype=np.int) * currentItem,
                                               data_list_to_add=nonzero_model_coef_value)
-
 
             # finally, replace the original values of the j-th column
             URM_train.data[start_pos:end_pos] = current_item_data_backup
@@ -109,14 +114,13 @@ class SLIMElasticNetRecommender(BaseItemSimilarityMatrixRecommender):
             elapsed_time = time.time() - start_time
             new_time_value, new_time_unit = seconds_to_biggest_unit(elapsed_time)
 
-
-            if time.time() - start_time_printBatch > 300 or currentItem == n_items-1:
+            if time.time() - start_time_printBatch > 300 or currentItem == n_items - 1:
                 self._print("Processed {} ({:4.1f}%) in {:.2f} {}. Items per second: {:.2f}".format(
-                    currentItem+1,
-                    100.0* float(currentItem+1)/n_items,
+                    currentItem + 1,
+                    100.0 * float(currentItem + 1) / n_items,
                     new_time_value,
                     new_time_unit,
-                    float(currentItem)/elapsed_time))
+                    float(currentItem) / elapsed_time))
 
                 sys.stdout.flush()
                 sys.stderr.flush()
@@ -124,7 +128,6 @@ class SLIMElasticNetRecommender(BaseItemSimilarityMatrixRecommender):
                 start_time_printBatch = time.time()
 
         self.W_sparse = similarity_builder.get_SparseMatrix()
-
 
 
 from multiprocessing import Pool, cpu_count, shared_memory
@@ -139,8 +142,8 @@ def create_shared_memory(a):
 
 
 @ignore_warnings(category=ConvergenceWarning)
-def _partial_fit(items, topK, alpha, l1_ratio, urm_shape, positive_only=True, shm_names=None, shm_shapes=None, shm_dtypes=None):
-
+def _partial_fit(items, topK, alpha, l1_ratio, urm_shape, positive_only=True, shm_names=None, shm_shapes=None,
+                 shm_dtypes=None):
     model = ElasticNet(
         alpha=alpha,
         l1_ratio=l1_ratio,
@@ -158,10 +161,10 @@ def _partial_fit(items, topK, alpha, l1_ratio, urm_shape, positive_only=True, sh
     data_shm = shared_memory.SharedMemory(name=shm_names[2], create=False)
 
     X_j = sps.csc_matrix((
-            np.ndarray(shm_shapes[2], dtype=shm_dtypes[2], buffer=data_shm.buf).copy(),
-            np.ndarray(shm_shapes[1], dtype=shm_dtypes[1], buffer=indices_shm.buf),
-            np.ndarray(shm_shapes[0], dtype=shm_dtypes[0], buffer=indptr_shm.buf),
-        ), shape=urm_shape)
+        np.ndarray(shm_shapes[2], dtype=shm_dtypes[2], buffer=data_shm.buf).copy(),
+        np.ndarray(shm_shapes[1], dtype=shm_dtypes[1], buffer=indices_shm.buf),
+        np.ndarray(shm_shapes[0], dtype=shm_dtypes[0], buffer=indptr_shm.buf),
+    ), shape=urm_shape)
 
     values, rows, cols = [], [], []
 
@@ -180,7 +183,7 @@ def _partial_fit(items, topK, alpha, l1_ratio, urm_shape, positive_only=True, sh
         # Check if there are more data points than topK, if so, extract the set of K best values
         if len(nonzero_model_coef_value) > topK:
             # Partition the data because this operation does not require to fully sort the data
-            relevant_items_partition = np.argpartition(-np.abs(nonzero_model_coef_value), topK-1, axis=0)[0:topK]
+            relevant_items_partition = np.argpartition(-np.abs(nonzero_model_coef_value), topK - 1, axis=0)[0:topK]
             nonzero_model_coef_index = nonzero_model_coef_index[relevant_items_partition]
             nonzero_model_coef_value = nonzero_model_coef_value[relevant_items_partition]
 
@@ -197,14 +200,12 @@ def _partial_fit(items, topK, alpha, l1_ratio, urm_shape, positive_only=True, sh
     return values, rows, cols
 
 
-
-
 class MultiThreadSLIM_SLIMElasticNetRecommender(SLIMElasticNetRecommender):
 
     def fit(self, alpha=1.0, l1_ratio=0.1, positive_only=True, topK=100,
-            verbose=True, workers=int(cpu_count()*0.3)):
+            verbose=True, workers=int(cpu_count() * 0.3)):
 
-        assert l1_ratio>= 0 and l1_ratio<=1, \
+        assert l1_ratio >= 0 and l1_ratio <= 1, \
             "ElasticNet: l1_ratio must be between 0 and 1, provided value was {}".format(l1_ratio)
 
         self.alpha = alpha
@@ -223,8 +224,10 @@ class MultiThreadSLIM_SLIMElasticNetRecommender(SLIMElasticNetRecommender):
         _pfit = partial(_partial_fit, topK=self.topK, alpha=self.alpha, urm_shape=self.URM_train.shape,
                         l1_ratio=self.l1_ratio, positive_only=self.positive_only,
                         shm_names=[indptr_shm.name, indices_shm.name, data_shm.name],
-                        shm_shapes=[self.URM_train.indptr.shape, self.URM_train.indices.shape, self.URM_train.data.shape],
-                        shm_dtypes=[self.URM_train.indptr.dtype, self.URM_train.indices.dtype, self.URM_train.data.dtype])
+                        shm_shapes=[self.URM_train.indptr.shape, self.URM_train.indices.shape,
+                                    self.URM_train.data.shape],
+                        shm_dtypes=[self.URM_train.indptr.dtype, self.URM_train.indices.dtype,
+                                    self.URM_train.data.dtype])
 
         with Pool(processes=self.workers) as pool:
 
