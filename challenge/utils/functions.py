@@ -24,7 +24,7 @@ def average_precision(recommended_items, relevant_items):
     return average_precision_score
 
 
-def evaluate_algorithm(URM_test, recommender_object, at=5):
+def evaluate_algorithm(URM_test, recommender_object, at=10):
     cumulative_precision = 0.0
     cumulative_recall = 0.0
     cumulative_AP = 0.0
@@ -74,9 +74,7 @@ def split(URM_all):
     return URM_train, URM_test
 
 
-def read_data():
-    data_file_path = 'input_files/data_train.csv'
-    users_file_path = 'input_files/data_target_users_test.csv'
+def read_data(data_file_path, users_file_path):
     URM_all_dataframe = pd.read_csv(filepath_or_buffer=data_file_path,
                                     sep=',',
                                     engine='python')

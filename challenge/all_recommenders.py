@@ -12,7 +12,9 @@ from Recommenders.Neural import MultVAERecommender
 
 
 def __main__():
-    URM_all_dataframe, users_list = read_data()
+    data_file_path = 'input_files/data_train.csv'
+    users_file_path = 'input_files/data_target_users_test.csv'
+    URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
     URM_all = sps.coo_matrix(
         (URM_all_dataframe['Data'].values, (URM_all_dataframe['UserID'].values, URM_all_dataframe['ItemID'].values)))
