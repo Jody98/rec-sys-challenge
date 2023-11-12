@@ -11,40 +11,33 @@ from Recommenders.SLIM import SLIM_BPR_Python
 
 
 def __main__():
-    URM_all_dataframe, users_list = read_data()
+    data_file_path = 'input_files/data_train.csv'
+    users_file_path = 'input_files/data_target_users_test.csv'
+    URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
     URM_all = sps.coo_matrix(
         (URM_all_dataframe['Data'].values, (URM_all_dataframe['UserID'].values, URM_all_dataframe['ItemID'].values)))
     URM_all = URM_all.tocsr()
 
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
-    URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_train, train_percentage=0.80)
 
-    recommender = ItemKNNCFRecommender(URM_train)
-    # il miglior fit è dato da topK=10, shrink=10.0 e similarity='cosine' (default)
-    recommender.fit(shrink=10.0, topK=10, similarity='cosine')
+    topk = [5, 10, 20, 50, 100, 200]
+    shrink = [0, 10, 20, 50, 100, 200, 500]
 
-    recommendations = []
+    for k in topk:
+        for s in shrink:
+            recommender = ItemKNNCFRecommender(URM_train)
+            recommender.fit(shrink=s, topK=k, similarity='cosine')
 
-    for user_id in users_list:
-        recommendation = recommender.recommend(user_id, at=10)[0]
-        recommendations.append(recommendation)
+            recommendations = []
 
-    generate_submission_csv("output_files/IBCF_submission.csv", recommendations)
+            for user_id in users_list:
+                recommendation = recommender.recommend(user_id, at=10)[0]
+                recommendations.append(recommendation)
 
-    evaluate_algorithm(URM_test, recommender, at=10)
-
-    recommender = SLIM_BPR_Python.SLIM_BPR_Python(URM_train)
-    recommender.fit()
-
-    recommendations = []
-
-    for user_id in users_list:
-        recommendation = recommender.recommend(user_id, at=10)[1]
-        recommendations.append(recommendation)
-        print(user_id)
-
-    generate_submission_csv("output_files/SLIM_BPR_Python_submission.csv", recommendations)
+            generate_submission_csv("output_files/IBCF_submission.csv", recommendations)
+            print("k: {}, s: {}".format(k, s))
+            evaluate_algorithm(URM_test, recommender, at=10)
 
 
 if __name__ == '__main__':
