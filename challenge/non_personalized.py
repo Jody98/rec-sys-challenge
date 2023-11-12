@@ -10,7 +10,9 @@ from recommenders.pure_SVD_recommender import SVDBasedRecommender
 
 
 def __main__():
-    URM_all_dataframe, users_list = read_data()
+    data_file_path = "input_files/data_train.csv"
+    user_file_path = "input_files/data_target_users_test.csv"
+    URM_all_dataframe, users_list = read_data(data_file_path, user_file_path)
 
     print("Number of items\t {}, Number of users\t {}".format(len(URM_all_dataframe['ItemID'].unique()),
                                                               len(URM_all_dataframe['UserID'].unique())))

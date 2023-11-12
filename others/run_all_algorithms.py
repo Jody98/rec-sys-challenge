@@ -1,16 +1,18 @@
+import os
+import traceback
 
-from Recommenders.Recommender_import_list import *
+import scipy.sparse as sps
 
-from Data_manager.Movielens.Movielens1MReader import Movielens1MReader
-from Data_manager.DataSplitter_leave_k_out import DataSplitter_leave_k_out
-from Recommenders.Incremental_Training_Early_Stopping import Incremental_Training_Early_Stopping
-from Recommenders.BaseCBFRecommender import BaseItemCBFRecommender, BaseUserCBFRecommender
+from Data_manager.split_functions.split_train_validation_random_holdout import \
+    split_train_in_two_percentage_global_sample
 from Evaluation.Evaluator import EvaluatorHoldout
-import traceback, os
+from Recommenders.BaseCBFRecommender import BaseItemCBFRecommender, BaseUserCBFRecommender
+from Recommenders.Incremental_Training_Early_Stopping import Incremental_Training_Early_Stopping
+from Recommenders.Recommender_import_list import *
+from challenge.utils import functions as f
 
 
 def _get_instance(recommender_class, URM_train, ICM_all, UCM_all):
-
     if issubclass(recommender_class, BaseItemCBFRecommender):
         recommender_object = recommender_class(URM_train, ICM_all)
     elif issubclass(recommender_class, BaseUserCBFRecommender):
@@ -20,44 +22,49 @@ def _get_instance(recommender_class, URM_train, ICM_all, UCM_all):
 
     return recommender_object
 
+
 if __name__ == '__main__':
+    data_file_path = '../challenge/input_files/data_train.csv'
+    users_file_path = '../challenge/input_files/data_target_users_test.csv'
 
+    URM_all_dataframe, users_list = f.read_data(data_file_path, users_file_path)
 
-    dataset_object = Movielens1MReader()
+    URM_all = sps.coo_matrix(
+        (URM_all_dataframe['Data'].values, (URM_all_dataframe['UserID'].values, URM_all_dataframe['ItemID'].values)))
+    URM_all = URM_all.tocsr()
 
-    dataSplitter = DataSplitter_leave_k_out(dataset_object, k_out_value=2)
+    URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
+    URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_train, train_percentage=0.80)
 
-    dataSplitter.load_data()
-    URM_train, URM_validation, URM_test = dataSplitter.get_holdout_split()
-    ICM_all = dataSplitter.get_loaded_ICM_dict()["ICM_genres"]
-    UCM_all = dataSplitter.get_loaded_UCM_dict()["UCM_all"]
+    ICM_all = None
+
+    UCM_all = None
 
     recommender_class_list = [
-        Random,
-        TopPop,
-        GlobalEffects,
-        SLIMElasticNetRecommender,
-        UserKNNCFRecommender,
-        IALSRecommender,
-        MatrixFactorization_BPR_Cython,
-        MatrixFactorization_FunkSVD_Cython,
-        MatrixFactorization_AsySVD_Cython,
-        EASE_R_Recommender,
-        ItemKNNCFRecommender,
-        P3alphaRecommender,
-        SLIM_BPR_Cython,
-        RP3betaRecommender,
-        PureSVDRecommender,
-        NMFRecommender,
-        UserKNNCBFRecommender,
-        ItemKNNCBFRecommender,
-        UserKNN_CFCBF_Hybrid_Recommender,
-        ItemKNN_CFCBF_Hybrid_Recommender,
-        LightFMCFRecommender,
-        LightFMUserHybridRecommender,
-        LightFMItemHybridRecommender,
-        ]
-
+        # Random,
+        # TopPop,
+        # GlobalEffects,
+        # SLIMElasticNetRecommender,
+        UserKNNCFRecommender,  # 0.0288819
+        IALSRecommender,  # 0.0396401
+        # MatrixFactorization_BPR_Cython,
+        # MatrixFactorization_FunkSVD_Cython,
+        # MatrixFactorization_AsySVD_Cython,
+        EASE_R_Recommender,  # 0.0473539
+        ItemKNNCFRecommender,  # 0.0505696
+        P3alphaRecommender,  # 0.0185236
+        # SLIM_BPR_Cython,
+        RP3betaRecommender,  # 0.0146424
+        PureSVDRecommender,  # 0.0378801
+        # NMFRecommender,
+        # UserKNNCBFRecommender,
+        # ItemKNNCBFRecommender,
+        # UserKNN_CFCBF_Hybrid_Recommender,
+        # ItemKNN_CFCBF_Hybrid_Recommender,
+        LightFMCFRecommender,  # 0.0251791
+        # LightFMUserHybridRecommender,
+        # LightFMItemHybridRecommender,
+    ]
 
     evaluator = EvaluatorHoldout(URM_test, [5, 20], exclude_seen=True)
 
@@ -70,16 +77,13 @@ if __name__ == '__main__':
                               "validation_metric": "MAP",
                               }
 
-
     output_root_path = "./result_experiments/"
 
     # If directory does not exist, create
     if not os.path.exists(output_root_path):
         os.makedirs(output_root_path)
 
-
     logFile = open(output_root_path + "result_all_algorithms.txt", "a")
-
 
     for recommender_class in recommender_class_list:
 
@@ -98,10 +102,10 @@ if __name__ == '__main__':
 
             results_run_1, results_run_string_1 = evaluator.evaluateRecommender(recommender_object)
 
-            recommender_object.save_model(output_root_path, file_name = "temp_model.zip")
+            recommender_object.save_model(output_root_path, file_name="temp_model.zip")
 
             recommender_object = _get_instance(recommender_class, URM_train, ICM_all, UCM_all)
-            recommender_object.load_model(output_root_path, file_name = "temp_model.zip")
+            recommender_object.load_model(output_root_path, file_name="temp_model.zip")
 
             os.remove(output_root_path + "temp_model.zip")
 
