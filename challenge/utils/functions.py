@@ -52,6 +52,8 @@ def evaluate_algorithm(URM_test, recommender_object, at=10):
                                                                                                  cumulative_recall,
                                                                                                  MAP))
 
+    return cumulative_precision, cumulative_recall, MAP
+
 
 def generate_submission_csv(filename, recommendations):
     with open(filename, 'w') as f:

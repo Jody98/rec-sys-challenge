@@ -17,22 +17,24 @@ def __main__():
 
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
-    topk = 10
-    shrink = 10
+    topk = [10]
+    shrink = [10]
     similarity = 'jaccard'
 
-    recommender = ItemKNNCFRecommender(URM_train)
-    recommender.fit(shrink=shrink, topK=topk, similarity=similarity)
+    for k in topk:
+        for s in shrink:
+            recommender = ItemKNNCFRecommender(URM_train)
+            recommender.fit(shrink=s, topK=k, similarity=similarity)
 
-    recommendations = []
+            recommendations = []
 
-    for user_id in users_list:
-        recommendation = recommender.recommend(user_id, at=10)[0]
-        recommendations.append(recommendation)
+            for user_id in users_list:
+                recommendation = recommender.recommend(user_id, at=10, exclude_seen=False)[0]
+                recommendations.append(recommendation)
 
-    generate_submission_csv("output_files/IBCF_submission.csv", recommendations)
-    print("similarity: {}".format(s))
-    evaluate_algorithm(URM_test, recommender, at=10)
+            generate_submission_csv("output_files/IBCF_submission.csv", recommendations)
+
+            cumulative_precision, cumulative_recall, MAP = evaluate_algorithm(URM_test, recommender, at=10)
 
 
 if __name__ == '__main__':
