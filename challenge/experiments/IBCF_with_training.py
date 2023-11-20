@@ -7,8 +7,8 @@ from utils.functions import read_data, evaluate_algorithm, generate_submission_c
 
 
 def __main__():
-    data_file_path = 'input_files/data_train.csv'
-    users_file_path = 'input_files/data_target_users_test.csv'
+    data_file_path = '../input_files/data_train.csv'
+    users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
     URM_all = sps.coo_matrix(

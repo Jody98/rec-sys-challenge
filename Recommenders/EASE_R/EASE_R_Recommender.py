@@ -6,13 +6,16 @@ Created on 23/10/17
 @author: Maurizio Ferrari Dacrema
 """
 
+import time
+
+import numpy as np
+import scipy.sparse as sps
+from sklearn.preprocessing import normalize
+
 from Recommenders.BaseSimilarityMatrixRecommender import BaseItemSimilarityMatrixRecommender
 from Recommenders.Recommender_utils import similarityMatrixTopK, check_matrix
 from Utils.seconds_to_biggest_unit import seconds_to_biggest_unit
-from sklearn.preprocessing import normalize
-import numpy as np
-import time
-import scipy.sparse as sps
+
 
 class EASE_R_Recommender(BaseItemSimilarityMatrixRecommender):
     """ EASE_R_Recommender
@@ -45,12 +48,11 @@ class EASE_R_Recommender(BaseItemSimilarityMatrixRecommender):
 
     RECOMMENDER_NAME = "EASE_R_Recommender"
 
-
-    def __init__(self, URM_train, sparse_threshold_quota = None, verbose = True):
-        super(EASE_R_Recommender, self).__init__(URM_train, verbose = verbose)
+    def __init__(self, URM_train, sparse_threshold_quota=None, verbose=True):
+        super(EASE_R_Recommender, self).__init__(URM_train, verbose=verbose)
         self.sparse_threshold_quota = sparse_threshold_quota
 
-    def fit(self, topK=None, l2_norm = 1e3, normalize_matrix = False):
+    def fit(self, topK=None, l2_norm=1000, normalize_matrix=False):
 
         start_time = time.time()
         self._print("Fitting model... ")
@@ -60,7 +62,6 @@ class EASE_R_Recommender(BaseItemSimilarityMatrixRecommender):
             self.URM_train = normalize(self.URM_train, norm='l2', axis=1)
             self.URM_train = normalize(self.URM_train, norm='l2', axis=0)
             self.URM_train = sps.csr_matrix(self.URM_train)
-
 
         # Grahm matrix is X^t X, compute dot product
         grahm_matrix = self.URM_train.T.dot(self.URM_train).toarray()
@@ -74,16 +75,14 @@ class EASE_R_Recommender(BaseItemSimilarityMatrixRecommender):
 
         B[diag_indices] = 0.0
 
-
-        new_time_value, new_time_unit = seconds_to_biggest_unit(time.time()-start_time)
-        self._print("Fitting model... done in {:.2f} {}".format( new_time_value, new_time_unit))
+        new_time_value, new_time_unit = seconds_to_biggest_unit(time.time() - start_time)
+        self._print("Fitting model... done in {:.2f} {}".format(new_time_value, new_time_unit))
 
         # Check if the matrix should be saved in a sparse or dense format
         # The matrix is sparse, regardless of the presence of the topK, if nonzero cells are less than sparse_threshold_quota %
         # B contains positive and negative values, so topK is selected based on the *absolute* value to preserve strong negatives
         if topK is not None:
-            B = similarityMatrixTopK(B, k = topK, use_absolute_values = True, verbose = False)
-
+            B = similarityMatrixTopK(B, k=topK, use_absolute_values=True, verbose=False)
 
         if self._is_content_sparse_check(B):
             self._print("Detected model matrix to be sparse, changing format.")
@@ -104,7 +103,6 @@ class EASE_R_Recommender(BaseItemSimilarityMatrixRecommender):
         #     self.W_sparse = similarityMatrixTopK(B, k = topK, verbose = False)
         #     self.W_sparse = sps.csr_matrix(self.W_sparse)
 
-
     def _is_content_sparse_check(self, matrix):
 
         if self.sparse_threshold_quota is None:
@@ -115,11 +113,9 @@ class EASE_R_Recommender(BaseItemSimilarityMatrixRecommender):
         else:
             nonzero = np.count_nonzero(matrix)
 
-        return nonzero / (matrix.shape[0]**2) <= self.sparse_threshold_quota
+        return nonzero / (matrix.shape[0] ** 2) <= self.sparse_threshold_quota
 
-
-
-    def _compute_score_W_dense(self, user_id_array, items_to_compute = None):
+    def _compute_score_W_dense(self, user_id_array, items_to_compute=None):
         """
         URM_train and W_sparse must have the same format, CSR
         :param user_id_array:
@@ -132,20 +128,16 @@ class EASE_R_Recommender(BaseItemSimilarityMatrixRecommender):
         user_profile_array = self.URM_train[user_id_array]
 
         if items_to_compute is not None:
-            item_scores = - np.ones((len(user_id_array), self.URM_train.shape[1]), dtype=np.float32)*np.inf
-            item_scores_all = user_profile_array.dot(self.W_sparse)#.toarray()
+            item_scores = - np.ones((len(user_id_array), self.URM_train.shape[1]), dtype=np.float32) * np.inf
+            item_scores_all = user_profile_array.dot(self.W_sparse)  # .toarray()
             item_scores[:, items_to_compute] = item_scores_all[:, items_to_compute]
         else:
-            item_scores = user_profile_array.dot(self.W_sparse)#.toarray()
+            item_scores = user_profile_array.dot(self.W_sparse)  # .toarray()
 
         return item_scores
 
-
-
-
-
-    def load_model(self, folder_path, file_name = None):
-        super(EASE_R_Recommender, self).load_model(folder_path, file_name = file_name)
+    def load_model(self, folder_path, file_name=None):
+        super(EASE_R_Recommender, self).load_model(folder_path, file_name=file_name)
 
         if not sps.issparse(self.W_sparse):
             self._W_sparse_format_checked = True

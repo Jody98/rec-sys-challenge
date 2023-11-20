@@ -10,8 +10,8 @@ from recommenders.pure_SVD_recommender import SVDBasedRecommender
 
 
 def __main__():
-    data_file_path = "input_files/data_train.csv"
-    user_file_path = "input_files/data_target_users_test.csv"
+    data_file_path = "../input_files/data_train.csv"
+    user_file_path = "../input_files/data_target_users_test.csv"
     URM_all_dataframe, users_list = read_data(data_file_path, user_file_path)
 
     print("Number of items\t {}, Number of users\t {}".format(len(URM_all_dataframe['ItemID'].unique()),
@@ -24,8 +24,8 @@ def __main__():
         (URM_all_dataframe['Data'].values, (URM_all_dataframe['UserID'].values, URM_all_dataframe['ItemID'].values)))
     URM_all = URM_all.tocsr()
 
-    URM_train = sps.load_npz("input_files/URM_train.npz")
-    URM_test = sps.load_npz("input_files/URM_test.npz")
+    URM_train = sps.load_npz("../input_files/URM_train.npz")
+    URM_test = sps.load_npz("../input_files/URM_test.npz")
 
     top_pop_recommender = TopPopRecommender()
     top_pop_recommender.fit(URM_train)
