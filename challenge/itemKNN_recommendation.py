@@ -1,4 +1,3 @@
-import numpy as np
 import scipy.sparse as sps
 
 from Data_manager.split_functions.split_train_validation_random_holdout import \

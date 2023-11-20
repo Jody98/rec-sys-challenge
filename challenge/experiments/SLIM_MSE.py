@@ -1,9 +1,26 @@
 import scipy.sparse as sps
+from challenge.experiments.cython_SLIM_MSE import train_multiple_epochs
 
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
-from challenge.experiments.cython_SLIM_MSE import train_multiple_epochs
-from utils.functions import read_data
+from Evaluation.Evaluator import EvaluatorHoldout
+from Recommenders.KNN import ItemKNNCustomSimilarityRecommender
+from challenge.utils.functions import read_data, generate_submission_csv
+
+
+def create_W_sparse(URM_train):
+    learning_rate = 1e-3
+    epochs = 5
+    regularization = 0.1
+
+    item_item_S, loss, samples_per_second = train_multiple_epochs(URM_train=URM_train,
+                                                                  learning_rate_input=learning_rate,
+                                                                  regularization_2_input=regularization,
+                                                                  n_epochs=epochs)
+
+    W_sparse = sps.csr_matrix(item_item_S)
+
+    return W_sparse
 
 
 def __main__():
@@ -17,16 +34,28 @@ def __main__():
 
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
-    learning_rate = 1e-3
-    epochs = 100
-    regularization = 0.0
+    W_sparse = create_W_sparse(URM_all)
 
-    item_item_S, loss, samples_per_second = train_multiple_epochs(URM_train=URM_train,
-                                                                  learning_rate_input=learning_rate,
-                                                                  regularization_2_input=regularization,
-                                                                  n_epochs=epochs)
+    topk = [100]
 
-    print("Loss: {}, samples_per_second: {}".format(loss, samples_per_second))
+    for k in topk:
+        recommender = ItemKNNCustomSimilarityRecommender.ItemKNNCustomSimilarityRecommender(URM_all)
+        recommender.fit(W_sparse=W_sparse, selectTopK=True, topK=k)
+
+        recommended_items = recommender.recommend(users_list, cutoff=10)
+        recommendations = []
+
+        for i in zip(users_list, recommended_items):
+            recommendation = {"user_id": i[0], "item_list": i[1]}
+            recommendations.append(recommendation)
+
+        generate_submission_csv("../output_files/ItemKNNSLIMMSESubmission.csv", recommendations)
+
+        evaluator = EvaluatorHoldout(URM_test, cutoff_list=[10])
+        results, _ = evaluator.evaluateRecommender(recommender)
+
+        for result in results.items():
+            print(result)
 
 
 if __name__ == '__main__':
