@@ -29,12 +29,12 @@ def __main__():
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(5, 30),
+        "topK": Integer(5, 40),
         "alpha": Real(0, 0.5),
         "beta": Real(0, 0.5),
         "min_rating": Real(0.15, 0.35),
         "implicit": Categorical([True]),
-        "normalize_similarity": Categorical([True]),
+        "normalize_similarity": Categorical([True, False]),
     }
 
     recommender_class = RP3betaRecommender
@@ -64,7 +64,7 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 100
+    n_cases = 200
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10

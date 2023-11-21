@@ -33,7 +33,7 @@ def __main__():
         "confidence_scaling": Categorical(["linear", "log"]),
         "alpha": Real(low=0, high=1, prior='uniform'),
         "epsilon": Real(low=0, high=1, prior='uniform'),
-        "reg": Real(low=0, high=1, prior='log-uniform'),
+        "reg": Real(low=0, high=0.01, prior='uniform'),
         "init_mean": Real(low=0, high=1, prior='uniform'),
         "init_std": Real(low=0, high=1, prior='uniform'),
     }
