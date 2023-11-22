@@ -6,39 +6,6 @@ from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.GraphBased import RP3betaRecommender
 from utils.functions import read_data, generate_submission_csv
 
-import numpy as np
-from scipy.sparse import csr_matrix
-
-
-def augment_urm(urm: csr_matrix, oversample_rate: float = 0.1):
-    """
-    Augment the URM by oversampling positive interactions.
-
-    Parameters:
-    urm (csr_matrix): The User-Item Matrix to augment.
-    oversample_rate (float): The rate at which to oversample positive interactions.
-
-    Returns:
-    csr_matrix: The augmented User-Item Matrix.
-    """
-    # Get the indices of positive interactions
-    positive_interactions = urm.nonzero()
-
-    # Calculate the number of positive interactions to oversample
-    num_oversamples = int(len(positive_interactions[0]) * oversample_rate)
-
-    # Randomly select positive interactions to oversample
-    oversample_indices = np.random.choice(len(positive_interactions[0]), size=num_oversamples)
-
-    # Get the user-item pairs to oversample
-    oversample_user_items = (positive_interactions[0][oversample_indices], positive_interactions[1][oversample_indices])
-
-    # Create a new URM with the oversampled interactions
-    urm_oversampled = urm.copy()
-    urm_oversampled[oversample_user_items] += 1
-
-    return urm_oversampled
-
 
 def __main__():
     cutoff_list = [10]

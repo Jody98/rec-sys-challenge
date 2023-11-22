@@ -29,12 +29,12 @@ def __main__():
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(5, 40),
-        "alpha": Real(0, 0.5),
-        "beta": Real(0, 0.5),
+        "topK": Integer(5, 50),
+        "alpha": Real(0.2, 0.5),
+        "beta": Real(0.2, 0.5),
         "min_rating": Real(0.15, 0.35),
         "implicit": Categorical([True]),
-        "normalize_similarity": Categorical([True, False]),
+        "normalize_similarity": Categorical([True]),
     }
 
     recommender_class = RP3betaRecommender

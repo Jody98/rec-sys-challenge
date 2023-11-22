@@ -136,3 +136,5 @@ class RP3betaRecommender(BaseItemSimilarityMatrixRecommender):
             self.W_sparse = similarityMatrixTopK(self.W_sparse, k=self.topK)
 
         self.W_sparse = check_matrix(self.W_sparse, format='csr')
+
+        return self.W_sparse
