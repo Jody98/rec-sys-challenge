@@ -20,7 +20,8 @@ def __main__():
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
     recommender = SLIM_BPR_Python.SLIM_BPR_Python(URM_train)
-    recommender.fit(topK=100, epochs=15, lambda_i=0.0025, lambda_j=0.00025, learning_rate=0.05)
+    recommender.fit(topK=26, epochs=15, lambda_i=0.009991555707793169, lambda_j=0.004832924438269361,
+                    learning_rate=0.04032300739781685)
 
     recommended_items = recommender.recommend(users_list, cutoff=10)
     recommendations = []

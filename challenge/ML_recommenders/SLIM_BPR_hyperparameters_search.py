@@ -29,9 +29,9 @@ def __main__():
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(low=5, high=50, prior='uniform'),
-        "lambda_i": Real(low=1e-6, high=1e-2, prior='uniform'),
-        "lambda_j": Real(low=1e-6, high=1e-2, prior='uniform'),
+        "topK": Integer(low=20, high=50, prior='uniform'),
+        "lambda_i": Real(low=1e-3, high=1e-1, prior='uniform'),
+        "lambda_j": Real(low=1e-3, high=1e-1, prior='uniform'),
         "learning_rate": Real(low=1e-6, high=1e-1, prior='uniform'),
     }
 
@@ -62,7 +62,7 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 100
+    n_cases = 10
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10
@@ -94,8 +94,6 @@ def __main__():
     print(best_hyperparameters)
     time_df = search_metadata["time_df"]
     print(time_df)
-    exception_list = search_metadata["exception_list"]
-    print(exception_list)
 
 
 if __name__ == '__main__':
