@@ -1,7 +1,7 @@
 import os
 
 import scipy.sparse as sps
-from skopt.space import Integer, Categorical, Real
+from skopt.space import Integer, Categorical
 
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
@@ -9,13 +9,13 @@ from Evaluation.Evaluator import EvaluatorHoldout
 from HyperparameterTuning.SearchAbstractClass import SearchInputRecommenderArgs
 from HyperparameterTuning.SearchBayesianSkopt import SearchBayesianSkopt
 from Recommenders.DataIO import DataIO
-from Recommenders.GraphBased.P3alphaRecommender import P3alphaRecommender
+from Recommenders.KNN.ItemKNNCFRecommender import ItemKNNCFRecommender
 from utils.functions import read_data
 
 
 def __main__():
-    data_file_path = 'input_files/data_train.csv'
-    users_file_path = 'input_files/data_target_users_test.csv'
+    data_file_path = '../input_files/data_train.csv'
+    users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
     URM_all = sps.coo_matrix(
@@ -29,14 +29,13 @@ def __main__():
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(30, 80),
-        "alpha": Real(0, 1),
-        "min_rating": Real(0, 0.2),
-        "implicit": Categorical([True]),
-        "normalize_similarity": Categorical([True]),
+        "topK": Integer(10, 11),
+        "shrink": Integer(10, 20),
+        "similarity": Categorical(["jaccard"]),
+        "normalize": Categorical([True, False]),
     }
 
-    recommender_class = P3alphaRecommender
+    recommender_class = ItemKNNCFRecommender
 
     hyperparameterSearch = SearchBayesianSkopt(recommender_class,
                                                evaluator_validation=evaluator_validation,
@@ -58,12 +57,12 @@ def __main__():
         EARLYSTOPPING_KEYWORD_ARGS={},
     )
 
-    output_folder_path = "result_experiments/"
+    output_folder_path = "../result_experiments/"
 
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 100
+    n_cases = 10
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10

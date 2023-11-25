@@ -103,6 +103,8 @@ class EASE_R_Recommender(BaseItemSimilarityMatrixRecommender):
         #     self.W_sparse = similarityMatrixTopK(B, k = topK, verbose = False)
         #     self.W_sparse = sps.csr_matrix(self.W_sparse)
 
+        return self.W_sparse
+
     def _is_content_sparse_check(self, matrix):
 
         if self.sparse_threshold_quota is None:

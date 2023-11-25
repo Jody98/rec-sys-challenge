@@ -9,13 +9,13 @@ from Evaluation.Evaluator import EvaluatorHoldout
 from HyperparameterTuning.SearchAbstractClass import SearchInputRecommenderArgs
 from HyperparameterTuning.SearchBayesianSkopt import SearchBayesianSkopt
 from Recommenders.DataIO import DataIO
-from Recommenders.MatrixFactorization.IALSRecommender import IALSRecommender
+from Recommenders.FactorizationMachines.LightFMRecommender import LightFMCFRecommender
 from utils.functions import read_data
 
 
 def __main__():
-    data_file_path = 'input_files/data_train.csv'
-    users_file_path = 'input_files/data_target_users_test.csv'
+    data_file_path = '../input_files/data_train.csv'
+    users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
     URM_all = sps.coo_matrix(
@@ -29,16 +29,15 @@ def __main__():
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "num_factors": Integer(low=5, high=50, prior='uniform'),
-        "confidence_scaling": Categorical(["linear", "log"]),
-        "alpha": Real(low=0, high=1, prior='uniform'),
-        "epsilon": Real(low=0, high=1, prior='uniform'),
-        "reg": Real(low=0, high=0.01, prior='uniform'),
-        "init_mean": Real(low=0, high=1, prior='uniform'),
-        "init_std": Real(low=0, high=1, prior='uniform'),
+        "loss": Categorical(["warp", "warp-kos"]),
+        "sgd_mode": Categorical(["adadelta"]),
+        "n_components": Integer(50, 100),
+        "item_alpha": Real(low=1e-6, high=1e-3, prior='log-uniform'),
+        "user_alpha": Real(low=1e-6, high=1e-3, prior='log-uniform'),
+        "learning_rate": Real(low=1e-6, high=1e-2, prior='log-uniform'),
     }
 
-    recommender_class = IALSRecommender
+    recommender_class = LightFMCFRecommender
 
     hyperparameterSearch = SearchBayesianSkopt(recommender_class,
                                                evaluator_validation=evaluator_validation,
@@ -60,12 +59,12 @@ def __main__():
         EARLYSTOPPING_KEYWORD_ARGS={},
     )
 
-    output_folder_path = "result_experiments/"
+    output_folder_path = "../result_experiments/"
 
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 100
+    n_cases = 20
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10
@@ -97,8 +96,6 @@ def __main__():
     print(best_hyperparameters)
     time_df = search_metadata["time_df"]
     print(time_df)
-    exception_list = search_metadata["exception_list"]
-    print(exception_list)
 
 
 if __name__ == '__main__':

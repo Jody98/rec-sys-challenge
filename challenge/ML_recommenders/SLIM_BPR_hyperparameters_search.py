@@ -9,13 +9,13 @@ from Evaluation.Evaluator import EvaluatorHoldout
 from HyperparameterTuning.SearchAbstractClass import SearchInputRecommenderArgs
 from HyperparameterTuning.SearchBayesianSkopt import SearchBayesianSkopt
 from Recommenders.DataIO import DataIO
-from Recommenders.EASE_R.EASE_R_Recommender import EASE_R_Recommender
-from utils.functions import read_data
+from Recommenders.SLIM.SLIM_BPR_Python import SLIM_BPR_Python
+from challenge.utils.functions import read_data
 
 
 def __main__():
-    data_file_path = 'input_files/data_train.csv'
-    users_file_path = 'input_files/data_target_users_test.csv'
+    data_file_path = '../input_files/data_train.csv'
+    users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
     URM_all = sps.coo_matrix(
@@ -29,12 +29,13 @@ def __main__():
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(low=5, high=20, prior='uniform'),
-        "l2_norm": Integer(low=30, high=110, prior='uniform'),
-        "normalize_matrix": Categorical([False]),
+        "topK": Integer(low=5, high=50, prior='uniform'),
+        "lambda_i": Real(low=1e-6, high=1e-2, prior='uniform'),
+        "lambda_j": Real(low=1e-6, high=1e-2, prior='uniform'),
+        "learning_rate": Real(low=1e-6, high=1e-1, prior='uniform'),
     }
 
-    recommender_class = EASE_R_Recommender
+    recommender_class = SLIM_BPR_Python
 
     hyperparameterSearch = SearchBayesianSkopt(recommender_class,
                                                evaluator_validation=evaluator_validation,
@@ -56,12 +57,12 @@ def __main__():
         EARLYSTOPPING_KEYWORD_ARGS={},
     )
 
-    output_folder_path = "result_experiments/"
+    output_folder_path = "../result_experiments/"
 
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 25
+    n_cases = 100
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10

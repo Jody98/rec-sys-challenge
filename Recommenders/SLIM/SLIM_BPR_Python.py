@@ -18,7 +18,7 @@ class SLIM_BPR_Python(BaseItemSimilarityMatrixRecommender):
 
 
 
-    def fit(self, topK = 100, epochs = 25, lambda_i = 0.0025, lambda_j = 0.00025, learning_rate = 0.05):
+    def fit(self, topK = 100, epochs = 15, lambda_i = 0.0025, lambda_j = 0.00025, learning_rate = 0.05):
         """
 
         :param topK:

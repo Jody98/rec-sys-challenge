@@ -16,14 +16,14 @@ from functools import partial
 ######################################################################
 from Recommenders.NonPersonalizedRecommender import TopPop, Random, GlobalEffects
 
-# KNN
+# KNN_recommenders
 from Recommenders.KNN.UserKNNCFRecommender import UserKNNCFRecommender
 from Recommenders.KNN.ItemKNNCFRecommender import ItemKNNCFRecommender
 from Recommenders.GraphBased.P3alphaRecommender import P3alphaRecommender
 from Recommenders.GraphBased.RP3betaRecommender import RP3betaRecommender
 from Recommenders.EASE_R.EASE_R_Recommender import EASE_R_Recommender
 
-# KNN machine learning
+# KNN_recommenders machine learning
 from Recommenders.SLIM.Cython.SLIM_BPR_Cython import SLIM_BPR_Cython
 from Recommenders.SLIM.SLIMElasticNetRecommender import SLIMElasticNetRecommender, MultiThreadSLIM_SLIMElasticNetRecommender
 

@@ -114,7 +114,7 @@ class BaseMatrixFactorizationRecommender(BaseRecommender):
 
 class BaseSVDRecommender(BaseMatrixFactorizationRecommender):
     """
-    This class refers to a BaseRecommender KNN which uses matrix factorization,
+    This class refers to a BaseRecommender KNN_recommenders which uses matrix factorization,
     it provides functions to compute item's score as well as a function to save the W_matrix
 
     The prediction for cold users will always be -inf for ALL items
