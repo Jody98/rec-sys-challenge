@@ -20,10 +20,10 @@ def __main__():
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
     recommender = NMFRecommender.NMFRecommender(URM_train)
-    recommender.fit(num_factors=100,
-                    l1_ratio=0.5,
+    recommender.fit(num_factors=121,
+                    l1_ratio=0.6548816817939879,
                     solver="multiplicative_update",
-                    init_type="random",
+                    init_type="nndsvda",
                     beta_loss="frobenius")
 
     recommended_items = recommender.recommend(users_list, cutoff=10)
