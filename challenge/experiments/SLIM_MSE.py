@@ -39,7 +39,7 @@ def __main__():
     topk = [100]
 
     for k in topk:
-        recommender = ItemKNNCustomSimilarityRecommender.ItemKNNCustomSimilarityRecommender(URM_all)
+        recommender = ItemKNNCustomSimilarityRecommender.ItemKNNCustomSimilarityRecommender(URM_train)
         recommender.fit(W_sparse=W_sparse, selectTopK=True, topK=k)
 
         recommended_items = recommender.recommend(users_list, cutoff=10)
