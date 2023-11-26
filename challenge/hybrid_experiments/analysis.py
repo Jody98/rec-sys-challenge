@@ -32,31 +32,6 @@ cutoff_list = [5, 10, 15]
 
 evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
 
-itemKNNCF = ItemKNNCFRecommender(URM_train)
-itemKNNCF.fit(topK=10, shrink=19, similarity='jaccard', normalize=False, feature_weighting="TF-IDF")
-
-RP3beta = RP3betaRecommender(URM_train)
-RP3beta.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086, min_rating=0.2588031389774553,
-            implicit=True,
-            normalize_similarity=True)
-
-# P3alpha = P3alphaRecommender(URM_train)
-# P3alpha.fit(topK=64, alpha=0.35496275558011753, min_rating=0.1, implicit=True, normalize_similarity=True)
-
-print(itemKNNCF.W_sparse)
-print(RP3beta.W_sparse)
-
-alpha = 0.15
-new_W_sparse = alpha * itemKNNCF.W_sparse + (1 - alpha) * RP3beta.W_sparse
-
-recommender_object = ItemKNNCustomSimilarityRecommender(URM_train)
-recommender_object.fit(new_W_sparse)
-
-result_df, _ = evaluator_test.evaluateRecommender(recommender_object)
-
-for result in result_df.items():
-    print(result)
-
 profile_length = np.ediff1d(sps.csr_matrix(URM_train).indptr)
 print(profile_length, profile_length.shape)
 
@@ -83,14 +58,8 @@ for group_id in range(0, 20):
 MAP_recommender_per_group = {}
 
 collaborative_recommender_class = {"TopPop": TopPop,
-                                   "UserKNNCF": UserKNNCFRecommender,
-                                   "ItemKNNCF": ItemKNNCFRecommender,
                                    "P3alpha": P3alphaRecommender,
                                    "RP3beta": RP3betaRecommender,
-                                   "PureSVDItem": PureSVDItemRecommender,
-                                   "NMF": NMFRecommender,
-                                   "iALS": IALSRecommender,
-                                   "SLIMBPR": SLIM_BPR_Python,
                                    "EASE_R": EASE_R_Recommender
                                    }
 
