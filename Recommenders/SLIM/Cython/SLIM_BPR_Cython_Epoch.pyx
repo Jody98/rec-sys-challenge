@@ -987,11 +987,11 @@ cdef class Sparse_Matrix_Tree_CSR:
 
 
         # Sort array elements on their data field
-        qsort(vector_pointer_to_list_elements, list_length, sizeof(head_pointer_tree_s), compare_struct_on_data())
+        qsort(vector_pointer_to_list_elements, list_length, sizeof(head_pointer_tree_s), compare_struct_on_data(a_input=vector_pointer_to_list_elements, b_input=vector_pointer_to_list_elements))
 
         # Sort only the TopK according to their column field
         # Sort is from lower to higher, therefore the elements to be considered are from len-topK to len
-        qsort(&vector_pointer_to_list_elements[list_length-TopK], TopK, sizeof(head_pointer_tree_s), compare_struct_on_column())
+        qsort(&vector_pointer_to_list_elements[list_length-TopK], TopK, sizeof(head_pointer_tree_s), compare_struct_on_column(a_input=vector_pointer_to_list_elements, b_input=vector_pointer_to_list_elements))
 
 
         # Rebuild list attaching the consecutive elements

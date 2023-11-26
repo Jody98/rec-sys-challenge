@@ -9,9 +9,9 @@ from challenge.utils.functions import read_data, generate_submission_csv
 
 
 def create_W_sparse(URM_train):
-    learning_rate = 1e-3
-    epochs = 5
-    regularization = 0.1
+    learning_rate = 1e-4
+    epochs = 60
+    regularization = 0.025
 
     item_item_S, loss, samples_per_second = train_multiple_epochs(URM_train=URM_train,
                                                                   learning_rate_input=learning_rate,
@@ -34,28 +34,25 @@ def __main__():
 
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
-    W_sparse = create_W_sparse(URM_all)
+    W_sparse = create_W_sparse(URM_train)
 
-    topk = [100]
+    recommender = ItemKNNCustomSimilarityRecommender.ItemKNNCustomSimilarityRecommender(URM_train)
+    recommender.fit(W_sparse=W_sparse, selectTopK=True, topK=100)
 
-    for k in topk:
-        recommender = ItemKNNCustomSimilarityRecommender.ItemKNNCustomSimilarityRecommender(URM_train)
-        recommender.fit(W_sparse=W_sparse, selectTopK=True, topK=k)
+    recommended_items = recommender.recommend(users_list, cutoff=10)
+    recommendations = []
 
-        recommended_items = recommender.recommend(users_list, cutoff=10)
-        recommendations = []
+    for i in zip(users_list, recommended_items):
+        recommendation = {"user_id": i[0], "item_list": i[1]}
+        recommendations.append(recommendation)
 
-        for i in zip(users_list, recommended_items):
-            recommendation = {"user_id": i[0], "item_list": i[1]}
-            recommendations.append(recommendation)
+    generate_submission_csv("../output_files/ItemKNNSLIMMSESubmission.csv", recommendations)
 
-        generate_submission_csv("../output_files/ItemKNNSLIMMSESubmission.csv", recommendations)
+    evaluator = EvaluatorHoldout(URM_test, cutoff_list=[10])
+    results, _ = evaluator.evaluateRecommender(recommender)
 
-        evaluator = EvaluatorHoldout(URM_test, cutoff_list=[10])
-        results, _ = evaluator.evaluateRecommender(recommender)
-
-        for result in results.items():
-            print(result)
+    for result in results.items():
+        print(result)
 
 
 if __name__ == '__main__':

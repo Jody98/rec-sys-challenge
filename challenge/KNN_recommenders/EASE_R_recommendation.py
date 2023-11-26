@@ -4,7 +4,7 @@ from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
 from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.EASE_R import EASE_R_Recommender
-from utils.functions import read_data, generate_submission_csv
+from challenge.utils.functions import read_data, generate_submission_csv
 
 
 def __main__():

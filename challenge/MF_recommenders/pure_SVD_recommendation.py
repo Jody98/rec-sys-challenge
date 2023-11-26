@@ -20,7 +20,7 @@ def __main__():
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
     recommender = PureSVDRecommender.PureSVDRecommender(URM_train)
-    recommender.fit(num_factors=200)
+    recommender.fit(num_factors=43)
 
     recommended_items = recommender.recommend(users_list, cutoff=10)
     recommendations = []
