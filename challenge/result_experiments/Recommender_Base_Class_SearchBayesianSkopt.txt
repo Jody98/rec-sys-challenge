@@ -38,3 +38,37 @@ SearchBayesianSkopt: Search complete. Best config is 1: {'topK': 36, 'lambda_i':
 SearchBayesianSkopt: Best config evaluated with evaluator_test with constructor data for final test. Config: {'topK': 36, 'lambda_i': 0.03535996386607549, 'lambda_j': 0.06865629311117577, 'learning_rate': 0.09740136727762765} - results:
 CUTOFF: 10 - PRECISION: 0.0623592, PRECISION_RECALL_MIN_DEN: 0.1124682, RECALL: 0.0966167, MAP: 0.0292477, MAP_MIN_DEN: 0.0526363, MRR: 0.1913498, NDCG: 0.1003787, F1: 0.0757969, HIT_RATE: 0.4071388, ARHR_ALL_HITS: 0.2351382, NOVELTY: 0.0045010, AVERAGE_POPULARITY: 0.4135343, DIVERSITY_MEAN_INTER_LIST: 0.8739200, DIVERSITY_HERFINDAHL: 0.9873837, COVERAGE_ITEM: 0.2049848, COVERAGE_ITEM_HIT: 0.0255504, ITEMS_IN_GT: 0.7986844, COVERAGE_USER: 0.8044530, COVERAGE_USER_HIT: 0.3275240, USERS_IN_GT: 0.8044530, DIVERSITY_GINI: 0.0190405, SHANNON_ENTROPY: 8.0337307, RATIO_DIVERSITY_HERFINDAHL: 0.9877397, RATIO_DIVERSITY_GINI: 0.0548847, RATIO_SHANNON_ENTROPY: 0.6187987, RATIO_AVERAGE_POPULARITY: 3.4574113, RATIO_NOVELTY: 0.2634968, 
 
+SearchBayesianSkopt: Config 0 Exception. Config: {'topK': 32, 'l1_ratio': 0.00134227333283373, 'alpha': 1.1802118081469726, 'positive_only': True} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: SLIM_BPR_Python.fit() got an unexpected keyword argument 'l1_ratio'
+
+SearchBayesianSkopt: Config 1 Exception. Config: {'topK': 35, 'l1_ratio': 0.0012331518818386364, 'alpha': 0.7431151380253113, 'positive_only': False} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: SLIM_BPR_Python.fit() got an unexpected keyword argument 'l1_ratio'
+
+SearchBayesianSkopt: Config 2 Exception. Config: {'topK': 34, 'l1_ratio': 0.7579312834035978, 'alpha': 1.1067623067043892, 'positive_only': True} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: SLIM_BPR_Python.fit() got an unexpected keyword argument 'l1_ratio'
+
+SearchBayesianSkopt: Search interrupted. No valid config was found during the initial random initialization

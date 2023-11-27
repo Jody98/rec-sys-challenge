@@ -9,7 +9,7 @@ from Evaluation.Evaluator import EvaluatorHoldout
 from HyperparameterTuning.SearchAbstractClass import SearchInputRecommenderArgs
 from HyperparameterTuning.SearchBayesianSkopt import SearchBayesianSkopt
 from Recommenders.DataIO import DataIO
-from Recommenders.SLIM.SLIM_BPR_Python import SLIM_BPR_Python
+from Recommenders.SLIM.SLIMElasticNetRecommender import SLIMElasticNetRecommender
 from challenge.utils.functions import read_data
 
 
@@ -35,7 +35,7 @@ def __main__():
         "positive_only": Categorical([True, False]),
     }
 
-    recommender_class = SLIM_BPR_Python
+    recommender_class = SLIMElasticNetRecommender
 
     hyperparameterSearch = SearchBayesianSkopt(recommender_class,
                                                evaluator_validation=evaluator_validation,
