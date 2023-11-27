@@ -36,23 +36,6 @@ def __main__():
     for result in results.items():
         print(result)
 
-    recommender = EASE_R_Recommender.EASE_R_Recommender(URM_train)
-    recommender.fit(l2_norm=101, normalize_matrix=False)
-
-    recommended_items = recommender.recommend(users_list, cutoff=10)
-    recommendations = []
-    for i in zip(users_list, recommended_items):
-        recommendation = {"user_id": i[0], "item_list": i[1]}
-        recommendations.append(recommendation)
-
-    generate_submission_csv("../output_files/EASE_R_Recommender_submission.csv", recommendations)
-
-    evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
-    results, _ = evaluator.evaluateRecommender(recommender)
-
-    for result in results.items():
-        print(result)
-
 
 if __name__ == '__main__':
     __main__()

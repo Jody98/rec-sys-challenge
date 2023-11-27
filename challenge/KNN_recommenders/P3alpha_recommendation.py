@@ -19,7 +19,7 @@ def __main__():
 
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
-    recommender = P3alphaRecommender.P3alphaRecommender(URM_all)
+    recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
     recommender.fit(topK=64, alpha=0.35496275558011753, min_rating=0.1, implicit=True, normalize_similarity=True)
 
     recommended_items = recommender.recommend(users_list, cutoff=10)

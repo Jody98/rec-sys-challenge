@@ -28,7 +28,7 @@ def __main__():
         recommendation = {"user_id": i[0], "item_list": i[1]}
         recommendations.append(recommendation)
 
-    generate_submission_csv("output_files/ItemKNNSubmission.csv", recommendations)
+    generate_submission_csv("../output_files/ItemKNNSubmission.csv", recommendations)
 
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
     results, _ = evaluator.evaluateRecommender(recommender)
