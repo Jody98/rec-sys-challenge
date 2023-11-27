@@ -21,6 +21,8 @@ def __main__():
 
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
+    # TODO: try this line in EASE_R: W_sparse = sps.csr_matrix(item_item_S)
+
     RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_train)
     RP3beta_Wsparse = RP3_recommender.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086,
                                           min_rating=0.2588031389774553,
