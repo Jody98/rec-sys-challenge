@@ -1,12 +1,13 @@
 import numpy as np
 import scipy.sparse as sps
 
-from Recommenders.BaseRecommender import BaseRecommender
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
 from Evaluation.Evaluator import EvaluatorHoldout
+from Recommenders.BaseRecommender import BaseRecommender
 from challenge.utils.functions import read_data
 from hybridization.utils.load_best_hyperparameters import load_best_hyperparameters
+
 
 def tune_URM(recommender_class: BaseRecommender, recommender_folder: str, n: int = 100):
     cutoff_list = [10]
@@ -20,7 +21,7 @@ def tune_URM(recommender_class: BaseRecommender, recommender_folder: str, n: int
 
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
     URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_train, train_percentage=0.80)
-    
+
     best_hyperparameters = load_best_hyperparameters(recommender_folder)
 
     best_map = 0
@@ -29,9 +30,9 @@ def tune_URM(recommender_class: BaseRecommender, recommender_folder: str, n: int
     best_details_weight = 0
     for i in range(n):
         print(f"\nIter {i}")
-        random_base = np.random.uniform(2,100)
-        random_details_weight = np.random.uniform(0,100)
-        random_views_weight = np.random.uniform(random_details_weight,100)
+        random_base = np.random.uniform(2, 100)
+        random_details_weight = np.random.uniform(0, 100)
+        random_views_weight = np.random.uniform(random_details_weight, 100)
         print(f"base={random_base}, views_weight={random_views_weight}, details_weight={random_details_weight}")
 
         evaluator = EvaluatorHoldout(URM_validation, cutoff_list=cutoff_list)

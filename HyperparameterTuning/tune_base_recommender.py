@@ -13,9 +13,11 @@ from Recommenders.BaseRecommender import BaseRecommender
 from Recommenders.DataIO import DataIO
 from Recommenders.EASE_R.EASE_R_Recommender import EASE_R_Recommender
 from Recommenders.GraphBased.RP3betaRecommender import RP3betaRecommender
+from Recommenders.GraphBased.P3alphaRecommender import P3alphaRecommender
 from Recommenders.KNN.ItemKNNCFRecommender import ItemKNNCFRecommender
 from Recommenders.MatrixFactorization.IALSRecommender import IALSRecommender
 from Recommenders.SLIM.SLIMElasticNetRecommender import SLIMElasticNetRecommender
+from Recommenders.SLIM.SLIM_BPR_Python import SLIM_BPR_Python
 from challenge.utils.functions import read_data
 
 
@@ -24,7 +26,7 @@ def _get_hyperparameters_range(recommender_class: BaseRecommender) -> Dict[str, 
         hyperparameters_range_dictionary = {
             "topK": Categorical([None]),
             "normalize_matrix": Categorical([False]),
-            "l2_norm": Real(low=1e0, high=1e7, prior="log-uniform"),
+            "l2_norm": Real(low=1, high=1e7, prior="log-uniform"),
         }
     elif recommender_class == IALSRecommender:
         hyperparameters_range_dictionary = {
@@ -42,16 +44,32 @@ def _get_hyperparameters_range(recommender_class: BaseRecommender) -> Dict[str, 
         }
     elif recommender_class == RP3betaRecommender:
         hyperparameters_range_dictionary = {
-            "topK": Integer(5, 1000),
+            "topK": Integer(5, 100),
             "alpha": Real(low=0, high=2, prior="uniform"),
             "beta": Real(low=0, high=2, prior="uniform"),
+            "min_rating": Real(low=0, high=0.3, prior="uniform"),
+            "normalize_similarity": Categorical([True, False]),
+        }
+    elif recommender_class == P3alphaRecommender:
+        hyperparameters_range_dictionary = {
+            "topK": Integer(5, 100),
+            "alpha": Real(low=0, high=2, prior="uniform"),
+            "min_rating": Real(low=0, high=0.3, prior="uniform"),
             "normalize_similarity": Categorical([True, False]),
         }
     elif recommender_class == SLIMElasticNetRecommender:
         hyperparameters_range_dictionary = {
-            "topK": Integer(500, 2000),
-            "l1_ratio": Real(low=1e-4, high=0.1, prior="log-uniform"),
-            "alpha": Real(low=1e-4, high=0.1, prior="uniform"),
+            "topK": Integer(5, 200),
+            "l1_ratio": Real(low=1e-4, high=1e-1, prior="log-uniform"),
+            "alpha": Real(low=1e-4, high=1e-1, prior="uniform"),
+        }
+    elif recommender_class == SLIM_BPR_Python:
+        hyperparameters_range_dictionary = {
+            "topK": Integer(5, 200),
+            "epochs": Integer(5, 25),
+            "lambda_i": Real(low=1e-4, high=1e-1, prior="log-uniform"),
+            "lambda_j": Real(low=1e-4, high=1e-1, prior="uniform"),
+            "learning_rate": Real(low=1e-4, high=1e-1, prior="uniform"),
         }
     else:
         return ValueError(f"The recommender class {recommender_class} is not supported")
