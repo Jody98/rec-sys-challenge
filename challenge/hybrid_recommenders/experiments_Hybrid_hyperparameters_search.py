@@ -11,6 +11,7 @@ from HyperparameterTuning.SearchBayesianSkopt import SearchBayesianSkopt
 from Recommenders.DataIO import DataIO
 from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
+from Recommenders.SLIM import SLIMElasticNetRecommender
 from Recommenders.KNN.ItemKNNSimilarityHybridRecommender import ItemKNNSimilarityHybridRecommender
 from challenge.utils.functions import read_data
 
@@ -36,20 +37,13 @@ def __main__():
                                           implicit=True,
                                           normalize_similarity=True)
 
-    item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
-    item_Wsparse = item_recommender.fit(topK=10, shrink=19, similarity='jaccard', normalize=False,
-                                        feature_weighting="TF-IDF")
-
-    P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
-    P3alpha_Wsparse = P3_recommender.fit(topK=64, alpha=0.35496275558011753, min_rating=0.1, implicit=True,
-                                         normalize_similarity=True)
-
-    recommender_object = ItemKNNSimilarityHybridRecommender(URM_train, RP3beta_Wsparse, item_Wsparse)
-    hybrid_Wsparse = recommender_object.fit(topK=56, alpha=0.8126786752572159)
+    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
+    SLIM_Wsparse = SLIM_recommender.fit(l1_ratio=0.005997129498003861, alpha=0.004503120402472539,
+                                        positive_only=True, topK=45)
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(5, 100),
-        "alpha": Real(0, 1),
+        "topK": Integer(80, 200),
+        "alpha": Real(0.3, 0.7),
     }
 
     recommender_class = ItemKNNSimilarityHybridRecommender
@@ -59,7 +53,7 @@ def __main__():
                                                evaluator_test=evaluator_test)
 
     recommender_input_args = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, P3alpha_Wsparse, hybrid_Wsparse],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, RP3beta_Wsparse, SLIM_Wsparse],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},
@@ -67,7 +61,7 @@ def __main__():
     )
 
     recommender_input_args_last_test = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, P3alpha_Wsparse, hybrid_Wsparse],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, RP3beta_Wsparse, SLIM_Wsparse],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},

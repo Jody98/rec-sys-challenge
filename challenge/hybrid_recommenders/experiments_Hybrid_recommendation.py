@@ -3,8 +3,7 @@ import scipy.sparse as sps
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
 from Evaluation.Evaluator import EvaluatorHoldout
-from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
-from Recommenders.KNN import ItemKNNCFRecommender
+from Recommenders.GraphBased import RP3betaRecommender
 from Recommenders.KNN.ItemKNNSimilarityHybridRecommender import ItemKNNSimilarityHybridRecommender
 from Recommenders.SLIM import SLIMElasticNetRecommender
 from challenge.utils.functions import read_data, generate_submission_csv
@@ -32,18 +31,18 @@ def __main__():
         item_Wsparse = item_recommender.fit(topK=10, shrink=19, similarity='jaccard', normalize=False,
                                             feature_weighting="TF-IDF")'''
 
-    RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_all)
+    RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_train)
     RP3beta_Wsparse = RP3_recommender.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086,
                                           min_rating=0.2588031389774553,
                                           implicit=True,
                                           normalize_similarity=True)
 
-    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_all)
-    SLIM_Wsparse = SLIM_recommender.fit(l1_ratio=0.011103511550118465, alpha=0.0010114858432948017,
-                                        positive_only=False, topK=48)
+    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
+    SLIM_Wsparse = SLIM_recommender.fit(l1_ratio=0.005997129498003861, alpha=0.004503120402472539,
+                                        positive_only=True, topK=45)
 
-    recommender_object = ItemKNNSimilarityHybridRecommender(URM_all, RP3beta_Wsparse, SLIM_Wsparse)
-    recommender_object.fit(alpha=0.3)
+    recommender_object = ItemKNNSimilarityHybridRecommender(URM_train, RP3beta_Wsparse, SLIM_Wsparse)
+    recommender_object.fit(alpha=0.6380727357892416, topK=146)
 
     recommended_items = recommender_object.recommend(users_list, cutoff=10)
     recommendations = []
