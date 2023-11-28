@@ -9,13 +9,8 @@ from Recommenders.EASE_R.EASE_R_Recommender import EASE_R_Recommender
 from Recommenders.GraphBased.P3alphaRecommender import P3alphaRecommender
 from Recommenders.GraphBased.RP3betaRecommender import RP3betaRecommender
 from Recommenders.KNN.ItemKNNCFRecommender import ItemKNNCFRecommender
-from Recommenders.KNN.ItemKNNCustomSimilarityRecommender import ItemKNNCustomSimilarityRecommender
-from Recommenders.KNN.UserKNNCFRecommender import UserKNNCFRecommender
-from Recommenders.MatrixFactorization.IALSRecommender import IALSRecommender
-from Recommenders.MatrixFactorization.NMFRecommender import NMFRecommender
-from Recommenders.MatrixFactorization.PureSVDRecommender import PureSVDItemRecommender
 from Recommenders.NonPersonalizedRecommender import TopPop
-from Recommenders.SLIM.SLIM_BPR_Python import SLIM_BPR_Python
+from Recommenders.SLIM.SLIMElasticNetRecommender import SLIMElasticNetRecommender
 from challenge.utils.functions import read_data
 
 data_file_path = '../input_files/data_train.csv'
@@ -60,7 +55,9 @@ MAP_recommender_per_group = {}
 collaborative_recommender_class = {"TopPop": TopPop,
                                    "P3alpha": P3alphaRecommender,
                                    "RP3beta": RP3betaRecommender,
-                                   "EASE_R": EASE_R_Recommender
+                                   "EASE_R": EASE_R_Recommender,
+                                   "SLIMElasticNet": SLIMElasticNetRecommender,
+                                   "ItemKNNCF": ItemKNNCFRecommender,
                                    }
 
 recommender_object_dict = {}
@@ -79,8 +76,8 @@ hyperparameters = {"TopPop": {},
                            "init_type": "nndsvda", "beta_loss": "frobenius"},
                    "iALS": {"num_factors": 10, "confidence_scaling": "linear", "alpha": 1.0, "epsilon": 1.0,
                             "reg": 0.001, "init_mean": 0.0, "init_std": 0.1},
-                   "SLIMBPR": {"topK": 26, "epochs": 15, "lambda_i": 0.009991555707793169,
-                               "lambda_j": 0.004832924438269361, "learning_rate": 0.04032300739781685},
+                   "SLIMElasticNet": {"topK": 45, "l1_ratio": 0.005997129498003861, "alpha": 0.004503120402472539,
+                                      "positive_only": True},
                    "EASE_R": {"topK": 10, "l2_norm": 101, "normalize_matrix": False}
                    }
 
