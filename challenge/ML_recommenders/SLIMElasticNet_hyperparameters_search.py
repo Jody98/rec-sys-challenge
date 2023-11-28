@@ -31,7 +31,7 @@ def __main__():
     hyperparameters_range_dictionary = {
         "topK": Integer(low=40, high=100, prior='uniform'),
         "l1_ratio": Real(low=1e-4, high=1e-1, prior='log-uniform'),
-        "alpha": Real(low=1e-5, high=1e-2, prior='uniform'),
+        "alpha": Real(low=1e-4, high=1e-2, prior='uniform'),
         "positive_only": Categorical([True, False]),
     }
 
