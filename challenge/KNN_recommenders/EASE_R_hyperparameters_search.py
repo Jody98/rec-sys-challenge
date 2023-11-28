@@ -10,7 +10,7 @@ from HyperparameterTuning.SearchAbstractClass import SearchInputRecommenderArgs
 from HyperparameterTuning.SearchBayesianSkopt import SearchBayesianSkopt
 from Recommenders.DataIO import DataIO
 from Recommenders.EASE_R.EASE_R_Recommender import EASE_R_Recommender
-from utils.functions import read_data
+from challenge.utils.functions import read_data
 
 
 def __main__():
@@ -29,8 +29,8 @@ def __main__():
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(low=5, high=20, prior='uniform'),
-        "l2_norm": Integer(low=30, high=110, prior='uniform'),
+        "topK": Integer(low=9, high=10, prior='uniform'),
+        "l2_norm": Integer(low=100, high=101, prior='uniform'),
         "normalize_matrix": Categorical([False]),
     }
 
@@ -61,8 +61,8 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 25
-    n_random_starts = int(n_cases * 0.3)
+    n_cases = 1
+    n_random_starts = 1
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10
 
@@ -71,7 +71,7 @@ def __main__():
                                 hyperparameter_search_space=hyperparameters_range_dictionary,
                                 n_cases=n_cases,
                                 n_random_starts=n_random_starts,
-                                save_model="last",
+                                save_model="best",
                                 output_folder_path=output_folder_path,
                                 output_file_name_root=recommender_class.RECOMMENDER_NAME,
                                 metric_to_optimize=metric_to_optimize,

@@ -9,6 +9,8 @@ from challenge.utils.functions import read_data, generate_submission_csv
 
 def __main__():
     cutoff_list = [10]
+    folder_path = "../result_experiments/"
+    filename = "EASE_R_Recommender_best_model.zip"
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
@@ -20,7 +22,8 @@ def __main__():
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
     recommender = EASE_R_Recommender.EASE_R_Recommender(URM_train)
-    recommender.fit(topK=10, l2_norm=101, normalize_matrix=False)
+    recommender.load_model(folder_path, filename)
+    # recommender.fit(topK=10, l2_norm=101, normalize_matrix=False)
 
     recommended_items = recommender.recommend(users_list, cutoff=10)
     recommendations = []

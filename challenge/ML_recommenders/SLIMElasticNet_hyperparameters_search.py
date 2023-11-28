@@ -29,10 +29,10 @@ def __main__():
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(low=40, high=100, prior='uniform'),
-        "l1_ratio": Real(low=1e-4, high=1e-1, prior='log-uniform'),
-        "alpha": Real(low=1e-4, high=1e-2, prior='uniform'),
-        "positive_only": Categorical([True, False]),
+        "topK": Integer(low=45, high=46, prior='uniform'),
+        "l1_ratio": Real(low=0.005997129498003861, high=0.005997129498003862, prior='log-uniform'),
+        "alpha": Real(low=0.004503120402472538, high=0.004503120402472539, prior='uniform'),
+        "positive_only": Categorical([True]),
     }
 
     recommender_class = SLIMElasticNetRecommender
@@ -62,8 +62,8 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 25
-    n_random_starts = int(n_cases * 0.3)
+    n_cases = 1
+    n_random_starts = 1
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10
 
@@ -72,7 +72,7 @@ def __main__():
                                 hyperparameter_search_space=hyperparameters_range_dictionary,
                                 n_cases=n_cases,
                                 n_random_starts=n_random_starts,
-                                save_model="last",
+                                save_model="best",
                                 output_folder_path=output_folder_path,
                                 output_file_name_root=recommender_class.RECOMMENDER_NAME,
                                 metric_to_optimize=metric_to_optimize,

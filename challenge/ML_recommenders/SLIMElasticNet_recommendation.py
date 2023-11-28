@@ -9,6 +9,8 @@ from challenge.utils.functions import read_data, generate_submission_csv
 
 def __main__():
     cutoff_list = [10]
+    folder_path = "../result_experiments/"
+    filename = "SLIMElasticNetRecommender_best_model.zip"
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
@@ -20,8 +22,8 @@ def __main__():
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
     recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
-    SLIMElasticNet_Wsparse = recommender.fit(l1_ratio=0.005997129498003861, alpha=0.004503120402472539,
-                                             positive_only=True, topK=45)
+    recommender.load_model(folder_path, filename)
+    # recommender.fit(topK=46, l1_ratio=0.005997129498003861, alpha=0.004503120402472538, positive_only=True)
 
     recommended_items = recommender.recommend(users_list, cutoff=10)
     recommendations = []
