@@ -20,7 +20,8 @@ def __main__():
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
     recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_all)
-    recommender.fit(l1_ratio=0.011103511550118465, alpha=0.0010114858432948017, positive_only=False, topK=48)
+    SLIMElasticNet_Wsparse = recommender.fit(l1_ratio=0.011103511550118465, alpha=0.0010114858432948017,
+                                             positive_only=False, topK=48)
 
     recommended_items = recommender.recommend(users_list, cutoff=10)
     recommendations = []

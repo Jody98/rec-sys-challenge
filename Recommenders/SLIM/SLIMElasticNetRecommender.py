@@ -128,6 +128,7 @@ class SLIMElasticNetRecommender(BaseItemSimilarityMatrixRecommender):
                 start_time_printBatch = time.time()
 
         self.W_sparse = similarity_builder.get_SparseMatrix()
+        return self.W_sparse
 
 
 from multiprocessing import Pool, cpu_count, shared_memory

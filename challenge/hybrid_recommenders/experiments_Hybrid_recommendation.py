@@ -6,6 +6,7 @@ from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
 from Recommenders.KNN.ItemKNNSimilarityHybridRecommender import ItemKNNSimilarityHybridRecommender
+from Recommenders.SLIM import SLIMElasticNetRecommender
 from challenge.utils.functions import read_data, generate_submission_csv
 
 
@@ -23,17 +24,15 @@ def __main__():
 
     # TODO: try this line in EASE_R: W_sparse = sps.csr_matrix(item_item_S)
 
-    RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_train)
+    RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_all)
     RP3beta_Wsparse = RP3_recommender.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086,
                                           min_rating=0.2588031389774553,
                                           implicit=True,
                                           normalize_similarity=True)
 
-    RP3_recommender_second = RP3betaRecommender.RP3betaRecommender(URM_train)
-    RP3beta_Wsparse_second = RP3_recommender_second.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086,
-                                                        min_rating=0.2588031389774553,
-                                                        implicit=True,
-                                                        normalize_similarity=True)
+    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_all)
+    SLIM_Wsparse = SLIM_recommender.fit(l1_ratio=0.011103511550118465, alpha=0.0010114858432948017,
+                                        positive_only=False, topK=48)
 
     P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
     P3alpha_Wsparse = P3_recommender.fit(topK=64, alpha=0.35496275558011753, min_rating=0.1, implicit=True,
@@ -43,14 +42,8 @@ def __main__():
     item_Wsparse = item_recommender.fit(topK=10, shrink=19, similarity='jaccard', normalize=False,
                                         feature_weighting="TF-IDF")
 
-    recommender_object = ItemKNNSimilarityHybridRecommender(URM_train, RP3beta_Wsparse, P3alpha_Wsparse)
-    hybrid_Wsparse = recommender_object.fit(topK=56, alpha=0.8126786752572159)
-
-    recommender_object = ItemKNNSimilarityHybridRecommender(URM_train, item_Wsparse, hybrid_Wsparse)
-    hybrid_Wsparse = recommender_object.fit(topK=87, alpha=0.3214615056709495)
-
-    recommender_object = ItemKNNSimilarityHybridRecommender(URM_train, RP3beta_Wsparse_second, hybrid_Wsparse)
-    hybrid_Wsparse = recommender_object.fit(topK=37, alpha=0.4214615056709495)
+    recommender_object = ItemKNNSimilarityHybridRecommender(URM_train, RP3beta_Wsparse, SLIM_Wsparse)
+    recommender_object.fit(alpha=0.3)
 
     recommended_items = recommender_object.recommend(users_list, cutoff=10)
     recommendations = []
