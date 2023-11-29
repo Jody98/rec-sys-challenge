@@ -17,6 +17,9 @@ from challenge.utils.functions import read_data
 
 
 def __main__():
+    folder_path = "../result_experiments/"
+    SLIM_filename = "SLIMElasticNetRecommender_best_model.zip"
+    RP3_filename = "RP3betaRecommender_best_model.zip"
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
@@ -32,18 +35,17 @@ def __main__():
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_train)
-    RP3beta_Wsparse = RP3_recommender.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086,
-                                          min_rating=0.2588031389774553,
-                                          implicit=True,
-                                          normalize_similarity=True)
+    RP3_recommender.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086, min_rating=0.2588031389774553,
+                        implicit=True, normalize_similarity=False)
+    RP3_Wsparse = RP3_recommender.W_sparse
 
     SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
-    SLIM_Wsparse = SLIM_recommender.fit(l1_ratio=0.005997129498003861, alpha=0.004503120402472539,
-                                        positive_only=True, topK=45)
+    SLIM_recommender.fit(topK=46, l1_ratio=0.005997129498003861, alpha=0.004503120402472538, positive_only=True)
+    SLIM_Wsparse = SLIM_recommender.W_sparse
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(80, 200),
-        "alpha": Real(0.3, 0.7),
+        "topK": Integer(0, 200),
+        "alpha": Real(0, 1),
     }
 
     recommender_class = ItemKNNSimilarityHybridRecommender
@@ -53,7 +55,7 @@ def __main__():
                                                evaluator_test=evaluator_test)
 
     recommender_input_args = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, RP3beta_Wsparse, SLIM_Wsparse],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, RP3_Wsparse, SLIM_Wsparse],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},
@@ -61,7 +63,7 @@ def __main__():
     )
 
     recommender_input_args_last_test = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, RP3beta_Wsparse, SLIM_Wsparse],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, RP3_Wsparse, SLIM_Wsparse],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},
@@ -83,7 +85,7 @@ def __main__():
                                 hyperparameter_search_space=hyperparameters_range_dictionary,
                                 n_cases=n_cases,
                                 n_random_starts=n_random_starts,
-                                save_model="last",
+                                save_model="best",
                                 output_folder_path=output_folder_path,
                                 output_file_name_root=recommender_class.RECOMMENDER_NAME,
                                 metric_to_optimize=metric_to_optimize,
