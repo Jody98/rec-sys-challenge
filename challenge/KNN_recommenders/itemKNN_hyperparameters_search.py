@@ -10,7 +10,7 @@ from HyperparameterTuning.SearchAbstractClass import SearchInputRecommenderArgs
 from HyperparameterTuning.SearchBayesianSkopt import SearchBayesianSkopt
 from Recommenders.DataIO import DataIO
 from Recommenders.KNN.ItemKNNCFRecommender import ItemKNNCFRecommender
-from utils.functions import read_data
+from challenge.utils.functions import read_data
 
 
 def __main__():
@@ -30,7 +30,7 @@ def __main__():
 
     hyperparameters_range_dictionary = {
         "topK": Integer(10, 11),
-        "shrink": Integer(10, 20),
+        "shrink": Integer(19, 20),
         "similarity": Categorical(["jaccard"]),
         "normalize": Categorical([True, False]),
     }
@@ -62,8 +62,8 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 10
-    n_random_starts = int(n_cases * 0.3)
+    n_cases = 1
+    n_random_starts = 1
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10
 
@@ -72,7 +72,7 @@ def __main__():
                                 hyperparameter_search_space=hyperparameters_range_dictionary,
                                 n_cases=n_cases,
                                 n_random_starts=n_random_starts,
-                                save_model="last",
+                                save_model="best",
                                 output_folder_path=output_folder_path,
                                 output_file_name_root=recommender_class.RECOMMENDER_NAME,
                                 metric_to_optimize=metric_to_optimize,

@@ -10,7 +10,7 @@ from HyperparameterTuning.SearchAbstractClass import SearchInputRecommenderArgs
 from HyperparameterTuning.SearchBayesianSkopt import SearchBayesianSkopt
 from Recommenders.DataIO import DataIO
 from Recommenders.GraphBased.P3alphaRecommender import P3alphaRecommender
-from utils.functions import read_data
+from challenge.utils.functions import read_data
 
 
 def __main__():
@@ -29,9 +29,9 @@ def __main__():
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(30, 80),
-        "alpha": Real(0, 1),
-        "min_rating": Real(0, 0.2),
+        "topK": Integer(64, 65),
+        "alpha": Real(0.35496275558011753, 0.35496276558011754),
+        "min_rating": Real(0.1, 0.10001),
         "implicit": Categorical([True]),
         "normalize_similarity": Categorical([True]),
     }
@@ -63,8 +63,8 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 100
-    n_random_starts = int(n_cases * 0.3)
+    n_cases = 1
+    n_random_starts = 1
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10
 
@@ -73,7 +73,7 @@ def __main__():
                                 hyperparameter_search_space=hyperparameters_range_dictionary,
                                 n_cases=n_cases,
                                 n_random_starts=n_random_starts,
-                                save_model="last",
+                                save_model="best",
                                 output_folder_path=output_folder_path,
                                 output_file_name_root=recommender_class.RECOMMENDER_NAME,
                                 metric_to_optimize=metric_to_optimize,

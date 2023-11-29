@@ -22,9 +22,8 @@ def __main__():
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
     recommender = RP3betaRecommender.RP3betaRecommender(URM_train)
-    recommender.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086, min_rating=0.2588031389774553,
-                    implicit=True,
-                    normalize_similarity=True)
+    # recommender.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086, min_rating=0.2588031389774553, implicit=True, normalize_similarity=False)
+    recommender.load_model(folder_path, filename)
 
     recommended_items = recommender.recommend(users_list, cutoff=10)
     recommendations = []
