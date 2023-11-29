@@ -29,10 +29,10 @@ def __main__():
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(5, 50),
-        "alpha": Real(0.2, 0.5),
-        "beta": Real(0.2, 0.5),
-        "min_rating": Real(0.15, 0.35),
+        "topK": Integer(30, 31),
+        "alpha": Real(0.26362900188025656, 0.26362900288025657),
+        "beta": Real(0.17133265585189086, 0.17133265785189087),
+        "min_rating": Real(0.2588031389774553, 0.2588031589774554),
         "implicit": Categorical([True]),
         "normalize_similarity": Categorical([True]),
     }
@@ -64,8 +64,8 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 200
-    n_random_starts = int(n_cases * 0.3)
+    n_cases = 2
+    n_random_starts = 1
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10
 
@@ -74,7 +74,7 @@ def __main__():
                                 hyperparameter_search_space=hyperparameters_range_dictionary,
                                 n_cases=n_cases,
                                 n_random_starts=n_random_starts,
-                                save_model="last",
+                                save_model="best",
                                 output_folder_path=output_folder_path,
                                 output_file_name_root=recommender_class.RECOMMENDER_NAME,
                                 metric_to_optimize=metric_to_optimize,

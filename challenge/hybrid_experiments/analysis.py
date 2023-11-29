@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 import scipy.sparse as sps
 
 from Data_manager.split_functions.split_train_validation_random_holdout import \
@@ -27,28 +28,26 @@ cutoff_list = [5, 10, 15]
 
 evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
 
-profile_length = np.ediff1d(sps.csr_matrix(URM_train).indptr)
-print(profile_length, profile_length.shape)
+# create a dataframe of users and their profile length
+user_profile_length = np.ediff1d(URM_all.indptr)
+user_profile_length = np.sort(user_profile_length)
+user_profile_length_df = pd.DataFrame(user_profile_length, columns=['profile_length'])
+user_profile_length_df['user_id'] = np.arange(0, len(user_profile_length_df))
 
-block_size = int(len(profile_length) * 0.05)
+# create 4 groups of users based on the profile length
+# first group where profile_length == 0
+# second group where profile_length > 0 and profile_length <= 6
+# third group where profile_length > 6 and profile_length <= 17
+# fourth group where profile_length > 17
+group_1 = user_profile_length_df[user_profile_length_df['profile_length'] == 0]
+group_2 = user_profile_length_df[
+    (user_profile_length_df['profile_length'] > 0) & (user_profile_length_df['profile_length'] <= 6)]
+group_3 = user_profile_length_df[
+    (user_profile_length_df['profile_length'] > 6) & (user_profile_length_df['profile_length'] <= 17)]
+group_4 = user_profile_length_df[user_profile_length_df['profile_length'] > 17]
 
-sorted_users = np.argsort(profile_length)
-
-for group_id in range(0, 20):
-    start_pos = group_id * block_size
-    end_pos = min((group_id + 1) * block_size, len(profile_length))
-
-    users_in_group = sorted_users[start_pos:end_pos]
-
-    users_in_group_p_len = profile_length[users_in_group]
-
-    print("Group {}, #users in group {}, average p.len {:.2f}, median {}, min {}, max {}".format(
-        group_id,
-        users_in_group.shape[0],
-        users_in_group_p_len.mean(),
-        np.median(users_in_group_p_len),
-        users_in_group_p_len.min(),
-        users_in_group_p_len.max()))
+# create a list of groups
+groups = [group_1, group_2, group_3, group_4]
 
 MAP_recommender_per_group = {}
 
@@ -88,17 +87,14 @@ for label, recommender_class in collaborative_recommender_class.items():
 
 cutoff = 10
 
-for group_id in range(0, 20):
+for group in groups:
+    users_in_group = group['user_id'].values
+    users_in_group_p_len = user_profile_length[users_in_group]
 
-    start_pos = group_id * block_size
-    end_pos = min((group_id + 1) * block_size, len(profile_length))
-
-    users_in_group = sorted_users[start_pos:end_pos]
-
-    users_in_group_p_len = profile_length[users_in_group]
+    sorted_users = np.argsort(user_profile_length)
 
     print("Group {}, #users in group {}, average p.len {:.2f}, median {}, min {}, max {}".format(
-        group_id,
+        group,
         users_in_group.shape[0],
         users_in_group_p_len.mean(),
         np.median(users_in_group_p_len),
