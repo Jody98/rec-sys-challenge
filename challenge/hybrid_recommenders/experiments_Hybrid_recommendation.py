@@ -29,7 +29,7 @@ def __main__():
 
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
-    P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_all)
+    P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
     P3_recommender.fit(topK=64, alpha=0.35496275558011753, min_rating=0.1, implicit=True,
                        normalize_similarity=True)
     P3_Wsparse = P3_recommender.W_sparse
@@ -48,16 +48,11 @@ def __main__():
                         implicit=True, normalize_similarity=True)
     RP3_Wsparse = RP3_recommender.W_sparse
 
-    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_all)
-    SLIM_recommender.fit(topK=46, l1_ratio=0.005997129498003861, alpha=0.004503120402472538, positive_only=True)
-    SLIM_Wsparse = SLIM_recommender.W_sparse
+    SLIM_Wsparse = sps.load_npz('../ML_recommenders/SLIM_WsparseALL.npz')
 
     recommender_object = ItemKNNSimilarityHybridRecommender(URM_all, RP3_Wsparse, SLIM_Wsparse)
     recommender_object.fit(alpha=0.5, topK=185)
     Wsparse = recommender_object.W_sparse
-
-    recommender_object = ItemKNNSimilarityHybridRecommender(URM_all, P3_Wsparse, Wsparse)
-    recommender_object.fit(alpha=0.3381788688387322, topK=152)
 
     recommended_items = recommender_object.recommend(users_list, cutoff=10)
     recommendations = []

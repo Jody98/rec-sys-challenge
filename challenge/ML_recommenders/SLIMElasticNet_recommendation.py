@@ -21,9 +21,11 @@ def __main__():
 
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
-    recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
-    recommender.load_model(folder_path, filename)
-    # recommender.fit(topK=46, l1_ratio=0.005997129498003861, alpha=0.004503120402472538, positive_only=True)
+    recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_all)
+    recommender.fit(topK=46, l1_ratio=0.005997129498003861, alpha=0.004503120402472538, positive_only=True)
+    SLIM_Wsparse = recommender.W_sparse
+
+    sps.save_npz('SLIM_WsparseALL.npz', SLIM_Wsparse)
 
     recommended_items = recommender.recommend(users_list, cutoff=10)
     recommendations = []

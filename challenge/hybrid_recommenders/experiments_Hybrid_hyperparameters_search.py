@@ -9,17 +9,14 @@ from Evaluation.Evaluator import EvaluatorHoldout
 from HyperparameterTuning.SearchAbstractClass import SearchInputRecommenderArgs
 from HyperparameterTuning.SearchBayesianSkopt import SearchBayesianSkopt
 from Recommenders.DataIO import DataIO
-from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
 from Recommenders.EASE_R import EASE_R_Recommender
-from Recommenders.SLIM import SLIMElasticNetRecommender
+from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
 from Recommenders.KNN.ItemKNNSimilarityHybridRecommender import ItemKNNSimilarityHybridRecommender
+from Recommenders.SLIM import SLIMElasticNetRecommender
 from challenge.utils.functions import read_data
 
 
 def __main__():
-    folder_path = "../result_experiments/"
-    SLIM_filename = "SLIMElasticNetRecommender_best_model.zip"
-    RP3_filename = "RP3betaRecommender_best_model.zip"
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
@@ -61,7 +58,7 @@ def __main__():
     Wsparse = recommender_object.W_sparse
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(0, 200),
+        "topK": Integer(100, 200),
         "alpha": Real(0, 1),
     }
 
@@ -92,7 +89,7 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 100
+    n_cases = 200
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10
