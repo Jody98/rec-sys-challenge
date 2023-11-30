@@ -42,8 +42,8 @@ def __main__():
 
     SLIM_Wsparse = sps.load_npz('../ML_recommenders/SLIM_Wsparse.npz')
 
-    recommender_object = ItemKNNSimilarityHybridRecommender(URM_train, item_Wsparse, SLIM_Wsparse)
-    recommender_object.fit(alpha=0.5, topK=185)
+    recommender_object = ItemKNNSimilarityHybridRecommender(URM_train, RP3_Wsparse, SLIM_Wsparse)
+    recommender_object.fit(alpha=0.0, topK=100)
     Wsparse = recommender_object.W_sparse
 
     recommended_items = recommender_object.recommend(users_list, cutoff=10)
