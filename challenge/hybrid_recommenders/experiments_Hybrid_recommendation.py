@@ -1,10 +1,13 @@
 import scipy.sparse as sps
+from numpy import linalg as la
+import numpy as np
 
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
 from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.EASE_R import EASE_R_Recommender
 from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
+from Recommenders.Hybrid.HybridDifferentLoss import DifferentLossScoresHybridRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
 from Recommenders.KNN.ItemKNNSimilarityHybridRecommender import ItemKNNSimilarityHybridRecommender
 from Recommenders.SLIM import SLIMElasticNetRecommender
@@ -23,6 +26,8 @@ def __main__():
 
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
+    evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
+
     item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
     item_recommender.fit(topK=10, shrink=19, similarity='jaccard', normalize=False,
                          feature_weighting="TF-IDF")
@@ -40,7 +45,18 @@ def __main__():
                         implicit=True, normalize_similarity=True)
     RP3_Wsparse = RP3_recommender.W_sparse
 
-    SLIM_Wsparse = sps.load_npz('../ML_recommenders/SLIM_Wsparse.npz')
+    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
+    SLIM_recommender.fit(l1_ratio=0.005997129498003861, alpha=0.004503120402472539,
+                         positive_only=True, topK=45)
+    SLIM_Wsparse = SLIM_recommender.W_sparse
+
+    recommender_object = DifferentLossScoresHybridRecommender(URM_train, RP3_recommender, SLIM_recommender)
+
+    for norm in [1, 2, np.inf]:
+        recommender_object.fit(norm, alpha=0.66)
+
+        result_df, _ = evaluator.evaluateRecommender(recommender_object)
+        print("Norm: {}, MAP: {}".format(norm, result_df.loc[10]["MAP"]))
 
     recommender_object = ItemKNNSimilarityHybridRecommender(URM_train, RP3_Wsparse, SLIM_Wsparse)
     recommender_object.fit(alpha=0.5153665793050106, topK=48)
@@ -54,7 +70,6 @@ def __main__():
 
     generate_submission_csv("../output_files/HybridSubmission.csv", recommendations)
 
-    evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
     results, _ = evaluator.evaluateRecommender(recommender_object)
 
     for result in results.items():
