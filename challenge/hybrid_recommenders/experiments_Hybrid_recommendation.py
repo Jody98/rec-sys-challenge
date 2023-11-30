@@ -29,12 +29,12 @@ def __main__():
 
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
-    '''P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
+    P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_all)
     P3_recommender.fit(topK=64, alpha=0.35496275558011753, min_rating=0.1, implicit=True,
                        normalize_similarity=True)
     P3_Wsparse = P3_recommender.W_sparse
 
-    item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
+    '''item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
     item_recommender.fit(topK=10, shrink=19, similarity='jaccard', normalize=False,
                          feature_weighting="TF-IDF")
     item_Wsparse = item_recommender.W_sparse
@@ -43,17 +43,21 @@ def __main__():
     EASE_R_recommender.fit(topK=10, l2_norm=101, normalize_matrix=False)
     EASE_R_Wsparse = sps.csr_matrix(EASE_R_recommender.W_sparse)'''
 
-    RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_train)
+    RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_all)
     RP3_recommender.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086, min_rating=0.2588031389774553,
-                        implicit=True, normalize_similarity=False)
+                        implicit=True, normalize_similarity=True)
     RP3_Wsparse = RP3_recommender.W_sparse
 
-    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
+    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_all)
     SLIM_recommender.fit(topK=46, l1_ratio=0.005997129498003861, alpha=0.004503120402472538, positive_only=True)
     SLIM_Wsparse = SLIM_recommender.W_sparse
 
-    recommender_object = ItemKNNSimilarityHybridRecommender(URM_train, RP3_Wsparse, SLIM_Wsparse)
-    recommender_object.fit(alpha=0.6380727357892416, topK=146)
+    recommender_object = ItemKNNSimilarityHybridRecommender(URM_all, RP3_Wsparse, SLIM_Wsparse)
+    recommender_object.fit(alpha=0.5, topK=185)
+    Wsparse = recommender_object.W_sparse
+
+    recommender_object = ItemKNNSimilarityHybridRecommender(URM_all, P3_Wsparse, Wsparse)
+    recommender_object.fit(alpha=0.3381788688387322, topK=152)
 
     recommended_items = recommender_object.recommend(users_list, cutoff=10)
     recommendations = []

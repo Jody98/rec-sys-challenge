@@ -10,7 +10,7 @@ from HyperparameterTuning.SearchAbstractClass import SearchInputRecommenderArgs
 from HyperparameterTuning.SearchBayesianSkopt import SearchBayesianSkopt
 from Recommenders.DataIO import DataIO
 from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
-from Recommenders.KNN import ItemKNNCFRecommender
+from Recommenders.EASE_R import EASE_R_Recommender
 from Recommenders.SLIM import SLIMElasticNetRecommender
 from Recommenders.KNN.ItemKNNSimilarityHybridRecommender import ItemKNNSimilarityHybridRecommender
 from challenge.utils.functions import read_data
@@ -36,12 +36,29 @@ def __main__():
 
     RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_train)
     RP3_recommender.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086, min_rating=0.2588031389774553,
-                        implicit=True, normalize_similarity=False)
+                        implicit=True, normalize_similarity=True)
     RP3_Wsparse = RP3_recommender.W_sparse
 
     SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
     SLIM_recommender.fit(topK=46, l1_ratio=0.005997129498003861, alpha=0.004503120402472538, positive_only=True)
     SLIM_Wsparse = SLIM_recommender.W_sparse
+
+    P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
+    P3_recommender.fit(topK=64, alpha=0.35496275558011753, min_rating=0.1, implicit=True,
+                       normalize_similarity=True)
+    P3_Wsparse = P3_recommender.W_sparse
+
+    recommender_object = ItemKNNSimilarityHybridRecommender(URM_train, RP3_Wsparse, SLIM_Wsparse)
+    recommender_object.fit(alpha=0.5, topK=185)
+    Wsparse = recommender_object.W_sparse
+
+    EASE_R_recommender = EASE_R_Recommender.EASE_R_Recommender(URM_train)
+    EASE_R_recommender.fit(topK=10, l2_norm=101, normalize_matrix=False)
+    EASE_R_Wsparse = sps.csr_matrix(EASE_R_recommender.W_sparse)
+
+    recommender_object = ItemKNNSimilarityHybridRecommender(URM_train, Wsparse, P3_Wsparse)
+    recommender_object.fit(alpha=0.3381788688387322, topK=152)
+    Wsparse = recommender_object.W_sparse
 
     hyperparameters_range_dictionary = {
         "topK": Integer(0, 200),
@@ -55,7 +72,7 @@ def __main__():
                                                evaluator_test=evaluator_test)
 
     recommender_input_args = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, RP3_Wsparse, SLIM_Wsparse],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, EASE_R_Wsparse, Wsparse],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},
@@ -63,7 +80,7 @@ def __main__():
     )
 
     recommender_input_args_last_test = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, RP3_Wsparse, SLIM_Wsparse],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, EASE_R_Wsparse, Wsparse],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},
