@@ -1,7 +1,8 @@
 import os
 
+import numpy as np
 import scipy.sparse as sps
-from skopt.space import Integer, Real
+from skopt.space import Real, Categorical
 
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
@@ -9,10 +10,9 @@ from Evaluation.Evaluator import EvaluatorHoldout
 from HyperparameterTuning.SearchAbstractClass import SearchInputRecommenderArgs
 from HyperparameterTuning.SearchBayesianSkopt import SearchBayesianSkopt
 from Recommenders.DataIO import DataIO
-from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
-from Recommenders.KNN import ItemKNNCFRecommender
+from Recommenders.GraphBased import RP3betaRecommender
+from Recommenders.Hybrid.HybridDifferentLoss import DifferentLossScoresHybridRecommender
 from Recommenders.SLIM import SLIMElasticNetRecommender
-from Recommenders.KNN.ItemKNNSimilarityHybridRecommender import ItemKNNSimilarityHybridRecommender
 from challenge.utils.functions import read_data
 
 
@@ -33,22 +33,22 @@ def __main__():
 
     RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_train)
     RP3_recommender.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086,
-                                          min_rating=0.2588031389774553,
-                                          implicit=True,
-                                          normalize_similarity=True)
+                        min_rating=0.2588031389774553,
+                        implicit=True,
+                        normalize_similarity=True)
     RP3beta_Wsparse = RP3_recommender.W_sparse
 
     SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
     SLIM_recommender.fit(l1_ratio=0.005997129498003861, alpha=0.004503120402472539,
-                                        positive_only=True, topK=45)
+                         positive_only=True, topK=45)
     SLIM_Wsparse = SLIM_recommender.W_sparse
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(10, 200),
-        "alpha": Real(0.01, 0.99),
+        "norm": Categorical([1, 2, np.inf]),
+        "alpha": Real(0, 1),
     }
 
-    recommender_class = ItemKNNSimilarityHybridRecommender
+    recommender_class = DifferentLossScoresHybridRecommender
 
     hyperparameterSearch = SearchBayesianSkopt(recommender_class,
                                                evaluator_validation=evaluator_validation,

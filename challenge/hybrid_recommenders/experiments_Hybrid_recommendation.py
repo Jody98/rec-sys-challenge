@@ -52,15 +52,13 @@ def __main__():
 
     recommender_object = DifferentLossScoresHybridRecommender(URM_train, RP3_recommender, SLIM_recommender)
 
-    for norm in [1, 2, np.inf]:
-        recommender_object.fit(norm, alpha=0.66)
+    recommender_object.fit(norm=2, alpha=0.5153665793050106)
 
-        result_df, _ = evaluator.evaluateRecommender(recommender_object)
-        print("Norm: {}, MAP: {}".format(norm, result_df.loc[10]["MAP"]))
+    result_df, _ = evaluator.evaluateRecommender(recommender_object)
+    print("Norm: {}, MAP: {}".format(2, result_df.loc[10]["MAP"]))
 
     recommender_object = ItemKNNSimilarityHybridRecommender(URM_train, RP3_Wsparse, SLIM_Wsparse)
     recommender_object.fit(alpha=0.5153665793050106, topK=48)
-    Wsparse = recommender_object.W_sparse
 
     recommended_items = recommender_object.recommend(users_list, cutoff=10)
     recommendations = []
@@ -72,8 +70,7 @@ def __main__():
 
     results, _ = evaluator.evaluateRecommender(recommender_object)
 
-    for result in results.items():
-        print(result)
+    print("MAP: {}".format(results.loc[10]["MAP"]))
 
 
 if __name__ == '__main__':
