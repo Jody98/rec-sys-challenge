@@ -1,6 +1,7 @@
 from Recommenders.BaseRecommender import BaseRecommender
 import scipy.sparse as sps
 from numpy import linalg as LA
+from Recommenders.DataIO import DataIO
 
 class DifferentLossScoresHybridRecommender(BaseRecommender):
     """ ScoresHybridRecommender
@@ -18,7 +19,7 @@ class DifferentLossScoresHybridRecommender(BaseRecommender):
         self.recommender_1 = recommender_1
         self.recommender_2 = recommender_2
 
-    def fit(self, norm, alpha=0.5):
+    def fit(self, norm=1, alpha=0.5):
 
         self.alpha = alpha
         self.norm = norm
@@ -43,3 +44,18 @@ class DifferentLossScoresHybridRecommender(BaseRecommender):
                     1 - self.alpha)
 
         return item_weights
+
+    def save_model(self, folder_path, file_name=None):
+        if file_name is None:
+            file_name = self.RECOMMENDER_NAME
+
+        self.recommender_1.save_model(folder_path, file_name + "_recommender_1")
+        self.recommender_2.save_model(folder_path, file_name + "_recommender_2")
+
+        print("{}: Saving norm and alpha".format(self.RECOMMENDER_NAME))
+
+        data_dict_to_save = {"norm": self.norm,
+                             "alpha": self.alpha}
+
+        dataIO = DataIO(folder_path=folder_path)
+        dataIO.save_data(file_name=file_name + "_dataIO", data_dict_to_save=data_dict_to_save)
