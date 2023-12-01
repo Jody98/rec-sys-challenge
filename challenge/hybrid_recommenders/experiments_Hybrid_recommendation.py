@@ -40,25 +40,22 @@ def __main__():
                        normalize_similarity=True)
     P3_Wsparse = P3_recommender.W_sparse
 
-    RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_train)
+    RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_all)
     RP3_recommender.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086, min_rating=0.2588031389774553,
                         implicit=True, normalize_similarity=True)
     RP3_Wsparse = RP3_recommender.W_sparse
 
-    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
+    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_all)
     SLIM_recommender.fit(l1_ratio=0.005997129498003861, alpha=0.004503120402472539,
                          positive_only=True, topK=45)
     SLIM_Wsparse = SLIM_recommender.W_sparse
 
-    recommender_object = DifferentLossScoresHybridRecommender(URM_train, RP3_recommender, SLIM_recommender)
+    recommender_object = DifferentLossScoresHybridRecommender(URM_all, RP3_recommender, SLIM_recommender)
 
     recommender_object.fit(norm=1, alpha=0.4969561446020178)
 
     result_df, _ = evaluator.evaluateRecommender(recommender_object)
     print("Norm: {}, MAP: {}".format(2, result_df.loc[10]["MAP"]))
-
-    recommender_object = ItemKNNSimilarityHybridRecommender(URM_train, RP3_Wsparse, SLIM_Wsparse)
-    recommender_object.fit(alpha=0.5153665793050106, topK=48)
 
     recommended_items = recommender_object.recommend(users_list, cutoff=10)
     recommendations = []
