@@ -27,6 +27,7 @@ def __main__():
     item_Wsparse = item_recommender.W_sparse
 
     results, _ = evaluator.evaluateRecommender(item_recommender)
+    print("ItemKNNCFRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     recommender = EASE_R_Recommender.EASE_R_Recommender(URM_train)
@@ -34,6 +35,7 @@ def __main__():
     EASE_R_Wsparse = sps.csr_matrix(recommender.W_sparse)
 
     results, _ = evaluator.evaluateRecommender(recommender)
+    print("EASE_R_Recommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
@@ -42,6 +44,7 @@ def __main__():
     P3_Wsparse = P3_recommender.W_sparse
 
     results, _ = evaluator.evaluateRecommender(P3_recommender)
+    print("P3alphaRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_train)
@@ -50,6 +53,7 @@ def __main__():
     RP3_Wsparse = RP3_recommender.W_sparse
 
     results, _ = evaluator.evaluateRecommender(RP3_recommender)
+    print("RP3betaRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
@@ -58,6 +62,7 @@ def __main__():
     SLIM_Wsparse = SLIM_recommender.W_sparse
 
     results, _ = evaluator.evaluateRecommender(SLIM_recommender)
+    print("SLIMElasticNetRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     SLIMRP3 = ItemKNNSimilarityHybridRecommender(URM_train, RP3_Wsparse, SLIM_Wsparse)
@@ -65,6 +70,7 @@ def __main__():
     SLIMRP3_Wsparse = SLIMRP3.W_sparse
 
     results, _ = evaluator.evaluateRecommender(SLIMRP3)
+    print("SLIMRP3")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     SLIMP3 = ItemKNNSimilarityHybridRecommender(URM_train, P3_Wsparse, SLIM_Wsparse)
@@ -72,6 +78,7 @@ def __main__():
     SLIMP3_Wsparse = SLIMP3.W_sparse
 
     results, _ = evaluator.evaluateRecommender(SLIMP3)
+    print("SLIMP3")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     SLIMitem = ItemKNNSimilarityHybridRecommender(URM_train, item_Wsparse, SLIM_Wsparse)
@@ -79,6 +86,7 @@ def __main__():
     SLIMitem_Wsparse = SLIMitem.W_sparse
 
     results, _ = evaluator.evaluateRecommender(SLIMitem)
+    print("SLIMitem")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     SLIMEASE_R = ItemKNNSimilarityHybridRecommender(URM_train, EASE_R_Wsparse, SLIM_Wsparse)
@@ -86,38 +94,43 @@ def __main__():
     SLIMEASE_R_Wsparse = SLIMEASE_R.W_sparse
 
     results, _ = evaluator.evaluateRecommender(SLIMEASE_R)
+    print("SLIMEASE_R")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     SLIMRP3P3 = ItemKNNSimilarityHybridRecommender(URM_train, RP3_Wsparse, SLIMP3_Wsparse)
-    SLIMRP3P3.fit(alpha=0.5153665793050106, topK=48)  # finetunare alpha e topK
+    SLIMRP3P3.fit(alpha=0.2153665793050106, topK=48)  # finetunare alpha e topK
     SLIMRP3P3_Wsparse = SLIMRP3P3.W_sparse
 
     results, _ = evaluator.evaluateRecommender(SLIMRP3P3)
+    print("SLIMRP3P3")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     SLIMRP3item = ItemKNNSimilarityHybridRecommender(URM_train, RP3_Wsparse, SLIMitem_Wsparse)
-    SLIMRP3item.fit(alpha=0.5153665793050106, topK=48)  # finetunare alpha e topK
+    SLIMRP3item.fit(alpha=0.2153665793050106, topK=48)  # finetunare alpha e topK
     SLIMRP3item_Wsparse = SLIMRP3item.W_sparse
 
     results, _ = evaluator.evaluateRecommender(SLIMRP3item)
+    print("SLIMRP3item")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     SLIMRP3EASE_R = ItemKNNSimilarityHybridRecommender(URM_train, RP3_Wsparse, SLIMEASE_R_Wsparse)
-    SLIMRP3EASE_R.fit(alpha=0.5153665793050106, topK=48)  # finetunare alpha e topK
+    SLIMRP3EASE_R.fit(alpha=0.2153665793050106, topK=48)  # finetunare alpha e topK
     SLIMRP3EASE_R_Wsparse = SLIMRP3EASE_R.W_sparse
 
     results, _ = evaluator.evaluateRecommender(SLIMRP3EASE_R)
+    print("SLIMRP3EASE_R")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     SLIMP3item = ItemKNNSimilarityHybridRecommender(URM_train, P3_Wsparse, SLIMitem_Wsparse)
-    SLIMP3item.fit(alpha=0.5153665793050106, topK=48)  # finetunare alpha e topK
+    SLIMP3item.fit(alpha=0.2153665793050106, topK=48)  # finetunare alpha e topK
     SLIMP3item_Wsparse = SLIMP3item.W_sparse
 
     results, _ = evaluator.evaluateRecommender(SLIMP3item)
+    print("SLIMP3item")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     recommenders = [item_recommender, P3_recommender, RP3_recommender, SLIM_recommender]
-    alphas = [0.5, 0.65, 0.75, 1.0]
+    alphas = [0.25, 0.5, 0.75, 1.5]
 
     recommender_object = GeneralizedLinearHybridRecommender(URM_train, recommenders=recommenders)
     recommender_object.fit(alphas=alphas)
