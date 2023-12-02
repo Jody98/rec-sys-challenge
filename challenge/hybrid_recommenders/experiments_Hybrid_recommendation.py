@@ -1,15 +1,11 @@
 import scipy.sparse as sps
-from numpy import linalg as la
-import numpy as np
 
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
 from Evaluation.Evaluator import EvaluatorHoldout
-from Recommenders.EASE_R import EASE_R_Recommender
 from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
-from Recommenders.Hybrid.HybridDifferentLoss import DifferentLossScoresHybridRecommender
+from Recommenders.Hybrid.GeneralizedLinearHybridRecommender import GeneralizedLinearHybridRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
-from Recommenders.KNN.ItemKNNSimilarityHybridRecommender import ItemKNNSimilarityHybridRecommender
 from Recommenders.SLIM import SLIMElasticNetRecommender
 from challenge.utils.functions import read_data, generate_submission_csv
 
@@ -33,29 +29,26 @@ def __main__():
                          feature_weighting="TF-IDF")
     item_Wsparse = item_recommender.W_sparse
 
-    EASE_R_Wsparse = sps.load_npz('../KNN_recommenders/EASE_R_Wsparse.npz')
-
     P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
     P3_recommender.fit(topK=64, alpha=0.35496275558011753, min_rating=0.1, implicit=True,
                        normalize_similarity=True)
     P3_Wsparse = P3_recommender.W_sparse
 
-    RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_all)
+    RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_train)
     RP3_recommender.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086, min_rating=0.2588031389774553,
                         implicit=True, normalize_similarity=True)
     RP3_Wsparse = RP3_recommender.W_sparse
 
-    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_all)
+    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
     SLIM_recommender.fit(l1_ratio=0.005997129498003861, alpha=0.004503120402472539,
                          positive_only=True, topK=45)
     SLIM_Wsparse = SLIM_recommender.W_sparse
 
-    recommender_object = DifferentLossScoresHybridRecommender(URM_all, RP3_recommender, SLIM_recommender)
+    recommenders = [item_recommender, P3_recommender, RP3_recommender, SLIM_recommender]
+    alphas = [0.5, 0.65, 0.75, 1.0]
 
-    recommender_object.fit(norm=1, alpha=0.4969561446020178)
-
-    result_df, _ = evaluator.evaluateRecommender(recommender_object)
-    print("Norm: {}, MAP: {}".format(2, result_df.loc[10]["MAP"]))
+    recommender_object = GeneralizedLinearHybridRecommender(URM_train, recommenders=recommenders)
+    recommender_object.fit(alphas=alphas)
 
     recommended_items = recommender_object.recommend(users_list, cutoff=10)
     recommendations = []
