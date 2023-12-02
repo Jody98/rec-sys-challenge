@@ -29,13 +29,13 @@ def __main__():
     print("ItemKNNCFRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    '''recommender = EASE_R_Recommender.EASE_R_Recommender(URM_train)
+    recommender = EASE_R_Recommender.EASE_R_Recommender(URM_train)
     recommender.fit(topK=10, l2_norm=101, normalize_matrix=False)
     EASE_R_Wsparse = sps.csr_matrix(recommender.W_sparse)
 
     results, _ = evaluator.evaluateRecommender(recommender)
     print("EASE_R_Recommender")
-    print("MAP: {}".format(results.loc[10]["MAP"]))'''
+    print("MAP: {}".format(results.loc[10]["MAP"]))
 
     P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
     P3_recommender.fit(topK=64, alpha=0.35496275558011753, min_rating=0.1, implicit=True,

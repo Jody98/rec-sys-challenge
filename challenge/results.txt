@@ -47,5 +47,5 @@ SLIMP3item(alpha=0.2153665793050106, topK=48)
 MAP: 0.048287206523966945 -> 0.12957
 
 recommenders = [item_recommender, P3_recommender, RP3_recommender, SLIM_recommender]
-alphas = [0.25, 0.5, 0.75, 1.5]
-MAP: 0.049019627339673716 -> 0.13157
+alphas = [0, 1.8161240086943757, 1.7842468494380264, 2.8553272775373806]
+MAP: 0.05086128819105528 -> 0.13587
