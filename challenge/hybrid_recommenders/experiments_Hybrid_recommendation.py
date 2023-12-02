@@ -51,6 +51,7 @@ def __main__():
     SLIM_Wsparse = SLIM_recommender.W_sparse
 
     recommender_object = DifferentLossScoresHybridRecommender(URM_all, RP3_recommender, SLIM_recommender)
+
     recommender_object.fit(norm=1, alpha=0.4969561446020178)
 
     result_df, _ = evaluator.evaluateRecommender(recommender_object)

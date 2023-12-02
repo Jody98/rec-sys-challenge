@@ -6,7 +6,7 @@ from xgboost import XGBRanker, plot_importance
 
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
-from Recommenders.Hybrid.HybridDifferentLoss import DifferentLossScoresHybridRecommender
+from Recommenders.KNN.ItemKNNSimilarityHybridRecommender import ItemKNNSimilarityHybridRecommender
 from Recommenders.GraphBased import P3alphaRecommender, RP3betaRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
 from Recommenders.EASE_R import EASE_R_Recommender
@@ -35,13 +35,15 @@ def __main__():
     SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_all)
     SLIM_recommender.fit(l1_ratio=0.005997129498003861, alpha=0.004503120402472539,
                          positive_only=True, topK=45)
+    SLIM_Wsparse = SLIM_recommender.W_sparse
 
     rp3beta = RP3betaRecommender.RP3betaRecommender(URM_all)
     rp3beta.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086, min_rating=0.2588031389774553,
                 implicit=True, normalize_similarity=True)
+    RP3_Wsparse = rp3beta.W_sparse
 
-    SLIMRP3 = DifferentLossScoresHybridRecommender(URM_all, rp3beta, SLIM_recommender)
-    SLIMRP3.fit(norm=1, alpha=0.4969561446020178)
+    SLIMRP3 = ItemKNNSimilarityHybridRecommender(URM_train, RP3_Wsparse, SLIM_Wsparse)
+    SLIMRP3.fit(alpha=0.5153665793050106, topK=48)
 
     training_dataframe = pd.DataFrame(index=range(0, n_users), columns=["ItemID"])
     training_dataframe.index.name = 'UserID'
