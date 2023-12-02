@@ -1,12 +1,12 @@
 import scipy.sparse as sps
 
-from Data_manager.split_functions.split_train_validation_random_holdout import \
-    split_train_in_two_percentage_global_sample
+from Recommenders.KNN.ItemKNNSimilarityHybridRecommender import ItemKNNSimilarityHybridRecommender
 from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
 from Recommenders.Hybrid.GeneralizedLinearHybridRecommender import GeneralizedLinearHybridRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
 from Recommenders.SLIM import SLIMElasticNetRecommender
+from Recommenders.EASE_R import EASE_R_Recommender
 from challenge.utils.functions import read_data, generate_submission_csv
 
 
@@ -27,6 +27,13 @@ def __main__():
     item_Wsparse = item_recommender.W_sparse
 
     results, _ = evaluator.evaluateRecommender(item_recommender)
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    recommender = EASE_R_Recommender.EASE_R_Recommender(URM_train)
+    recommender.fit(topK=10, l2_norm=101, normalize_matrix=False)
+    EASE_R_Wsparse = sps.csr_matrix(recommender.W_sparse)
+
+    results, _ = evaluator.evaluateRecommender(recommender)
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
@@ -51,6 +58,62 @@ def __main__():
     SLIM_Wsparse = SLIM_recommender.W_sparse
 
     results, _ = evaluator.evaluateRecommender(SLIM_recommender)
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    SLIMRP3 = ItemKNNSimilarityHybridRecommender(URM_train, RP3_Wsparse, SLIM_Wsparse)
+    SLIMRP3.fit(alpha=0.5153665793050106, topK=48)
+    SLIMRP3_Wsparse = SLIMRP3.W_sparse
+
+    results, _ = evaluator.evaluateRecommender(SLIMRP3)
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    SLIMP3 = ItemKNNSimilarityHybridRecommender(URM_train, P3_Wsparse, SLIM_Wsparse)
+    SLIMP3.fit(alpha=0.5153665793050106, topK=48)  # finetunare alpha e topK
+    SLIMP3_Wsparse = SLIMP3.W_sparse
+
+    results, _ = evaluator.evaluateRecommender(SLIMP3)
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    SLIMitem = ItemKNNSimilarityHybridRecommender(URM_train, item_Wsparse, SLIM_Wsparse)
+    SLIMitem.fit(alpha=0.5153665793050106, topK=48)  # finetunare alpha e topK
+    SLIMitem_Wsparse = SLIMitem.W_sparse
+
+    results, _ = evaluator.evaluateRecommender(SLIMitem)
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    SLIMEASE_R = ItemKNNSimilarityHybridRecommender(URM_train, EASE_R_Wsparse, SLIM_Wsparse)
+    SLIMEASE_R.fit(alpha=0.5153665793050106, topK=48)  # finetunare alpha e topK
+    SLIMEASE_R_Wsparse = SLIMEASE_R.W_sparse
+
+    results, _ = evaluator.evaluateRecommender(SLIMEASE_R)
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    SLIMRP3P3 = ItemKNNSimilarityHybridRecommender(URM_train, RP3_Wsparse, SLIMP3_Wsparse)
+    SLIMRP3P3.fit(alpha=0.5153665793050106, topK=48)  # finetunare alpha e topK
+    SLIMRP3P3_Wsparse = SLIMRP3P3.W_sparse
+
+    results, _ = evaluator.evaluateRecommender(SLIMRP3P3)
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    SLIMRP3item = ItemKNNSimilarityHybridRecommender(URM_train, RP3_Wsparse, SLIMitem_Wsparse)
+    SLIMRP3item.fit(alpha=0.5153665793050106, topK=48)  # finetunare alpha e topK
+    SLIMRP3item_Wsparse = SLIMRP3item.W_sparse
+
+    results, _ = evaluator.evaluateRecommender(SLIMRP3item)
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    SLIMRP3EASE_R = ItemKNNSimilarityHybridRecommender(URM_train, RP3_Wsparse, SLIMEASE_R_Wsparse)
+    SLIMRP3EASE_R.fit(alpha=0.5153665793050106, topK=48)  # finetunare alpha e topK
+    SLIMRP3EASE_R_Wsparse = SLIMRP3EASE_R.W_sparse
+
+    results, _ = evaluator.evaluateRecommender(SLIMRP3EASE_R)
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    SLIMP3item = ItemKNNSimilarityHybridRecommender(URM_train, P3_Wsparse, SLIMitem_Wsparse)
+    SLIMP3item.fit(alpha=0.5153665793050106, topK=48)  # finetunare alpha e topK
+    SLIMP3item_Wsparse = SLIMP3item.W_sparse
+
+    results, _ = evaluator.evaluateRecommender(SLIMP3item)
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     recommenders = [item_recommender, P3_recommender, RP3_recommender, SLIM_recommender]
