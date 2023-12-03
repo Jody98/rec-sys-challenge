@@ -1,16 +1,15 @@
 import numpy as np
 import pandas as pd
 import scipy.sparse as sps
+from sklearn.model_selection import GridSearchCV
 from tqdm import tqdm
-from xgboost import XGBRanker, plot_importance
+from xgboost import XGBRanker
 
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
 from Recommenders.GraphBased import P3alphaRecommender, RP3betaRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
-from Recommenders.KNN.ItemKNNSimilarityHybridRecommender import ItemKNNSimilarityHybridRecommender
 from Recommenders.NonPersonalizedRecommender import TopPop
-from Recommenders.SLIM import SLIMElasticNetRecommender
 from challenge.utils.functions import read_data
 
 
@@ -29,26 +28,31 @@ def __main__():
 
     URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
+    param_grid = {
+        'n_estimators': [500],
+        'learning_rate': [0.0001],
+        'reg_alpha': [0.5],
+        'reg_lambda': [0.5],
+        'max_depth': [37],
+        'max_leaves': [1],
+        'grow_policy': ['depthwise'],
+        'objective': ['rank:pairwise'],
+        'booster': ['gbtree'],
+        'enable_categorical': [True],
+    }
+
     n_users, n_items = URM_train.shape
 
-    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_all)
-    SLIM_recommender.fit(l1_ratio=0.005997129498003861, alpha=0.004503120402472539,
-                         positive_only=True, topK=45)
-    SLIM_Wsparse = SLIM_recommender.W_sparse
-
-    rp3beta = RP3betaRecommender.RP3betaRecommender(URM_all)
+    rp3beta = RP3betaRecommender.RP3betaRecommender(URM_train)
     rp3beta.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086, min_rating=0.2588031389774553,
                 implicit=True, normalize_similarity=True)
     RP3_Wsparse = rp3beta.W_sparse
-
-    SLIMRP3 = ItemKNNSimilarityHybridRecommender(URM_train, RP3_Wsparse, SLIM_Wsparse)
-    SLIMRP3.fit(alpha=0.5153665793050106, topK=48)
 
     training_dataframe = pd.DataFrame(index=range(0, n_users), columns=["ItemID"])
     training_dataframe.index.name = 'UserID'
 
     for user_id in tqdm(range(n_users)):
-        recommendations = SLIMRP3.recommend(user_id, cutoff=cutoff_xgb)
+        recommendations = rp3beta.recommend(user_id, cutoff=cutoff_xgb)
         training_dataframe.loc[user_id, "ItemID"] = recommendations
 
     training_dataframe = training_dataframe.explode("ItemID")
@@ -64,14 +68,14 @@ def __main__():
     training_dataframe["Label"] = training_dataframe["Exist"] == "both"
     training_dataframe.drop(columns=['Exist'], inplace=True)
 
-    topPop = TopPop(URM_all)
+    topPop = TopPop(URM_train)
     topPop.fit()
 
-    item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_all)
+    item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
     item_recommender.fit(topK=10, shrink=19, similarity='jaccard', normalize=False,
                          feature_weighting="TF-IDF")
 
-    p3alpha = P3alphaRecommender.P3alphaRecommender(URM_all)
+    p3alpha = P3alphaRecommender.P3alphaRecommender(URM_train)
     p3alpha.fit(topK=64, alpha=0.35496275558011753, min_rating=0.1, implicit=True,
                 normalize_similarity=True)
 
@@ -79,8 +83,6 @@ def __main__():
         "TopPop": topPop,
         "ItemKNNCF": item_recommender,
         "P3alpha": p3alpha,
-        "RP3beta": rp3beta,
-        "SLIM": SLIM_recommender
     }
 
     training_dataframe = training_dataframe.set_index('UserID')
@@ -100,71 +102,30 @@ def __main__():
     user_popularity = np.ediff1d(sps.csr_matrix(URM_all).indptr)
     training_dataframe['user_profile_len'] = user_popularity[training_dataframe["UserID"].values.astype(int)]
 
-    groups = training_dataframe.groupby("UserID").size().values
-
-    n_estimators = 50
-    learning_rate = 1e-1
-    reg_alpha = 1e-1
-    reg_lambda = 1e-1
-    max_depth = 5
-    max_leaves = 0
-    grow_policy = "depthwise"
-    objective = "pairwise"
-    booster = "gbtree"
-    use_user_profile = False
-    random_seed = None
-
-    XGB_model = XGBRanker(objective='rank:{}'.format(objective),
-                          n_estimators=int(n_estimators),
-                          random_state=random_seed,
-                          learning_rate=learning_rate,
-                          reg_alpha=reg_alpha,
-                          reg_lambda=reg_lambda,
-                          max_depth=int(max_depth),
-                          max_leaves=int(max_leaves),
-                          grow_policy=grow_policy,
-                          verbosity=0,
-                          enable_categorical=True,
-                          booster=booster,
-                          )
+    group_sizes = training_dataframe.groupby("UserID").size()
+    groups = np.repeat(np.arange(len(group_sizes)), group_sizes.values)
 
     y_train = training_dataframe["Label"]
     X_train = training_dataframe.drop(columns=["Label"])
     X_train["UserID"] = X_train["UserID"].astype("category")
     X_train["ItemID"] = X_train["ItemID"].astype("category")
 
-    XGB_model.fit(X_train,
-                  y_train,
-                  group=groups,
-                  verbose=True)
+    print("Numero di righe in X_train: ", X_train.shape[0])
+    print("Numero di righe in y_train: ", len(y_train))
+    print("Numero di elementi in groups: ", len(groups))
 
-    reranked_df = pd.DataFrame(index=range(0, n_users), columns=["ItemID"])
-    reranked_df.index.name = 'UserID'
+    objective = 'pairwise'
+    model = XGBRanker(objective='rank:{}'.format(objective), enable_categorical=True)
 
-    for user_id in tqdm(range(n_users)):
-        X_to_predict = X_train[X_train["UserID"] == user_id]
-        X_prediction = XGB_model.predict(X_to_predict)
-        dict_prediction = dict(zip(X_to_predict["ItemID"], X_prediction))
-        dict_prediction = {k: v for k, v in sorted(dict_prediction.items(), key=lambda item: item[1], reverse=True)}
-        list_prediction = list(dict_prediction.keys())[:cutoff_real]
-        reranked_df.loc[user_id, "ItemID"] = list_prediction
+    grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=5, error_score='raise')
+    grid_search.fit(X_train, y_train, group=groups, verbose=2)
 
-    reranked_df['UserID'] = reranked_df.index
+    print("Migliori parametri: ", grid_search.best_params_)
+    print("Miglior score: ", grid_search.best_score_)
+    print("Miglior modello: ", grid_search.best_estimator_)
 
-    with open(submission_file_path, 'w') as file:
-        file.write('user_id,item_list\n')
-        for user_id in tqdm(users_list):
-            item_list = reranked_df.loc[user_id, "ItemID"]
-            user_string = f"{user_id},{' '.join(map(str, item_list))}\n"
-            file.write(user_string)
-
-    plot1 = plot_importance(XGB_model, importance_type='gain', title='Gain')
-    plot2 = plot_importance(XGB_model, importance_type='cover', title='Cover')
-    plot3 = plot_importance(XGB_model, importance_type='weight', title='Weight (Frequence)')
-
-    plot1.figure.savefig('gain.png')
-    plot2.figure.savefig('cover.png')
-    plot3.figure.savefig('weight.png')
+    results = pd.DataFrame(grid_search.cv_results_)
+    results.to_csv('../output_files/XGBoostResults.csv', index=False)
 
 
 if __name__ == '__main__':
