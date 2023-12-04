@@ -10,7 +10,7 @@ from HyperparameterTuning.SearchAbstractClass import SearchInputRecommenderArgs
 from HyperparameterTuning.SearchBayesianSkopt import SearchBayesianSkopt
 from Recommenders.DataIO import DataIO
 from Recommenders.MatrixFactorization.IALSRecommender import IALSRecommender
-from utils.functions import read_data
+from challenge.utils.functions import read_data
 
 
 def __main__():
@@ -29,13 +29,12 @@ def __main__():
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "num_factors": Integer(low=5, high=50, prior='uniform'),
+        "epochs": Integer(low=10, high=75, prior='uniform'),
+        "num_factors": Integer(low=50, high=500, prior='uniform'),
         "confidence_scaling": Categorical(["linear", "log"]),
-        "alpha": Real(low=0, high=1, prior='uniform'),
-        "epsilon": Real(low=0, high=1, prior='uniform'),
-        "reg": Real(low=0, high=0.01, prior='uniform'),
-        "init_mean": Real(low=0, high=1, prior='uniform'),
-        "init_std": Real(low=0, high=1, prior='uniform'),
+        "alpha": Real(low=0.0001, high=1, prior='uniform'),
+        "epsilon": Real(low=0.001, high=1, prior='log-uniform'),
+        "reg": Real(low=1e-2, high=1, prior='log-uniform'),
     }
 
     recommender_class = IALSRecommender
@@ -65,7 +64,7 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 100
+    n_cases = 20
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10

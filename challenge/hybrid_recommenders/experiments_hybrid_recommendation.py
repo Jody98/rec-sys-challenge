@@ -5,6 +5,7 @@ from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
 from Recommenders.Hybrid.GeneralizedLinearHybridRecommender import GeneralizedLinearHybridRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
+from Recommenders.MatrixFactorization import IALSRecommender
 from Recommenders.SLIM import SLIMElasticNetRecommender
 from Recommenders.EASE_R import EASE_R_Recommender
 from challenge.utils.functions import read_data, generate_submission_csv
@@ -20,6 +21,14 @@ def __main__():
     URM_test = sps.load_npz('../input_files/URM_test.npz')
 
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
+
+    ials_recommender = IALSRecommender.IALSRecommender(URM_train)
+    ials_recommender.fit(epochs=70, num_factors=50, confidence_scaling="linear", alpha=1.0, epsilon=0.026681180348966625,
+                         reg=0.01, init_mean=0.0, init_std=0.1)
+
+    results, _ = evaluator.evaluateRecommender(ials_recommender)
+    print("IALSRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
 
     item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
     item_recommender.fit(topK=10, shrink=19, similarity='jaccard', normalize=False,
