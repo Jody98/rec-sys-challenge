@@ -29,12 +29,11 @@ def __main__():
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "epochs": Integer(low=10, high=75, prior='uniform'),
-        "num_factors": Integer(low=50, high=500, prior='uniform'),
-        "confidence_scaling": Categorical(["linear", "log"]),
-        "alpha": Real(low=0.0001, high=1, prior='uniform'),
-        "epsilon": Real(low=0.001, high=1, prior='log-uniform'),
-        "reg": Real(low=1e-2, high=1, prior='log-uniform'),
+        "num_factors": Integer(low=50, high=100, prior='uniform'),
+        "confidence_scaling": Categorical(["linear"]),
+        "alpha": Real(low=0.01, high=10, prior='uniform'),
+        "epsilon": Real(low=0.0001, high=0.1, prior='log-uniform'),
+        "reg": Real(low=1e-3, high=1, prior='log-uniform'),
     }
 
     recommender_class = IALSRecommender
@@ -96,8 +95,6 @@ def __main__():
     print(best_hyperparameters)
     time_df = search_metadata["time_df"]
     print(time_df)
-    exception_list = search_metadata["exception_list"]
-    print(exception_list)
 
 
 if __name__ == '__main__':

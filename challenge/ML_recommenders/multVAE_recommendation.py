@@ -19,14 +19,13 @@ def __main__():
 
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
-    recommender = MultVAERecommender.MultVAERecommender(URM_train)
-    recommender.fit(epochs=100,
-                    learning_rate=1e-3,
-                    batch_size=500,
+    recommender = MultVAERecommender.MultVAERecommender(URM_train, force_gpu=True)
+    recommender.fit(learning_rate=1e-3,
+                    batch_size=512,
                     dropout=0.5,
                     total_anneal_steps=200000,
                     anneal_cap=0.2,
-                    l2_reg=0.01, )
+                    l2_reg=0.01)
 
     recommended_items = recommender.recommend(users_list, cutoff=10)
     recommendations = []

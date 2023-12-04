@@ -1,14 +1,14 @@
 import scipy.sparse as sps
 
-from Recommenders.KNN.ItemKNNSimilarityHybridRecommender import ItemKNNSimilarityHybridRecommender
 from Evaluation.Evaluator import EvaluatorHoldout
+from Recommenders.EASE_R import EASE_R_Recommender
 from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
 from Recommenders.Hybrid.GeneralizedLinearHybridRecommender import GeneralizedLinearHybridRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
+from Recommenders.KNN.ItemKNNSimilarityHybridRecommender import ItemKNNSimilarityHybridRecommender
 from Recommenders.MatrixFactorization import IALSRecommender
 from Recommenders.SLIM import SLIMElasticNetRecommender
-from Recommenders.EASE_R import EASE_R_Recommender
-from challenge.utils.functions import read_data, generate_submission_csv
+from challenge.utils.functions import read_data
 
 
 def __main__():
@@ -23,7 +23,8 @@ def __main__():
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
 
     ials_recommender = IALSRecommender.IALSRecommender(URM_train)
-    ials_recommender.fit(epochs=70, num_factors=50, confidence_scaling="linear", alpha=1.0, epsilon=0.026681180348966625,
+    ials_recommender.fit(epochs=100, num_factors=100, confidence_scaling="linear", alpha=0.5,
+                         epsilon=0.026681180348966625,
                          reg=0.01, init_mean=0.0, init_std=0.1)
 
     results, _ = evaluator.evaluateRecommender(ials_recommender)
@@ -37,14 +38,6 @@ def __main__():
 
     results, _ = evaluator.evaluateRecommender(item_recommender)
     print("ItemKNNCFRecommender")
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
-    recommender = EASE_R_Recommender.EASE_R_Recommender(URM_train)
-    recommender.fit(topK=10, l2_norm=101, normalize_matrix=False)
-    EASE_R_Wsparse = sps.csr_matrix(recommender.W_sparse)
-
-    results, _ = evaluator.evaluateRecommender(recommender)
-    print("EASE_R_Recommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
@@ -66,12 +59,22 @@ def __main__():
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
-    SLIM_recommender.fit(l1_ratio=0.005997129498003861, alpha=0.004503120402472539,
-                         positive_only=True, topK=45)
+    SLIM_recommender.fit(topK=46, l1_ratio=0.005997129498003861, alpha=0.004503120402472538, positive_only=True)
     SLIM_Wsparse = SLIM_recommender.W_sparse
 
     results, _ = evaluator.evaluateRecommender(SLIM_recommender)
     print("SLIMElasticNetRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    recommenders = [ials_recommender, SLIM_recommender]
+    alpha = 0.25
+    beta = 0.75
+
+    recommender_object = GeneralizedLinearHybridRecommender(URM_train, recommenders=recommenders)
+    recommender_object.fit(alpha=alpha, beta=beta)
+
+    results, _ = evaluator.evaluateRecommender(recommender_object)
+    print("SLIMiALS")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     SLIMRP3 = ItemKNNSimilarityHybridRecommender(URM_train, RP3_Wsparse, SLIM_Wsparse)
@@ -80,6 +83,13 @@ def __main__():
 
     results, _ = evaluator.evaluateRecommender(SLIMRP3)
     print("SLIMRP3")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    SLIMRP3iALS = GeneralizedLinearHybridRecommender(URM_train, recommenders=[ials_recommender, SLIMRP3])
+    SLIMRP3iALS.fit(alpha=0.25, beta=0.75)
+
+    results, _ = evaluator.evaluateRecommender(SLIMRP3iALS)
+    print("SLIMRP3iALS")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     SLIMP3 = ItemKNNSimilarityHybridRecommender(URM_train, P3_Wsparse, SLIM_Wsparse)
@@ -98,7 +108,7 @@ def __main__():
     print("SLIMitem")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    SLIMEASE_R = ItemKNNSimilarityHybridRecommender(URM_train, EASE_R_Wsparse, SLIM_Wsparse)
+    SLIMEASE_R = ItemKNNSimilarityHybridRecommender(URM_train, item_Wsparse, SLIM_Wsparse)
     SLIMEASE_R.fit(alpha=0.5153665793050106, topK=48)  # finetunare alpha e topK
     SLIMEASE_R_Wsparse = SLIMEASE_R.W_sparse
 
@@ -136,23 +146,6 @@ def __main__():
 
     results, _ = evaluator.evaluateRecommender(SLIMP3item)
     print("SLIMP3item")
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
-    recommenders = [item_recommender, P3_recommender, RP3_recommender, SLIM_recommender]
-    alphas = [0.25, 0.5, 0.75, 1.5]
-
-    recommender_object = GeneralizedLinearHybridRecommender(URM_train, recommenders=recommenders)
-    recommender_object.fit(alphas=alphas)
-
-    recommended_items = recommender_object.recommend(users_list, cutoff=10)
-    recommendations = []
-    for i in zip(users_list, recommended_items):
-        recommendation = {"user_id": i[0], "item_list": i[1]}
-        recommendations.append(recommendation)
-
-    generate_submission_csv("../output_files/HybridSubmission.csv", recommendations)
-
-    results, _ = evaluator.evaluateRecommender(recommender_object)
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
 

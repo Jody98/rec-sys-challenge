@@ -21,12 +21,10 @@ class GeneralizedLinearHybridRecommender(BaseRecommender):
 
         self.recommenders = recommenders
 
-    def fit(self, alpha=None, beta=None, gamma=None, delta=None, alphas=None):
+    def fit(self, alpha=None, beta=None, alphas=None):
         self.alpha = alpha
         self.beta = beta
-        self.gamma = gamma
-        self.delta = delta
-        self.alphas = [alpha, beta, gamma, delta]
+        self.alphas = [alpha, beta]
 
     def save_model(self, folder_path, file_name=None):
         pass

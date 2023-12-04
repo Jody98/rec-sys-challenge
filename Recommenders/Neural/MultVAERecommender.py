@@ -253,7 +253,7 @@ class MultVAERecommender(BaseRecommender, Incremental_Training_Early_Stopping, B
         return item_scores
 
     def fit(self,
-            epochs=100,
+            epochs=7,
             learning_rate=1e-3,
             batch_size=500,
             dropout=0.5,
