@@ -37,7 +37,7 @@ def evaluate_algorithm(URM_test, recommender_object, at=10):
         relevant_items = URM_test.indices[URM_test.indptr[user_id]:URM_test.indptr[user_id + 1]]
 
         if len(relevant_items) > 0:
-            recommended_items = recommender_object.recommend(user_id, at=at)[1]
+            recommended_items = recommender_object.recommend(user_id, cutoff=at)
 
             num_eval += 1
             cumulative_precision += precision(recommended_items, relevant_items)
@@ -48,7 +48,7 @@ def evaluate_algorithm(URM_test, recommender_object, at=10):
     cumulative_recall /= num_eval
     MAP = cumulative_AP / num_eval
 
-    print("Recommender performance is: Precision = {:.4f}, Recall = {:.4f}, MAP = {:.4f}".format(cumulative_precision,
+    print("Recommender performance is: Precision = {:.7f}, Recall = {:.7f}, MAP = {:.7f}".format(cumulative_precision,
                                                                                                  cumulative_recall,
                                                                                                  MAP))
 

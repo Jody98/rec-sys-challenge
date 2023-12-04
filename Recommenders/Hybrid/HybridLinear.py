@@ -9,12 +9,12 @@ class HybridLinear(BaseRecommender):
 
         self.recommenders = recommenders
 
-    def fit(self, KNN, RP3beta, iALS, EASE_R, SLIM):
+    def fit(self, ItemKNN, EASE_R, P3alpha, RP3beta, SLIM):
         self.weights = {
-            "KNN": KNN,
-            "RP3beta": RP3beta,
-            "iALS": iALS,
+            "ItemKNN": ItemKNN,
             "EASE_R": EASE_R,
+            "P3alpha": P3alpha,
+            "RP3beta": RP3beta,
             "SLIM": SLIM
         }
 
@@ -31,3 +31,12 @@ class HybridLinear(BaseRecommender):
             result += item_weights[rec_id] * self.weights[rec_id]
 
         return result
+
+    def save_model(self, folder_path, file_name=None):
+        if file_name is None:
+            file_name = self.RECOMMENDER_NAME
+
+        for rec_id, rec_obj in self.recommenders.items():
+            rec_obj.save_model(folder_path, rec_id + "_" + file_name)
+
+
