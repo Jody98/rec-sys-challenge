@@ -11,6 +11,7 @@ from Recommenders.GraphBased import P3alphaRecommender, RP3betaRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
 from Recommenders.NonPersonalizedRecommender import TopPop
 from challenge.utils.functions import read_data
+from sklearn.model_selection import train_test_split
 
 
 def __main__():
@@ -102,13 +103,15 @@ def __main__():
     user_popularity = np.ediff1d(sps.csr_matrix(URM_all).indptr)
     training_dataframe['user_profile_len'] = user_popularity[training_dataframe["UserID"].values.astype(int)]
 
-    group_sizes = training_dataframe.groupby("UserID").size()
-    groups = np.repeat(np.arange(len(group_sizes)), group_sizes.values)
+    groups = training_dataframe.groupby("UserID").size().values
+    groups = groups[:10420]
 
     y_train = training_dataframe["Label"]
     X_train = training_dataframe.drop(columns=["Label"])
     X_train["UserID"] = X_train["UserID"].astype("category")
     X_train["ItemID"] = X_train["ItemID"].astype("category")
+
+    X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=0.2, random_state=42)
 
     print("Numero di righe in X_train: ", X_train.shape[0])
     print("Numero di righe in y_train: ", len(y_train))
