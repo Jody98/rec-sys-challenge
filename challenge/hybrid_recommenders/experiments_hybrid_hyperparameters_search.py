@@ -13,6 +13,7 @@ from Recommenders.DataIO import DataIO
 from Recommenders.GraphBased import RP3betaRecommender
 from Recommenders.Hybrid.HybridDifferentLoss import DifferentLossScoresHybridRecommender
 from Recommenders.SLIM import SLIMElasticNetRecommender
+from Recommenders.KNN import ItemKNNCFRecommender
 from challenge.utils.functions import read_data
 
 
@@ -31,6 +32,10 @@ def __main__():
     evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[10])
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
+    item_rec = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
+    item_rec.fit(topK=10, shrink=0, similarity='cosine', normalize=True)
+    item_Wsparse = item_rec.W_sparse
+
     RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_train)
     RP3_recommender.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086,
                         min_rating=0.2588031389774553,
@@ -43,9 +48,12 @@ def __main__():
                          positive_only=True, topK=45)
     SLIM_Wsparse = SLIM_recommender.W_sparse
 
+    hybrid_recommender = DifferentLossScoresHybridRecommender(URM_train, RP3_recommender, SLIM_recommender)
+    hybrid_recommender.fit(norm=1, alpha=0.4969561446020178)
+
     hyperparameters_range_dictionary = {
         "norm": Categorical([1, 2, np.inf]),
-        "alpha": Real(0, 1),
+        "alpha": Real(0, 1, prior='uniform'),
     }
 
     recommender_class = DifferentLossScoresHybridRecommender
@@ -55,7 +63,7 @@ def __main__():
                                                evaluator_test=evaluator_test)
 
     recommender_input_args = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, RP3_recommender, SLIM_recommender],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, item_rec, hybrid_recommender],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},
@@ -63,7 +71,7 @@ def __main__():
     )
 
     recommender_input_args_last_test = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, RP3_recommender, SLIM_recommender],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, item_rec, hybrid_recommender],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},
@@ -75,7 +83,7 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 20
+    n_cases = 100
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10
@@ -107,8 +115,6 @@ def __main__():
     print(best_hyperparameters)
     time_df = search_metadata["time_df"]
     print(time_df)
-    exception_list = search_metadata["exception_list"]
-    print(exception_list)
 
 
 if __name__ == '__main__':

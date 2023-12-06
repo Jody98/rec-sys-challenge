@@ -103,7 +103,7 @@ def __main__():
 
     groups = training_dataframe.groupby("UserID").size().values
 
-    n_estimators = 50
+    n_estimators = [50, 500, 5000]
     learning_rate = 1e-1
     reg_alpha = 1e-1
     reg_lambda = 1e-1
@@ -114,108 +114,109 @@ def __main__():
     booster = "gbtree"
     random_seed = None
 
-    XGB_model = XGBRanker(objective='rank:{}'.format(objective),
-                          n_estimators=int(n_estimators),
-                          random_state=random_seed,
-                          learning_rate=learning_rate,
-                          reg_alpha=reg_alpha,
-                          reg_lambda=reg_lambda,
-                          max_depth=int(max_depth),
-                          max_leaves=int(max_leaves),
-                          grow_policy=grow_policy,
-                          verbosity=0,
-                          enable_categorical=True,
-                          booster=booster,
-                          )
+    for e in n_estimators:
+        XGB_model = XGBRanker(objective='rank:{}'.format(objective),
+                              n_estimators=int(e),
+                              random_state=random_seed,
+                              learning_rate=learning_rate,
+                              reg_alpha=reg_alpha,
+                              reg_lambda=reg_lambda,
+                              max_depth=int(max_depth),
+                              max_leaves=int(max_leaves),
+                              grow_policy=grow_policy,
+                              verbosity=0,
+                              enable_categorical=True,
+                              booster=booster,
+                              )
 
-    y_train = training_dataframe["Label"]
-    X_train = training_dataframe.drop(columns=["Label"])
-    X_train["UserID"] = X_train["UserID"].astype("category")
-    X_train["ItemID"] = X_train["ItemID"].astype("category")
+        y_train = training_dataframe["Label"]
+        X_train = training_dataframe.drop(columns=["Label"])
+        X_train["UserID"] = X_train["UserID"].astype("category")
+        X_train["ItemID"] = X_train["ItemID"].astype("category")
 
-    X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=0.2, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=0.2, random_state=42)
 
-    groups_train = groups[:10420]
+        groups_train = groups[:10420]
 
-    XGB_model.fit(X_train,
-                  y_train,
-                  group=groups_train,
-                  verbose=True)
+        XGB_model.fit(X_train,
+                      y_train,
+                      group=groups_train,
+                      verbose=True)
 
-    y_pred = XGB_model.predict(X_test)
+        y_pred = XGB_model.predict(X_test)
 
-    from sklearn.metrics import roc_curve, auc
-    import matplotlib.pyplot as plt
+        from sklearn.metrics import roc_curve, auc
+        import matplotlib.pyplot as plt
 
-    # Calcola la curva ROC
-    fpr, tpr, thresholds = roc_curve(y_test, y_pred)
+        # Calcola la curva ROC
+        fpr, tpr, thresholds = roc_curve(y_test, y_pred)
 
-    # Calcola l'area sotto la curva ROC (AUC-ROC)
-    roc_auc = auc(fpr, tpr)
+        # Calcola l'area sotto la curva ROC (AUC-ROC)
+        roc_auc = auc(fpr, tpr)
 
-    # Traccia la curva ROC
-    plt.figure()
-    plt.plot(fpr, tpr, color='darkorange', lw=2, label='ROC curve (area = {:.2f})'.format(roc_auc))
-    plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.title('Receiver Operating Characteristic (ROC) Curve')
-    plt.legend(loc="lower right")
-    plt.show()
+        # Traccia la curva ROC
+        plt.figure()
+        plt.plot(fpr, tpr, color='darkorange', lw=2, label='ROC curve (area = {:.2f})'.format(roc_auc))
+        plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+        plt.xlabel('False Positive Rate')
+        plt.ylabel('True Positive Rate')
+        plt.title('Receiver Operating Characteristic (ROC) Curve')
+        plt.legend(loc="lower right")
+        plt.show()
 
-    # Seleziona la soglia in base a un punto specifico sulla curva ROC
-    optimal_threshold_index = np.argmax(tpr - fpr)
-    optimal_threshold = thresholds[optimal_threshold_index]
+        # Seleziona la soglia in base a un punto specifico sulla curva ROC
+        optimal_threshold_index = np.argmax(tpr - fpr)
+        optimal_threshold = thresholds[optimal_threshold_index]
 
-    print(f'Optimal threshold: {optimal_threshold}')
+        print(f'Optimal threshold: {optimal_threshold}')
 
-    from sklearn.metrics import precision_recall_curve
+        from sklearn.metrics import precision_recall_curve
 
-    # Calcola la curva precision-recall
-    precision, recall, thresholds = precision_recall_curve(y_test, y_pred)
+        # Calcola la curva precision-recall
+        precision, recall, thresholds = precision_recall_curve(y_test, y_pred)
 
-    # Trova la soglia che bilancia precision e recall
-    balanced_threshold_index = np.argmax(precision + recall)
-    balanced_threshold = thresholds[balanced_threshold_index] * 1.8
-    balanced_threshold = -2.1
+        # Trova la soglia che bilancia precision e recall
+        balanced_threshold_index = np.argmax(precision + recall)
+        balanced_threshold = thresholds[balanced_threshold_index] * 1.8
+        balanced_threshold = -2.1
 
-    print(f'Balanced threshold: {balanced_threshold}')
+        print(f'Balanced threshold: {balanced_threshold}')
 
-    # Esplora la distribuzione delle predizioni continue
-    plt.figure()
-    plt.hist(y_pred, bins=50, color='blue', alpha=0.7)
-    plt.xlabel('Predicted Probabilities')
-    plt.ylabel('Frequency')
-    plt.title('Distribution of Predicted Probabilities')
-    plt.show()
+        # Esplora la distribuzione delle predizioni continue
+        plt.figure()
+        plt.hist(y_pred, bins=50, color='blue', alpha=0.7)
+        plt.xlabel('Predicted Probabilities')
+        plt.ylabel('Frequency')
+        plt.title('Distribution of Predicted Probabilities')
+        plt.show()
 
-    # Seleziona una soglia basata sulla distribuzione
-    custom_threshold = 0  # Sostituisci con il valore desiderato
+        # Seleziona una soglia basata sulla distribuzione
+        custom_threshold = 0  # Sostituisci con il valore desiderato
 
-    y_pred_optimal = (y_pred > optimal_threshold).astype(int)
-    y_pred_balanced = (y_pred > balanced_threshold).astype(int)
-    y_pred_custom = (y_pred > custom_threshold).astype(int)
+        y_pred_optimal = (y_pred > optimal_threshold).astype(int)
+        y_pred_balanced = (y_pred > balanced_threshold).astype(int)
+        y_pred_custom = (y_pred > custom_threshold).astype(int)
 
-    precision = precision_score(y_test, y_pred_optimal)
-    recall = recall_score(y_test, y_pred_optimal)
-    average_precision = average_precision_score(y_test, y_pred_optimal)
-    print(f'Precision: {precision}')
-    print(f'Recall: {recall}')
-    print(f'Mean Average Precision (MAP): {average_precision}')
+        precision = precision_score(y_test, y_pred_optimal)
+        recall = recall_score(y_test, y_pred_optimal)
+        average_precision = average_precision_score(y_test, y_pred_optimal)
+        print(f'Precision: {precision}')
+        print(f'Recall: {recall}')
+        print(f'Mean Average Precision (MAP): {average_precision}')
 
-    precision = precision_score(y_test, y_pred_balanced)
-    recall = recall_score(y_test, y_pred_balanced)
-    average_precision = average_precision_score(y_test, y_pred_balanced)
-    print(f'Precision: {precision}')
-    print(f'Recall: {recall}')
-    print(f'Mean Average Precision (MAP): {average_precision}')
+        precision = precision_score(y_test, y_pred_balanced)
+        recall = recall_score(y_test, y_pred_balanced)
+        average_precision = average_precision_score(y_test, y_pred_balanced)
+        print(f'Precision: {precision}')
+        print(f'Recall: {recall}')
+        print(f'Mean Average Precision (MAP): {average_precision}')
 
-    precision = precision_score(y_test, y_pred_custom)
-    recall = recall_score(y_test, y_pred_custom)
-    average_precision = average_precision_score(y_test, y_pred_custom)
-    print(f'Precision: {precision}')
-    print(f'Recall: {recall}')
-    print(f'Mean Average Precision (MAP): {average_precision}')
+        precision = precision_score(y_test, y_pred_custom)
+        recall = recall_score(y_test, y_pred_custom)
+        average_precision = average_precision_score(y_test, y_pred_custom)
+        print(f'Precision: {precision}')
+        print(f'Recall: {recall}')
+        print(f'Mean Average Precision (MAP): {average_precision}')
 
     '''reranked_df = pd.DataFrame(index=range(0, n_users), columns=["ItemID"])
     reranked_df.index.name = 'UserID'

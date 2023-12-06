@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sps
 from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 from xgboost import XGBRanker
 
@@ -11,7 +12,6 @@ from Recommenders.GraphBased import P3alphaRecommender, RP3betaRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
 from Recommenders.NonPersonalizedRecommender import TopPop
 from challenge.utils.functions import read_data
-from sklearn.model_selection import train_test_split
 
 
 def __main__():
@@ -27,7 +27,10 @@ def __main__():
         (URM_all_dataframe['Data'].values, (URM_all_dataframe['UserID'].values, URM_all_dataframe['ItemID'].values)))
     URM_all = URM_all.tocsr()
 
-    URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
+    URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
+    URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_train, train_percentage=0.80)
+
+    URM_train_recommenders, URM_train_booster = train_test_split(URM_train, test_size=0.5, random_state=42)
 
     param_grid = {
         'n_estimators': [500],
@@ -104,24 +107,21 @@ def __main__():
     training_dataframe['user_profile_len'] = user_popularity[training_dataframe["UserID"].values.astype(int)]
 
     groups = training_dataframe.groupby("UserID").size().values
-    groups = groups[:10420]
 
     y_train = training_dataframe["Label"]
     X_train = training_dataframe.drop(columns=["Label"])
     X_train["UserID"] = X_train["UserID"].astype("category")
     X_train["ItemID"] = X_train["ItemID"].astype("category")
 
-    X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=0.2, random_state=42)
-
-    print("Numero di righe in X_train: ", X_train.shape[0])
-    print("Numero di righe in y_train: ", len(y_train))
-    print("Numero di elementi in groups: ", len(groups))
-
     objective = 'pairwise'
     model = XGBRanker(objective='rank:{}'.format(objective), enable_categorical=True)
 
     grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=5, error_score='raise')
-    grid_search.fit(X_train, y_train, group=groups, verbose=2)
+    try:
+        grid_search.fit(X_train, y_train, group=groups)
+    except ValueError as e:
+        print(e)
+        raise e
 
     print("Migliori parametri: ", grid_search.best_params_)
     print("Miglior score: ", grid_search.best_score_)
