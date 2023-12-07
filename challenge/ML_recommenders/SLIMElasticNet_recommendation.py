@@ -9,8 +9,6 @@ from challenge.utils.functions import read_data, generate_submission_csv
 
 def __main__():
     cutoff_list = [10]
-    folder_path = "../result_experiments/"
-    filename = "SLIMElasticNetRecommender_best_model.zip"
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
