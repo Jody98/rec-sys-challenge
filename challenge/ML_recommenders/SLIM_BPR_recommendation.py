@@ -13,15 +13,12 @@ def __main__():
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
-    URM_all = sps.coo_matrix(
-        (URM_all_dataframe['Data'].values, (URM_all_dataframe['UserID'].values, URM_all_dataframe['ItemID'].values)))
-    URM_all = URM_all.tocsr()
-
-    URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
+    URM_train = sps.load_npz('../input_files/URM_train_plus_validation.npz')
+    URM_test = sps.load_npz('../input_files/URM_test.npz')
 
     recommender = SLIM_BPR_Python.SLIM_BPR_Python(URM_train)
-    recommender.fit(topK=26, epochs=15, lambda_i=0.009991555707793169, lambda_j=0.004832924438269361,
-                    learning_rate=0.04032300739781685)
+    recommender.fit(topK=10, epochs=15, lambda_i=0.25210476921792674, lambda_j=0.0001,
+                    learning_rate=0.05149809958563418)
 
     recommended_items = recommender.recommend(users_list, cutoff=10)
     recommendations = []
@@ -34,8 +31,7 @@ def __main__():
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
     results, _ = evaluator.evaluateRecommender(recommender)
 
-    for result in results.items():
-        print(result)
+    print("MAP: {}".format(results.loc[10]["MAP"]))
 
 
 if __name__ == '__main__':

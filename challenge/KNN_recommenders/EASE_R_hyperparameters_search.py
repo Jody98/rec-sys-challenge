@@ -18,20 +18,18 @@ def __main__():
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
-    URM_all = sps.coo_matrix(
-        (URM_all_dataframe['Data'].values, (URM_all_dataframe['UserID'].values, URM_all_dataframe['ItemID'].values)))
-    URM_all = URM_all.tocsr()
-
-    URM_train_validation, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.8)
-    URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_train_validation, train_percentage=0.8)
+    URM_train_validation = sps.load_npz('../input_files/URM_train_plus_validation.npz')
+    URM_test = sps.load_npz('../input_files/URM_test.npz')
+    URM_validation = sps.load_npz('../input_files/URM_validation.npz')
+    URM_train = sps.load_npz('../input_files/URM_train.npz')
 
     evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[10])
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(low=9, high=10, prior='uniform'),
-        "l2_norm": Integer(low=100, high=101, prior='uniform'),
-        "normalize_matrix": Categorical([False]),
+        "topK": Integer(low=1, high=1000, prior='uniform'),
+        "l2_norm": Real(low=0.001, high=1000, prior='log-uniform'),
+        "normalize_matrix": Categorical([True, False]),
     }
 
     recommender_class = EASE_R_Recommender
@@ -61,8 +59,8 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 1
-    n_random_starts = 1
+    n_cases = 100
+    n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10
 

@@ -21,9 +21,6 @@ def __main__():
 
     recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_all)
     recommender.fit(topK=46, l1_ratio=0.005997129498003861, alpha=0.004503120402472538, positive_only=True)
-    SLIM_Wsparse = recommender.W_sparse
-
-    sps.save_npz('SLIM_WsparseALL.npz', SLIM_Wsparse)
 
     recommended_items = recommender.recommend(users_list, cutoff=10)
     recommendations = []
@@ -36,8 +33,7 @@ def __main__():
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
     results, _ = evaluator.evaluateRecommender(recommender)
 
-    for result in results.items():
-        print(result)
+    print("MAP: {}".format(results.loc[10]["MAP"]))
 
 
 if __name__ == '__main__':

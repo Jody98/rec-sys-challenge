@@ -18,21 +18,19 @@ def __main__():
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
-    URM_all = sps.coo_matrix(
-        (URM_all_dataframe['Data'].values, (URM_all_dataframe['UserID'].values, URM_all_dataframe['ItemID'].values)))
-    URM_all = URM_all.tocsr()
-
-    URM_train_validation, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.8)
-    URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_train_validation, train_percentage=0.8)
+    URM_train_validation = sps.load_npz('../input_files/URM_train_plus_validation.npz')
+    URM_test = sps.load_npz('../input_files/URM_test.npz')
+    URM_validation = sps.load_npz('../input_files/URM_validation.npz')
+    URM_train = sps.load_npz('../input_files/URM_train.npz')
 
     evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[10])
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(low=20, high=50, prior='uniform'),
-        "lambda_i": Real(low=1e-3, high=1e-1, prior='uniform'),
-        "lambda_j": Real(low=1e-3, high=1e-1, prior='uniform'),
-        "learning_rate": Real(low=1e-6, high=1e-1, prior='uniform'),
+        "topK": Integer(low=10, high=100, prior='uniform'),
+        "lambda_i": Real(low=1e-4, high=10, prior='log-uniform'),
+        "lambda_j": Real(low=1e-4, high=10, prior='log-uniform'),
+        "learning_rate": Real(low=1e-6, high=1e-1, prior='log-uniform'),
     }
 
     recommender_class = SLIM_BPR_Python
