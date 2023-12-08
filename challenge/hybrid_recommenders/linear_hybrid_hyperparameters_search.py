@@ -52,7 +52,7 @@ def __main__():
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
-    P3_recommender.fit(topK=64, alpha=0.35496275558011753, min_rating=0.1, implicit=True,
+    P3_recommender.fit(topK=40, alpha=0.35496275558011753, min_rating=0.1, implicit=True,
                        normalize_similarity=True)
     P3_Wsparse = P3_recommender.W_sparse
 
@@ -88,11 +88,11 @@ def __main__():
     }
 
     hyperparameters_range_dictionary = {
-        "iALS": Real(0.0, 1.0),
-        "ItemKNN": Real(0.0, 1.0),
-        "EASE_R": Real(0.0, 1.0),
-        "P3alpha": Real(0.0, 1.0),
-        "RP3beta": Real(0.0, 1.0),
+        "iALS": Real(0.0, 0.1),
+        "ItemKNN": Real(0.0, 0.4),
+        "EASE_R": Real(0.0, 0.0001),
+        "P3alpha": Real(0.5, 1.0),
+        "RP3beta": Real(0.0, 0.6),
         "SLIM": Real(0.0, 1.0),
     }
 

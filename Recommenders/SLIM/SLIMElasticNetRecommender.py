@@ -108,7 +108,7 @@ class SLIMElasticNetRecommender(BaseItemSimilarityMatrixRecommender):
 
             similarity_builder.add_data_lists(row_list_to_add=nonzero_model_coef_index,
                                               col_list_to_add=np.ones(len(nonzero_model_coef_index),
-                                                                      dtype=np.int) * currentItem,
+                                                                      dtype=np.int32) * currentItem,
                                               data_list_to_add=nonzero_model_coef_value)
 
             # finally, replace the original values of the j-th column
