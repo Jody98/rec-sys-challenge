@@ -18,6 +18,7 @@ from Recommenders.BaseSimilarityMatrixRecommender import BaseItemSimilarityMatri
 from Recommenders.Recommender_utils import check_matrix
 from Recommenders.Similarity.Compute_Similarity_Python import Incremental_Similarity_Builder
 from Utils.seconds_to_biggest_unit import seconds_to_biggest_unit
+from challenge.utils.functions import tail_boost
 
 
 # os.environ["PYTHONWARNINGS"] = ('ignore::exceptions.ConvergenceWarning:sklearn.linear_model')
@@ -44,7 +45,7 @@ class SLIMElasticNetRecommender(BaseItemSimilarityMatrixRecommender):
         super(SLIMElasticNetRecommender, self).__init__(URM_train, verbose=verbose)
 
     @ignore_warnings(category=ConvergenceWarning)
-    def fit(self, l1_ratio=0.1, alpha=1.0, positive_only=True, topK=10):
+    def fit(self, l1_ratio=0.1, alpha=1.0, positive_only=True, topK=10, tail=False, tail_weight=0.05):
 
         assert l1_ratio >= 0 and l1_ratio <= 1, "{}: l1_ratio must be between 0 and 1, provided value was {}".format(
             self.RECOMMENDER_NAME, l1_ratio)
@@ -52,6 +53,8 @@ class SLIMElasticNetRecommender(BaseItemSimilarityMatrixRecommender):
         self.l1_ratio = l1_ratio
         self.positive_only = positive_only
         self.topK = topK
+        self.tail = tail
+        self.tail_weight = tail_weight
 
         # initialize the ElasticNet model
         self.model = ElasticNet(alpha=alpha,
@@ -128,6 +131,11 @@ class SLIMElasticNetRecommender(BaseItemSimilarityMatrixRecommender):
                 start_time_printBatch = time.time()
 
         self.W_sparse = similarity_builder.get_SparseMatrix()
+
+        if self.tail:
+            item_popularity = np.ediff1d(sps.csc_matrix(self.URM_train).indptr)
+            self.W_sparse = tail_boost(self.W_sparse, item_popularity, alpha=self.tail_weight)
+
         return self.W_sparse
 
 

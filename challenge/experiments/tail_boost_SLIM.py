@@ -1,12 +1,10 @@
-import numpy as np
-import pandas as pd
 import scipy.sparse as sps
-from sklearn.model_selection import train_test_split
 
+from Data_manager.split_functions.split_train_validation_random_holdout import \
+    split_train_in_two_percentage_global_sample
 from Evaluation.Evaluator import EvaluatorHoldout
-from Recommenders.KNN import ItemKNNCFRecommender
-from challenge.utils.functions import read_data, evaluate_algorithm, dataset_splits, write_submission, \
-    preprocess_data, prepare_submission, generate_submission_csv
+from Recommenders.SLIM import SLIMElasticNetRecommender
+from challenge.utils.functions import read_data, generate_submission_csv
 
 
 def __main__():
@@ -18,11 +16,11 @@ def __main__():
     URM_train = sps.load_npz("../input_files/URM_train_plus_validation.npz")
     URM_test = sps.load_npz("../input_files/URM_test.npz")
 
-    topk = [10, 50, 100, 200, 500, 1000]
+    weights = [0.0075]
 
-    for k in topk:
-        recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
-        recommender.fit(topK=k, shrink=19, similarity='jaccard', normalize=False, feature_weighting="TF-IDF")
+    for weight in weights:
+        recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
+        recommender.fit(topK=46, l1_ratio=0.005997129498003861, alpha=0.004503120402472538, positive_only=True)
 
         recommended_items = recommender.recommend(users_list, cutoff=10)
         recommendations = []
@@ -30,11 +28,12 @@ def __main__():
             recommendation = {"user_id": i[0], "item_list": i[1]}
             recommendations.append(recommendation)
 
-        generate_submission_csv("../output_files/P3alphaSubmission.csv", recommendations)
+        generate_submission_csv("../output_files/SLIMElasticNetSubmission.csv", recommendations)
 
         evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
         results, _ = evaluator.evaluateRecommender(recommender)
 
+        print("Weight: {}".format(weight))
         print("MAP: {}".format(results.loc[10]["MAP"]))
 
 

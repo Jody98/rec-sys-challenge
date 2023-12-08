@@ -29,9 +29,9 @@ def __main__():
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(10, 11),
-        "shrink": Integer(19, 20),
-        "similarity": Categorical(["jaccard"]),
+        "topK": Integer(100, 1000),
+        "shrink": Integer(1, 2000),
+        "similarity": Categorical(["jaccard", "cosine", "asymmetric", "dice", "tversky"]),
         "normalize": Categorical([True, False]),
     }
 
@@ -62,8 +62,8 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 1
-    n_random_starts = 1
+    n_cases = 100
+    n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10
 
