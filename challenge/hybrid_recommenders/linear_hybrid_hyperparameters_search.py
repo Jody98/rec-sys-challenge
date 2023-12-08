@@ -12,6 +12,7 @@ from Recommenders.Hybrid.HybridLinear import HybridLinear
 from Recommenders.EASE_R import EASE_R_Recommender
 from Recommenders.SLIM import SLIMElasticNetRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
+from Recommenders.MatrixFactorization import IALSRecommender
 from challenge.utils.functions import read_data
 
 
@@ -27,6 +28,11 @@ def __main__():
 
     evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[10])
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=[10])
+
+    ials_recommender = IALSRecommender.IALSRecommender(URM_train)
+    ials_recommender.fit(epochs=100, num_factors=92, confidence_scaling="linear", alpha=2.5431444656816597,
+                         epsilon=0.035779451402656745,
+                         reg=1.5, init_mean=0.0, init_std=0.1)
 
     item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
     item_recommender.fit(topK=10, shrink=19, similarity='jaccard', normalize=False,
@@ -73,6 +79,7 @@ def __main__():
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     recommenders = {
+        "iALS": ials_recommender,
         "ItemKNN": item_recommender,
         "EASE_R": EASE_R_recommender,
         "P3alpha": P3_recommender,
@@ -81,6 +88,7 @@ def __main__():
     }
 
     hyperparameters_range_dictionary = {
+        "iALS": Real(0.0, 1.0),
         "ItemKNN": Real(0.0, 1.0),
         "EASE_R": Real(0.0, 1.0),
         "P3alpha": Real(0.0, 1.0),
@@ -115,7 +123,7 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 50
+    n_cases = 100
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10

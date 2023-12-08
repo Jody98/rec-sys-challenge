@@ -12,19 +12,20 @@ class GeneralizedLinearHybridRecommender(BaseRecommender):
     RECOMMENDER_NAME = "GeneralizedLinearHybridRecommender"
 
     def __init__(self, URM_train, recommenders: list, verbose=True):
-        self.RECOMMENDER_NAME = ''
-        for recommender in recommenders:
-            self.RECOMMENDER_NAME = self.RECOMMENDER_NAME + recommender.RECOMMENDER_NAME[:-11]
-        self.RECOMMENDER_NAME = self.RECOMMENDER_NAME + 'HybridRecommender'
+
+        self.RECOMMENDER_NAME = 'HybridRecommender'
 
         super(GeneralizedLinearHybridRecommender, self).__init__(URM_train, verbose=verbose)
 
         self.recommenders = recommenders
 
-    def fit(self, alpha=None, beta=None, alphas=None):
+    def fit(self, alpha=None, beta=None, gamma=None, delta=None, epsilon=None, alphas=None):
         self.alpha = alpha
         self.beta = beta
-        self.alphas = [alpha, beta]
+        self.gamma = gamma
+        self.delta = delta
+        self.epsilon = epsilon
+        self.alphas = [alpha, beta, gamma, delta, epsilon]
 
     def save_model(self, folder_path, file_name=None):
         pass
