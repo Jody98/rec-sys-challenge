@@ -60,6 +60,17 @@ def fine_tune_parameters(URM, users_list, items_list, parameter_grid):
     return best_parameters
 
 
+def tail_boost(W_sparse, item_popularity, alpha=0.1):
+    W_sparse = sps.csr_matrix(W_sparse)
+    item_popularity = np.array(item_popularity, dtype=np.float32).squeeze()
+    item_popularity = np.power(item_popularity, alpha)
+    item_popularity = sps.diags(item_popularity)
+
+    W_sparse = item_popularity.dot(W_sparse)
+
+    return W_sparse
+
+
 def __main__():
     cutoff_list = [10]
     alpha = 0.05
@@ -73,22 +84,24 @@ def __main__():
         (URM_all_dataframe['Data'].values, (URM_all_dataframe['UserID'].values, URM_all_dataframe['ItemID'].values)))
     URM_all = URM_all.tocsr()
 
-    # Define the parameter grid for fine-tuning
-    parameter_grid = {'step': [0.1, 0.5, 1, 2, 5, 10], 'lastN': [3, 4, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+    item_popularity = np.ediff1d(sps.csc_matrix(URM_all).indptr)
 
-    # Fine-tune the parameters
+    '''parameter_grid = {'step': [0.1, 0.5, 1, 2, 5, 10], 'lastN': [3, 4, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+
     best_params = fine_tune_parameters(URM_all, users_list, items_list, parameter_grid)
     print("Best Parameters:", best_params)
 
-    # Use the best parameters to boost URM
     URM_boosted = custom_tail_boost(URM_all.copy(), users_list, items_list, step=best_params['step'],
-                                    lastN=best_params['lastN'])
+                                    lastN=best_params['lastN'])'''
 
-    URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_boosted, train_percentage=0.80)
+    URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
     recommender = RP3betaRecommender.RP3betaRecommender(URM_train)
     recommender.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086, min_rating=0.2588031389774553,
                     implicit=True, normalize_similarity=True)
+    W_sparse = recommender.W_sparse
+
+    W_sparse = tail_boost(W_sparse, item_popularity, alpha=alpha)
 
     recommended_items = recommender.recommend(users_list, cutoff=10)
     recommendations = []
