@@ -4,8 +4,6 @@ from tqdm import tqdm
 
 from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.GraphBased import RP3betaRecommender
-from Recommenders.Hybrid.HybridDifferentLoss import DifferentLossScoresHybridRecommender
-from Recommenders.SLIM import SLIMElasticNetRecommender
 from challenge.utils.functions import read_data, generate_submission_csv, evaluate_algorithm
 
 
@@ -39,32 +37,26 @@ def __main__():
     URM_train = sps.load_npz("../input_files/URM_train_plus_validation.npz")
     URM_test = sps.load_npz("../input_files/URM_test.npz")
 
-    RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_train)
-    RP3_recommender.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086, min_rating=0.2588031389774553,
+    topK = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 500, 750, 1000]
+
+    for topk in topK:
+        recommender = RP3betaRecommender.RP3betaRecommender(URM_train)
+        recommender.fit(topK=topk, alpha=0.26362900188025656, beta=0.17133265585189086, min_rating=0.2588031389774553,
                         implicit=True, normalize_similarity=True)
-    RP3_Wsparse = RP3_recommender.W_sparse
 
-    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
-    SLIM_recommender.fit(topK=46, l1_ratio=0.005997129498003861, alpha=0.004503120402472538, positive_only=True)
-    SLIM_Wsparse = SLIM_recommender.W_sparse
+        recommended_items = recommender.recommend(users_list, cutoff=10)
+        recommendations = []
+        for i in zip(users_list, recommended_items):
+            recommendation = {"user_id": i[0], "item_list": i[1]}
+            recommendations.append(recommendation)
 
-    recommender = DifferentLossScoresHybridRecommender(URM_train, RP3_recommender, SLIM_recommender)
-    recommender.fit(norm=2, alpha=0.4304989217384739)
+        generate_submission_csv("../output_files/RP3betaSubmission.csv", recommendations)
 
-    recommended_items = recommender.recommend(users_list, cutoff=10)
-    recommendations = []
-    for i in zip(users_list, recommended_items):
-        recommendation = {"user_id": i[0], "item_list": i[1]}
-        recommendations.append(recommendation)
+        evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
+        results, _ = evaluator.evaluateRecommender(recommender)
 
-    generate_submission_csv("../output_files/RP3betaSubmission.csv", recommendations)
-
-    evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
-    results, _ = evaluator.evaluateRecommender(recommender)
-
-    evaluate_algorithm(URM_test, recommender, cutoff_list[0])
-
-    print("MAP: {}".format(results.loc[10]["MAP"]))
+        print("TopK: {}".format(topk))
+        print("MAP: {}".format(results.loc[10]["MAP"]))
 
 
 if __name__ == '__main__':

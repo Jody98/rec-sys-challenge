@@ -35,6 +35,7 @@ def __main__():
         evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
         results, _ = evaluator.evaluateRecommender(recommender)
 
+        print("TopK: {}".format(k))
         print("MAP: {}".format(results.loc[10]["MAP"]))
 
 

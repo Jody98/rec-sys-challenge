@@ -13,6 +13,8 @@ class SLIM_BPR_Python(BaseItemSimilarityMatrixRecommender):
     This class does not implement early stopping
     """
 
+    RECOMMENDER_NAME = "SLIM_BPR_Recommender"
+
     def __init__(self, URM_train, ):
         super(SLIM_BPR_Python, self).__init__(URM_train)
 

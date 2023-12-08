@@ -1,7 +1,5 @@
 import scipy.sparse as sps
 
-from Data_manager.split_functions.split_train_validation_random_holdout import \
-    split_train_in_two_percentage_global_sample
 from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.GraphBased import P3alphaRecommender
 from challenge.utils.functions import read_data, generate_submission_csv, evaluate_algorithm
@@ -9,8 +7,6 @@ from challenge.utils.functions import read_data, generate_submission_csv, evalua
 
 def __main__():
     cutoff_list = [10]
-    folder_path = "../result_experiments/"
-    filename = "P3alphaRecommender_best_model.zip"
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
@@ -18,24 +14,28 @@ def __main__():
     URM_train = sps.load_npz("../input_files/URM_train_plus_validation.npz")
     URM_test = sps.load_npz("../input_files/URM_test.npz")
 
-    recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
-    recommender.fit(topK=64, alpha=0.35496275558011753, min_rating=0.1, implicit=True, normalize_similarity=True)
-    # recommender.load_model(folder_path, filename)
+    topK = [40]
 
-    recommended_items = recommender.recommend(users_list, cutoff=10)
-    recommendations = []
-    for i in zip(users_list, recommended_items):
-        recommendation = {"user_id": i[0], "item_list": i[1]}
-        recommendations.append(recommendation)
+    for topk in topK:
+        recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
+        recommender.fit(topK=topk, alpha=0.3119217553589628, min_rating=0.01, implicit=True,
+                        normalize_similarity=True)
 
-    generate_submission_csv("../output_files/P3alphaSubmission.csv", recommendations)
+        recommended_items = recommender.recommend(users_list, cutoff=10)
+        recommendations = []
+        for i in zip(users_list, recommended_items):
+            recommendation = {"user_id": i[0], "item_list": i[1]}
+            recommendations.append(recommendation)
 
-    evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
-    results, _ = evaluator.evaluateRecommender(recommender)
+        generate_submission_csv("../output_files/P3alphaSubmission.csv", recommendations)
 
-    evaluate_algorithm(URM_test, recommender, cutoff_list[0])
+        evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
+        results, _ = evaluator.evaluateRecommender(recommender)
 
-    print("MAP: {}".format(results.loc[10]["MAP"]))
+        evaluate_algorithm(URM_test, recommender, cutoff_list[0])
+
+        print("TopK: {}".format(topk))
+        print("MAP: {}".format(results.loc[10]["MAP"]))
 
 
 if __name__ == '__main__':
