@@ -170,3 +170,61 @@ def read_data(data_file_path, users_file_path):
     test_users.columns = ['UserID']
     users_list = test_users['UserID'].values
     return URM_all_dataframe, users_list
+
+def custom_tail_boost(URM, users_list, items_list, step=1, lastN=40):
+    for user_index in tqdm(range(URM.shape[0])):
+        if user_index in users_list:
+            sorted_items = get_sorted_items_for_user(users_list, user_index, items_list)
+            user_items = URM[user_index].indices
+            len_items = len(user_items)
+
+            for i in range(len_items):
+                index_of_item, = np.where(sorted_items == user_items[i])
+                if len_items - index_of_item <= lastN:
+                    additive_score = ((lastN + 1) - (len_items - index_of_item)) * step
+                    URM.data[URM.indptr[user_index] + i] += additive_score
+
+    return URM
+
+
+def get_sorted_items_for_user(users_list, user_id, items_list):
+    index_list = np.where(users_list == user_id)
+    return items_list[index_list]
+
+
+'''def fine_tune_parameters_tail_boost(URM, users_list, items_list, parameter_grid):
+    best_map = 0.0
+    best_parameters = {}
+
+    for parameters in product(*parameter_grid.values()):
+        step, lastN = parameters
+        URM_boosted = custom_tail_boost(URM.copy(), users_list, items_list, step=step, lastN=lastN)
+
+        URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_boosted, train_percentage=0.80)
+
+        recommender = RP3betaRecommender.RP3betaRecommender(URM_train)
+        recommender.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086, min_rating=0.2588031389774553,
+                        implicit=True, normalize_similarity=True)
+
+        evaluator = EvaluatorHoldout(URM_test, cutoff_list=[10])
+        results, _ = evaluator.evaluateRecommender(recommender)
+
+        map_10 = results.loc[10]["MAP"]
+
+        print("Parameters: {}, MAP: {}".format(parameters, map_10))
+
+        if map_10 > best_map:
+            best_map = map_10
+            best_parameters = {'step': step, 'lastN': lastN}
+
+    return best_parameters'''
+
+def tail_boost(W_sparse, item_popularity, alpha=0.1):
+    W_sparse = sps.csr_matrix(W_sparse)
+    item_popularity = np.array(item_popularity, dtype=np.float32).squeeze()
+    item_popularity = np.power(item_popularity, alpha)
+    item_popularity = sps.diags(item_popularity)
+
+    W_sparse = item_popularity.dot(W_sparse)
+
+    return W_sparse

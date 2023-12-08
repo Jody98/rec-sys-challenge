@@ -9,11 +9,13 @@ import time
 
 import numpy as np
 from sklearn.preprocessing import normalize
+import scipy.sparse as sps
 
 from Recommenders.BaseSimilarityMatrixRecommender import BaseItemSimilarityMatrixRecommender
 from Recommenders.Recommender_utils import check_matrix, similarityMatrixTopK
 from Recommenders.Similarity.Compute_Similarity_Python import Incremental_Similarity_Builder
 from Utils.seconds_to_biggest_unit import seconds_to_biggest_unit
+from challenge.utils.functions import tail_boost
 
 
 class RP3betaRecommender(BaseItemSimilarityMatrixRecommender):
@@ -30,7 +32,7 @@ class RP3betaRecommender(BaseItemSimilarityMatrixRecommender):
             self.beta, self.min_rating, self.topK,
             self.implicit, self.normalize_similarity)
 
-    def fit(self, alpha=1., beta=0.6, min_rating=0, topK=100, implicit=False, normalize_similarity=True):
+    def fit(self, alpha=1., beta=0.6, min_rating=0, topK=100, implicit=False, normalize_similarity=True, tail=False, tail_weight=0.05):
 
         self.topK = topK
         self.alpha = alpha
@@ -38,6 +40,8 @@ class RP3betaRecommender(BaseItemSimilarityMatrixRecommender):
         self.min_rating = min_rating
         self.implicit = implicit
         self.normalize_similarity = normalize_similarity
+        self.tail = tail
+        self.tail_weight = tail_weight
 
         # if X.dtype != np.float32:
         #     print("RP3beta fit: For memory usage reasons, we suggest to use np.float32 as dtype for the dataset")
@@ -132,5 +136,9 @@ class RP3betaRecommender(BaseItemSimilarityMatrixRecommender):
 
         if self.topK != False:
             self.W_sparse = similarityMatrixTopK(self.W_sparse, k=self.topK)
+
+        if self.tail:
+            item_popularity = np.ediff1d(sps.csc_matrix(self.URM_train).indptr)
+            self.W_sparse = tail_boost(self.W_sparse, item_popularity, alpha=self.tail_weight)
 
         self.W_sparse = check_matrix(self.W_sparse, format='csr')
