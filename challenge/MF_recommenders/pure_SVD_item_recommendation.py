@@ -19,22 +19,27 @@ def __main__():
 
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
-    recommender = PureSVDRecommender.PureSVDItemRecommender(URM_train)
-    recommender.fit(num_factors=96, topK=66)
+    num_factors = [10, 50, 200]
+    topK = [10, 50, 200]
 
-    recommended_items = recommender.recommend(users_list, cutoff=10)
-    recommendations = []
-    for i in zip(users_list, recommended_items):
-        recommendation = {"user_id": i[0], "item_list": i[1]}
-        recommendations.append(recommendation)
+    for num_factor in num_factors:
+        for topk in topK:
+            recommender = PureSVDRecommender.PureSVDItemRecommender(URM_train)
+            recommender.fit(num_factors=num_factor, topK=topk)
 
-    generate_submission_csv("../output_files/pureSVDSubmission.csv", recommendations)
+            recommended_items = recommender.recommend(users_list, cutoff=10)
+            recommendations = []
+            for i in zip(users_list, recommended_items):
+                recommendation = {"user_id": i[0], "item_list": i[1]}
+                recommendations.append(recommendation)
 
-    evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
-    results, _ = evaluator.evaluateRecommender(recommender)
+            generate_submission_csv("../output_files/pureSVDSubmission.csv", recommendations)
 
-    for result in results.items():
-        print(result)
+            evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
+            results, _ = evaluator.evaluateRecommender(recommender)
+
+            print("PureSVDItemRecommender with num_factors: {}, topK: {}".format(num_factor, topk))
+            print("MAP: {}".format(results.loc[10]["MAP"]))
 
 
 if __name__ == '__main__':
