@@ -24,7 +24,7 @@ def __main__():
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
 
     item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
-    item_recommender.fit(topK=10, shrink=19, similarity='tversky', tversky_alpha=0.036424892090848766,
+    item_recommender.fit(topK=9, shrink=19, similarity='tversky', tversky_alpha=0.036424892090848766,
                          tversky_beta=0.9961018325655608)
     item_Wsparse = item_recommender.W_sparse
 
@@ -38,11 +38,19 @@ def __main__():
                          positive_only=True, topK=45)
     SLIM_Wsparse = SLIM_recommender.W_sparse
 
-    SLIMRP3 = ItemKNNSimilarityHybridRecommender(URM_train, item_Wsparse, SLIM_Wsparse)
-    SLIMRP3.fit(alpha=0.18015836647732283, topK=398)
+    SLIMRP3 = ItemKNNSimilarityHybridRecommender(URM_train, RP3_Wsparse, SLIM_Wsparse)
+    SLIMRP3.fit(alpha=0.5364079633111103, topK=200)
     SLIMRP3_Wsparse = SLIMRP3.W_sparse
 
     results, _ = evaluator.evaluateRecommender(SLIMRP3)
+    print("SLIMRP3")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    SLIMitem = ItemKNNSimilarityHybridRecommender(URM_train, item_Wsparse, SLIM_Wsparse)
+    SLIMitem.fit(alpha=0.18015836647732283, topK=398)
+    SLIMRP3_Wsparse = SLIMitem.W_sparse
+
+    results, _ = evaluator.evaluateRecommender(SLIMitem)
     print("SLIMRP3")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
