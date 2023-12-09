@@ -4,7 +4,9 @@ import scipy.sparse as sps
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
-from xgboost import XGBRanker
+from sklearn.metrics import classification_report
+from sklearn.metrics import accuracy_score
+import xgboost as xgb
 
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
@@ -33,15 +35,15 @@ def __main__():
     URM_train_recommenders, URM_train_booster = train_test_split(URM_train, test_size=0.5, random_state=42)
 
     param_grid = {
-        'n_estimators': [500],
-        'learning_rate': [0.0001],
-        'reg_alpha': [0.5],
-        'reg_lambda': [0.5],
-        'max_depth': [37],
-        'max_leaves': [1],
-        'grow_policy': ['depthwise'],
-        'objective': ['rank:pairwise'],
-        'booster': ['gbtree'],
+        'n_estimators': [5, 10, 15, 20, 50, 100, 200, 500],
+        'learning_rate': [1e-5, 1e-4, 1e-3, 1e-2, 0.1],
+        'reg_alpha': [0.1, 0.5, 1],
+        'reg_lambda': [0.1, 0.5, 1],
+        'max_depth': [3, 5, 7],
+        'max_leaves': [1, 3, 5, 7],
+        'grow_policy': ['depthwise', 'lossguide'],
+        'objective': ['binary:logistic'],
+        'booster': ['gbtree', 'gblinear', 'dart'],
         'enable_categorical': [True],
     }
 
@@ -106,19 +108,17 @@ def __main__():
     user_popularity = np.ediff1d(sps.csr_matrix(URM_all).indptr)
     training_dataframe['user_profile_len'] = user_popularity[training_dataframe["UserID"].values.astype(int)]
 
-    groups = training_dataframe.groupby("UserID").size().values
-
     y_train = training_dataframe["Label"]
     X_train = training_dataframe.drop(columns=["Label"])
     X_train["UserID"] = X_train["UserID"].astype("category")
     X_train["ItemID"] = X_train["ItemID"].astype("category")
 
-    objective = 'pairwise'
-    model = XGBRanker(objective='rank:{}'.format(objective), enable_categorical=True)
+    objective = 'logistic'
+    model = xgb.XGBClassifier(objective='binary:{}'.format(objective), enable_categorical=True)
 
-    grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=5, error_score='raise')
+    grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=10, error_score='raise')
     try:
-        grid_search.fit(X_train, y_train, group=groups)
+        grid_search.fit(X_train, y_train)
     except ValueError as e:
         print(e)
         raise e
@@ -128,7 +128,63 @@ def __main__():
     print("Miglior modello: ", grid_search.best_estimator_)
 
     results = pd.DataFrame(grid_search.cv_results_)
-    results.to_csv('../output_files/XGBoostResults.csv', index=False)
+    path = '../result_experiments/XGBoostGridSearchResults.csv'
+    results.to_csv(path, index=False)
+
+
+def model_training(X, y, n_trees, mdepth, gamma, lam):
+    ##### Step 1 - Create training and testing samples
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    ##### Step 2 - Set model and its parameters
+    model = xgb.XGBClassifier(use_label_encoder=False,
+                              booster='gbtree',  # boosting algorithm to use, default gbtree, othera: gblinear, dart
+                              n_estimators=n_trees,  # number of trees, default = 100
+                              eta=0.3,  # this is learning rate, default = 0.3
+                              max_depth=mdepth,  # maximum depth of the tree, default = 6
+                              gamma=gamma,  # used for pruning, if gain < gamma the branch will be pruned, default = 0
+                              reg_lambda=lam,  # regularization parameter, defautl = 1
+                              # min_child_weight=0 # this refers to Cover which is also responsible for pruning if not set to 0
+                              )
+
+    # Fit the model
+    clf = model.fit(X_train, y_train)
+
+    ##### Step 3
+    # Predict class labels on training data
+    pred_labels_tr = model.predict(X_train)
+    # Predict class labels on a test data
+    pred_labels_te = model.predict(X_test)
+
+    print("Training predictions: ", pred_labels_tr)
+    print("Testing predictions: ", pred_labels_te)
+
+    ##### Step 4 - Model summary
+    # Basic info about the model
+    print('*************** Tree Summary ***************')
+    print('No. of classes: ', clf.n_classes_)
+    print('Classes: ', clf.classes_)
+    print('No. of features: ', clf.n_features_in_)
+    print('No. of Estimators: ', clf.n_estimators)
+    print('--------------------------------------------------------')
+    print("")
+
+    print('*************** Evaluation on Test Data ***************')
+    score_te = model.score(X_test, y_test)
+    print('Accuracy Score: ', score_te)
+    # Look at classification report to evaluate the model
+    print(classification_report(y_test, pred_labels_te))
+    print('--------------------------------------------------------')
+    print("")
+
+    print('*************** Evaluation on Training Data ***************')
+    score_tr = model.score(X_train, y_train)
+    print('Accuracy Score: ', score_tr)
+    # Look at classification report to evaluate the model
+    print(classification_report(y_train, pred_labels_tr))
+    print('--------------------------------------------------------')
+
+    return clf, X_test, y_test
 
 
 if __name__ == '__main__':
