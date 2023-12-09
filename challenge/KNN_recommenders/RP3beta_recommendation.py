@@ -1,32 +1,10 @@
-import numpy as np
 import scipy.sparse as sps
-from sklearn.metrics.pairwise import cosine_similarity
-from tqdm import tqdm
 
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
 from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.GraphBased import RP3betaRecommender
-from challenge.utils.functions import read_data, generate_submission_csv
-
-
-def create_new_users(URM_train, users_list, num_users_to_create=100, similarity_threshold=0.8):
-    user_similarity = cosine_similarity(URM_train, dense_output=False)
-    URM_train_augmented = URM_train.copy()
-
-    for _ in tqdm(range(num_users_to_create)):
-        random_user_index = np.random.choice(len(users_list))
-        model_user = users_list[random_user_index]
-
-        similarities = user_similarity[model_user, :].toarray().ravel()
-
-        similar_users = np.where(similarities > similarity_threshold)[0]
-
-        if similar_users.size > 0:
-            random_similar_user = np.random.choice(similar_users)
-            URM_train_augmented[random_similar_user, :] += URM_train[model_user, :]
-
-    return URM_train_augmented
+from challenge.utils.functions import read_data, generate_submission_csv, augmentation
 
 
 def __main__():
@@ -43,7 +21,8 @@ def __main__():
     num_interactions = URM_train.nnz
     num_interactions_test = URM_test.nnz
 
-    URM_train_augmented = create_new_users(URM_train, users_list, num_users_to_create=1000, similarity_threshold=0.18)
+    URM_train_augmented = augmentation(URM_train, users_list, num_users_to_create=802,
+                                       similarity_threshold=0.6371651421518384)
     num_interactions_augmented = URM_train_augmented.nnz
 
     topK = [30]

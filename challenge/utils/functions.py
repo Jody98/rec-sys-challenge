@@ -1,7 +1,9 @@
 import numpy as np
 import pandas as pd
 import scipy.sparse as sps
+from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import train_test_split
+from tqdm import tqdm
 
 
 def precision(recommended_items, relevant_items):
@@ -171,6 +173,7 @@ def read_data(data_file_path, users_file_path):
     users_list = test_users['UserID'].values
     return URM_all_dataframe, users_list
 
+
 def custom_tail_boost(URM, users_list, items_list, step=1, lastN=40):
     for user_index in tqdm(range(URM.shape[0])):
         if user_index in users_list:
@@ -219,6 +222,7 @@ def get_sorted_items_for_user(users_list, user_id, items_list):
 
     return best_parameters'''
 
+
 def tail_boost(W_sparse, item_popularity, alpha=0.1):
     W_sparse = sps.csr_matrix(W_sparse)
     item_popularity = np.array(item_popularity, dtype=np.float32).squeeze()
@@ -228,3 +232,22 @@ def tail_boost(W_sparse, item_popularity, alpha=0.1):
     W_sparse = item_popularity.dot(W_sparse)
 
     return W_sparse
+
+
+def augmentation(URM_train, users_list, num_users_to_create=100, similarity_threshold=0.8):
+    user_similarity = cosine_similarity(URM_train, dense_output=False)
+    URM_train_augmented = URM_train.copy()
+
+    for _ in tqdm(range(num_users_to_create)):
+        random_user_index = np.random.choice(len(users_list))
+        model_user = users_list[random_user_index]
+
+        similarities = user_similarity[model_user, :].toarray().ravel()
+
+        similar_users = np.where(similarities > similarity_threshold)[0]
+
+        if similar_users.size > 0:
+            random_similar_user = np.random.choice(similar_users)
+            URM_train_augmented[random_similar_user, :] += URM_train[model_user, :]
+
+    return URM_train_augmented
