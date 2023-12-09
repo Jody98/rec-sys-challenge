@@ -13,14 +13,11 @@ def __main__():
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
-    URM_all = sps.coo_matrix(
-        (URM_all_dataframe['Data'].values, (URM_all_dataframe['UserID'].values, URM_all_dataframe['ItemID'].values)))
-    URM_all = URM_all.tocsr()
+    URM_train = sps.load_npz("../input_files/URM_train_plus_validation.npz")
+    URM_test = sps.load_npz("../input_files/URM_test.npz")
 
-    URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
-
-    num_factors = [10, 50, 200]
-    topK = [10, 50, 200]
+    num_factors = [145]
+    topK = [28]
 
     for num_factor in num_factors:
         for topk in topK:

@@ -38,12 +38,10 @@ def read_data_split_and_search():
 
     URM_all_dataframe, users_list = f.read_data(data_file_path, users_file_path)
 
-    URM_all = sps.coo_matrix(
-        (URM_all_dataframe['Data'].values, (URM_all_dataframe['UserID'].values, URM_all_dataframe['ItemID'].values)))
-    URM_all = URM_all.tocsr()
-
-    URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
-    URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_train, train_percentage=0.80)
+    URM_train_validation = sps.load_npz("../input_files/URM_train_plus_validation.npz")
+    URM_train = sps.load_npz("../input_files/URM_train.npz")
+    URM_test = sps.load_npz("../input_files/URM_test.npz")
+    URM_validation = sps.load_npz("../input_files/URM_validation.npz")
 
     output_folder_path = "result_experiments/"
 
@@ -52,13 +50,11 @@ def read_data_split_and_search():
         os.makedirs(output_folder_path)
 
     collaborative_algorithm_list = [
-        P3alphaRecommender,
-        RP3betaRecommender,
-        ItemKNNCFRecommender,
-        MatrixFactorization_BPR_Cython,
-        MatrixFactorization_FunkSVD_Cython,
-        PureSVDRecommender,
-        SLIM_BPR_Cython,
+        # P3alphaRecommender,
+        # RP3betaRecommender,
+        # ItemKNNCFRecommender,
+        EASE_R_Recommender,
+        IALSRecommender,
         SLIMElasticNetRecommender
     ]
 

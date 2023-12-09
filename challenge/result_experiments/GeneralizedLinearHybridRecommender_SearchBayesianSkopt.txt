@@ -472,6 +472,457 @@ SearchBayesianSkopt: Search complete. Best config is 98: {'alpha': 0.17913685407
 SearchBayesianSkopt: Best config evaluated with evaluator_test with constructor data for final test. Config: {'alpha': 0.1791368540738244, 'beta': 0.0850359742652931, 'gamma': 1.329291334991808, 'delta': 3.0, 'epsilon': 3.0} - results:
 CUTOFF: 10 - PRECISION: 0.0858580, PRECISION_RECALL_MIN_DEN: 0.1449758, RECALL: 0.1208263, MAP: 0.0442506, MAP_MIN_DEN: 0.0736437, MRR: 0.2489160, NDCG: 0.1343784, F1: 0.1003841, HIT_RATE: 0.4799734, ARHR_ALL_HITS: 0.3278406, NOVELTY: 0.0052031, AVERAGE_POPULARITY: 0.1740171, DIVERSITY_MEAN_INTER_LIST: 0.9821749, DIVERSITY_HERFINDAHL: 0.9982082, COVERAGE_ITEM: 0.3794523, COVERAGE_ITEM_HIT: 0.0823340, ITEMS_IN_GT: 0.7993109, COVERAGE_USER: 0.8089060, COVERAGE_USER_HIT: 0.3882534, USERS_IN_GT: 0.8089060, DIVERSITY_GINI: 0.0707233, SHANNON_ENTROPY: 10.5202840, RATIO_DIVERSITY_HERFINDAHL: 0.9985686, RATIO_DIVERSITY_GINI: 0.2040673, RATIO_SHANNON_ENTROPY: 0.8104345, RATIO_AVERAGE_POPULARITY: 1.4602448, RATIO_NOVELTY: 0.3046413, 
 
+SearchBayesianSkopt: Config 0 Exception. Config: {'gamma': 2.4482369283656698, 'delta': 0.1955990011560506, 'epsilon': 1.1552635919166776} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 1 Exception. Config: {'gamma': 2.6834257543350257, 'delta': 2.9065174406296603, 'epsilon': 2.7534831097239123} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 2 Exception. Config: {'gamma': 2.5296111923510654, 'delta': 1.8364424414607519, 'epsilon': 1.953300658327877} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 3 Exception. Config: {'gamma': 0.7409564614702453, 'delta': 0.6908879149177445, 'epsilon': 0.7147303783109615} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 4 Exception. Config: {'gamma': 2.331317912740764, 'delta': 0.6368836861741631, 'epsilon': 0.23042829132696913} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 5 Exception. Config: {'gamma': 1.8302093525446124, 'delta': 2.4286429044989095, 'epsilon': 0.1641551959343211} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 6 Exception. Config: {'gamma': 1.2964306334896754, 'delta': 0.5051803127816382, 'epsilon': 2.2491964818308805} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 7 Exception. Config: {'gamma': 0.688824395162972, 'delta': 2.4609143569274226, 'epsilon': 1.743464125994523} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 8 Exception. Config: {'gamma': 1.3020389651318593, 'delta': 1.430959289742328, 'epsilon': 0.36106223670717885} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 9 Exception. Config: {'gamma': 1.7824012553336592, 'delta': 1.3871979670591612, 'epsilon': 2.3369565858164334} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 10 Exception. Config: {'gamma': 0.9301948579504355, 'delta': 2.4010190512070517, 'epsilon': 2.1468756567769995} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 11 Exception. Config: {'gamma': 0.2034975035226198, 'delta': 0.9036399969107296, 'epsilon': 0.07877781985616908} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 12 Exception. Config: {'gamma': 2.41654217097241, 'delta': 1.3840443119594967, 'epsilon': 0.37118090846560714} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 13 Exception. Config: {'gamma': 1.3435671392593722, 'delta': 1.5707019566888731, 'epsilon': 0.43878606697997935} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 14 Exception. Config: {'gamma': 1.1514299382728919, 'delta': 1.8913075620136, 'epsilon': 2.528128296348908} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 15 Exception. Config: {'gamma': 1.4209294266486454, 'delta': 1.3806090956553536, 'epsilon': 1.0441470080341784} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 16 Exception. Config: {'gamma': 2.116677374391154, 'delta': 1.0219200320416486, 'epsilon': 2.736595395789448} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 17 Exception. Config: {'gamma': 0.5377086798365853, 'delta': 1.8449248946449754, 'epsilon': 1.3376084232450127} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 18 Exception. Config: {'gamma': 0.4540091090639672, 'delta': 1.949044510595772, 'epsilon': 0.1589302318597005} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 19 Exception. Config: {'gamma': 2.912319908429223, 'delta': 1.6821169455969884, 'epsilon': 0.5386421000081297} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 20 Exception. Config: {'gamma': 1.7175968984056045, 'delta': 0.5861227060922396, 'epsilon': 2.7600351938059475} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 21 Exception. Config: {'gamma': 0.18670264622230776, 'delta': 1.2205442742144093, 'epsilon': 0.18246619188614616} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 22 Exception. Config: {'gamma': 2.293870914210912, 'delta': 0.07880953766757007, 'epsilon': 0.469798277708781} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 23 Exception. Config: {'gamma': 0.17622615409233616, 'delta': 2.658235484965078, 'epsilon': 0.03563668473114824} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 24 Exception. Config: {'gamma': 2.0605787812559213, 'delta': 1.195218740518328, 'epsilon': 0.47349831267689535} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 25 Exception. Config: {'gamma': 2.387672620928548, 'delta': 1.247795671372673, 'epsilon': 1.2177429763056666} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 26 Exception. Config: {'gamma': 1.9171490898488186, 'delta': 1.7721143028184863, 'epsilon': 0.8739331529979444} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 27 Exception. Config: {'gamma': 2.783938511991592, 'delta': 1.3927210262635428, 'epsilon': 1.6992696123584712} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 28 Exception. Config: {'gamma': 1.0706760599808534, 'delta': 1.1995045725960427, 'epsilon': 0.014819963156425312} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Config 29 Exception. Config: {'gamma': 1.6549090347835258, 'delta': 2.0821563120345505, 'epsilon': 0.21501601160242362} - Exception: Traceback (most recent call last):
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+  File "/home/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 330, in _evaluate_on_validation
+    result_df, _ = self.evaluator_validation.evaluateRecommender(recommender_instance)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 273, in evaluateRecommender
+    results_dict = self._run_evaluation_on_selected_users(recommender_object, self.users_to_evaluate)
+  File "/home/rec-sys-challenge/Evaluation/Evaluator.py", line 479, in _run_evaluation_on_selected_users
+    recommended_items_batch_list, scores_batch = recommender_object.recommend(test_user_batch_array,
+  File "/home/rec-sys-challenge/Recommenders/BaseRecommender.py", line 140, in recommend
+    scores_batch = self._compute_item_score(user_id_array, items_to_compute=items_to_compute)
+  File "/home/rec-sys-challenge/Recommenders/Hybrid/GeneralizedLinearHybridRecommender.py", line 34, in _compute_item_score
+    result = self.alphas[0] * self.recommenders[0]._compute_item_score(user_id_array, items_to_compute)
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+
+SearchBayesianSkopt: Search interrupted. No valid config was found during the initial random initialization
 SearchBayesianSkopt: New best config found. Config 0: {'gamma': 1.9586737732891182, 'delta': 0.7522457412539505, 'epsilon': 1.5969531093982539} - results: PRECISION: 0.0669654, PRECISION_RECALL_MIN_DEN: 0.1312937, RECALL: 0.1173168, MAP: 0.0310476, MAP_MIN_DEN: 0.0620345, MRR: 0.2037832, NDCG: 0.1138392, F1: 0.0852623, HIT_RATE: 0.4346874, ARHR_ALL_HITS: 0.2503274, NOVELTY: 0.0052499, AVERAGE_POPULARITY: 0.1710361, DIVERSITY_MEAN_INTER_LIST: 0.9825465, DIVERSITY_HERFINDAHL: 0.9982449, COVERAGE_ITEM: 0.4342223, COVERAGE_ITEM_HIT: 0.0716843, ITEMS_IN_GT: 0.7396188, COVERAGE_USER: 0.7711324, COVERAGE_USER_HIT: 0.3352015, USERS_IN_GT: 0.7711324, DIVERSITY_GINI: 0.0871846, SHANNON_ENTROPY: 10.7338002, RATIO_DIVERSITY_HERFINDAHL: 0.9986056, RATIO_DIVERSITY_GINI: 0.2545805, RATIO_SHANNON_ENTROPY: 0.8275672, RATIO_AVERAGE_POPULARITY: 1.5032238, RATIO_NOVELTY: 0.3845470, 
 SearchBayesianSkopt: Config evaluated with evaluator_test. Config: {'gamma': 1.9586737732891182, 'delta': 0.7522457412539505, 'epsilon': 1.5969531093982539} - results:
 CUTOFF: 10 - PRECISION: 0.0788440, PRECISION_RECALL_MIN_DEN: 0.1350249, RECALL: 0.1138325, MAP: 0.0379763, MAP_MIN_DEN: 0.0652397, MRR: 0.2256894, NDCG: 0.1222263, F1: 0.0931614, HIT_RATE: 0.4658314, ARHR_ALL_HITS: 0.2902844, NOVELTY: 0.0052778, AVERAGE_POPULARITY: 0.1686773, DIVERSITY_MEAN_INTER_LIST: 0.9829262, DIVERSITY_HERFINDAHL: 0.9982833, COVERAGE_ITEM: 0.4516735, COVERAGE_ITEM_HIT: 0.0789780, ITEMS_IN_GT: 0.7993109, COVERAGE_USER: 0.8089060, COVERAGE_USER_HIT: 0.3768138, USERS_IN_GT: 0.8089060, DIVERSITY_GINI: 0.0911441, SHANNON_ENTROPY: 10.7837784, RATIO_DIVERSITY_HERFINDAHL: 0.9986440, RATIO_DIVERSITY_GINI: 0.2661423, RATIO_SHANNON_ENTROPY: 0.8314205, RATIO_AVERAGE_POPULARITY: 1.4824924, RATIO_NOVELTY: 0.3865874, 
