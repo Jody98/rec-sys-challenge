@@ -35,8 +35,8 @@ def __main__():
                          reg=1.5, init_mean=0.0, init_std=0.1)
 
     item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
-    item_recommender.fit(topK=10, shrink=19, similarity='jaccard', normalize=False,
-                         feature_weighting="TF-IDF")
+    item_recommender.fit(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.03642489209084876,
+                         tversky_beta=0.9961018325655608)
     item_Wsparse = item_recommender.W_sparse
 
     results, _ = evaluator.evaluateRecommender(item_recommender)
@@ -52,8 +52,7 @@ def __main__():
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
-    P3_recommender.fit(topK=40, alpha=0.35496275558011753, min_rating=0.1, implicit=True,
-                       normalize_similarity=True)
+    P3_recommender.fit(topK=40, alpha=0.3119217553589628, min_rating=0.01, implicit=True, normalize_similarity=True)
     P3_Wsparse = P3_recommender.W_sparse
 
     results, _ = evaluator.evaluateRecommender(P3_recommender)
@@ -70,8 +69,7 @@ def __main__():
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
-    SLIM_recommender.fit(l1_ratio=0.005997129498003861, alpha=0.004503120402472539,
-                         positive_only=True, topK=45)
+    SLIM_recommender.fit(topK=216, l1_ratio=0.0032465600313226354, alpha=0.002589066655986645, positive_only=True)
     SLIM_Wsparse = SLIM_recommender.W_sparse
 
     results, _ = evaluator.evaluateRecommender(SLIM_recommender)
@@ -88,12 +86,12 @@ def __main__():
     }
 
     hyperparameters_range_dictionary = {
-        "iALS": Real(0.0, 0.1),
-        "ItemKNN": Real(0.0, 0.4),
-        "EASE_R": Real(0.0, 0.0001),
-        "P3alpha": Real(0.5, 1.0),
-        "RP3beta": Real(0.0, 0.6),
-        "SLIM": Real(0.0, 1.0),
+        "iALS": Real(0.5, 1.0),
+        "ItemKNN": Real(0.7, 1.0),
+        "EASE_R": Real(0.0, 0.3),
+        "P3alpha": Real(0.9, 1.8),
+        "RP3beta": Real(0.9, 1.8),
+        "SLIM": Real(1.0, 2.0),
     }
 
     recommender_class = HybridLinear
@@ -123,7 +121,7 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 100
+    n_cases = 33
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10

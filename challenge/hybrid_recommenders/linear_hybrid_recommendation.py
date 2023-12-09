@@ -23,22 +23,22 @@ def __main__():
 
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
 
-    ials_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
-    ials_recommender.fit(topK=64, alpha=0.35496275558011753, min_rating=0.1, implicit=True,
-                         normalize_similarity=True)
+    ials_recommender = IALSRecommender.IALSRecommender(URM_train)
+    ials_recommender.fit(epochs=100, num_factors=92, confidence_scaling="linear", alpha=2.5431444656816597,
+                         epsilon=0.035779451402656745,
+                         reg=1.5, init_mean=0.0, init_std=0.1)
 
     item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
-    item_recommender.fit(topK=10, shrink=19, similarity='jaccard', normalize=False,
-                         feature_weighting="TF-IDF")
+    item_recommender.fit(topK=10, shrink=19, similarity='tversky', tversky_alpha=0.036424892090848766,
+                         tversky_beta=0.9961018325655608)
     item_Wsparse = item_recommender.W_sparse
 
     results, _ = evaluator.evaluateRecommender(item_recommender)
     print("ItemKNNCFRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    EASE_R_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
-    EASE_R_recommender.fit(topK=64, alpha=0.35496275558011753, min_rating=0.1, implicit=True,
-                           normalize_similarity=True)
+    EASE_R_recommender = EASE_R_Recommender.EASE_R_Recommender(URM_train)
+    EASE_R_recommender.fit(topK=10, l2_norm=101, normalize_matrix=False)
     EASE_R_Wsparse = sps.csr_matrix(EASE_R_recommender.W_sparse)
 
     results, _ = evaluator.evaluateRecommender(EASE_R_recommender)
@@ -64,8 +64,7 @@ def __main__():
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
-    SLIM_recommender.fit(l1_ratio=0.005997129498003861, alpha=0.004503120402472539,
-                         positive_only=True, topK=45)
+    SLIM_recommender.fit(topK=216, l1_ratio=0.0032465600313226354, alpha=0.002589066655986645, positive_only=True)
     SLIM_Wsparse = SLIM_recommender.W_sparse
 
     results, _ = evaluator.evaluateRecommender(SLIM_recommender)
@@ -90,18 +89,9 @@ def __main__():
     }
 
     all_recommender = HybridLinear(URM_train, recommenders)
-    all_recommender.fit(iALS=0.0, ItemKNN=0.3677964803954745,
-                        EASE_R=0.0, P3alpha=0.7239455833579226,
-                        RP3beta=0.4439258978922839, SLIM=0.55520329895492982)
-
-    results, _ = evaluator.evaluateRecommender(all_recommender)
-    print("HybridLinear")
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
-    all_recommender = HybridLinear(URM_train, recommenders)
-    all_recommender.fit(iALS=0.8063775585626619, ItemKNN=0.32792294569765507,
-                        EASE_R=0.2233733817355404, P3alpha=0.9098345552342707,
-                        RP3beta=0.342017078321237, SLIM=0.85520329895492982)
+    all_recommender.fit(iALS=0.7432079425513481, ItemKNN=0.8757178484514192,
+                        EASE_R=0.20666138406426018, P3alpha=0.9134869885933723,
+                        RP3beta=1.662585351548445, SLIM=1.4395154022835905)
 
     results, _ = evaluator.evaluateRecommender(all_recommender)
     print("HybridLinear")
