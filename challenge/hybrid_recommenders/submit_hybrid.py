@@ -21,7 +21,7 @@ def __main__():
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
 
     item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
-    item_recommender.fit(topK=10, shrink=19, similarity='tversky', tversky_alpha=0.036424892090848766,
+    item_recommender.fit(topK=9, shrink=19, similarity='tversky', tversky_alpha=0.036424892090848766,
                          tversky_beta=0.9961018325655608)
 
     results, _ = evaluator.evaluateRecommender(item_recommender)
@@ -51,35 +51,9 @@ def __main__():
     recommenders = [item_recommender, item_recommender, item_recommender, RP3_recommender, SLIM_recommender]
     alpha = 0
     beta = 0
-    gamma = 0.44230314621214717
-    delta = 1.5842505033001206
-    epsilon = 0.772315877369318
-
-    recommender_object = GeneralizedLinearHybridRecommender(URM_train, recommenders=recommenders)
-    recommender_object.fit(alpha=alpha, beta=beta, gamma=gamma, delta=delta, epsilon=epsilon)
-
-    results, _ = evaluator.evaluateRecommender(recommender_object)
-    print("GeneralizedLinearHybridRecommender")
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
-    alpha = 0
-    beta = 0
-    gamma = 0.44230314621214717
-    delta = 1.5842505033001206
-    epsilon = 1.772315877369318
-
-    recommender_object = GeneralizedLinearHybridRecommender(URM_train, recommenders=recommenders)
-    recommender_object.fit(alpha=alpha, beta=beta, gamma=gamma, delta=delta, epsilon=epsilon)
-
-    results, _ = evaluator.evaluateRecommender(recommender_object)
-    print("GeneralizedLinearHybridRecommender")
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
-    alpha = 0
-    beta = 0
-    gamma = 0.44230314621214717
-    delta = 1.5842505033001206
-    epsilon = 2.772315877369318
+    gamma = 0.14621041546759697
+    delta = 1.4088635313876665
+    epsilon = 1.4578805008713718
 
     recommender_object = GeneralizedLinearHybridRecommender(URM_train, recommenders=recommenders)
     recommender_object.fit(alpha=alpha, beta=beta, gamma=gamma, delta=delta, epsilon=epsilon)

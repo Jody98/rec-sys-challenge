@@ -30,19 +30,17 @@ def __main__():
     evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[10])
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
-    RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_train)
-    RP3_recommender.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086,
-                        min_rating=0.2588031389774553,
-                        implicit=True,
-                        normalize_similarity=True)
-    RP3beta_Wsparse = RP3_recommender.W_sparse
+    item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
+    item_recommender.fit(topK=10, shrink=19, similarity='tversky', tversky_alpha=0.036424892090848766,
+                         tversky_beta=0.9961018325655608)
+    item_Wsparse = item_recommender.W_sparse
 
     SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
     SLIM_recommender.fit(topK=216, l1_ratio=0.0032465600313226354, alpha=0.002589066655986645, positive_only=True)
     SLIM_Wsparse = SLIM_recommender.W_sparse
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(5, 200),
+        "topK": Integer(5, 500),
         "alpha": Real(0, 1, prior='uniform'),
     }
 
@@ -53,7 +51,7 @@ def __main__():
                                                evaluator_test=evaluator_test)
 
     recommender_input_args = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, RP3beta_Wsparse, SLIM_Wsparse],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, item_Wsparse, SLIM_Wsparse],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},
@@ -61,7 +59,7 @@ def __main__():
     )
 
     recommender_input_args_last_test = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, RP3beta_Wsparse, SLIM_Wsparse],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, item_Wsparse, SLIM_Wsparse],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},

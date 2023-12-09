@@ -1,5 +1,5 @@
-ItemKNN(topK=10, shrink=19, similarity='jaccard', normalize=False, feature_weighting='TF-IDF')
-MAP: 0.04450039019657538 -> 0.11624
+ItemKNN(topK=k, shrink=13, similarity='tversky', tversky_alpha=0.03642489209084876, tversky_beta=0.9961018325655608)
+MAP: 0.04819639019657538
 
 EASE_R(topK=10, l2_norm=0.0001, l1_norm=0.0, normalize=True)
 MAP: 0.04589183268853038 -> 0.1194
