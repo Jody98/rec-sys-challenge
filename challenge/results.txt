@@ -1,4 +1,4 @@
-ItemKNN(topK=k, shrink=13, similarity='tversky', tversky_alpha=0.03642489209084876, tversky_beta=0.9961018325655608)
+ItemKNN(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.03642489209084876, tversky_beta=0.9961018325655608)
 MAP: 0.04819639019657538
 
 EASE_R(topK=10, l2_norm=0.0001, l1_norm=0.0, normalize=True)

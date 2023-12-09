@@ -29,7 +29,7 @@ def __main__():
                          reg=1.5, init_mean=0.0, init_std=0.1)
 
     item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
-    item_recommender.fit(topK=10, shrink=19, similarity='tversky', tversky_alpha=0.036424892090848766,
+    item_recommender.fit(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.036424892090848766,
                          tversky_beta=0.9961018325655608)
     item_Wsparse = item_recommender.W_sparse
 
@@ -46,7 +46,7 @@ def __main__():
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
-    P3_recommender.fit(topK=64, alpha=0.35496275558011753, min_rating=0.1, implicit=True,
+    P3_recommender.fit(topK=40, alpha=0.3119217553589628, min_rating=0.01, implicit=True,
                        normalize_similarity=True)
     P3_Wsparse = P3_recommender.W_sparse
 
@@ -72,7 +72,7 @@ def __main__():
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     SLIMRP3 = ItemKNNSimilarityHybridRecommender(URM_train, RP3_Wsparse, SLIM_Wsparse)
-    SLIMRP3.fit(alpha=0.5153665793050106, topK=48)
+    SLIMRP3.fit(alpha=0.5364079633111103, topK=200)
     SLIMRP3_Wsparse = SLIMRP3.W_sparse
 
     results, _ = evaluator.evaluateRecommender(SLIMRP3)
@@ -89,13 +89,21 @@ def __main__():
     }
 
     all_recommender = HybridLinear(URM_train, recommenders)
-    all_recommender.fit(iALS=0.7432079425513481, ItemKNN=0.8757178484514192,
-                        EASE_R=0.20666138406426018, P3alpha=0.9134869885933723,
-                        RP3beta=1.662585351548445, SLIM=1.4395154022835905)
+    all_recommender.fit(iALS=0.9674103723952641, ItemKNN=0.9885478633045848,
+                        EASE_R=0.02470494636545416, P3alpha=1.4884536168571887,
+                        RP3beta=1.6534592676545503, SLIM=1.9018687827525076)
 
     results, _ = evaluator.evaluateRecommender(all_recommender)
     print("HybridLinear")
     print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    recommended_items = all_recommender.recommend(users_list, cutoff=10)
+    recommendations = []
+    for i in zip(users_list, recommended_items):
+        recommendation = {"user_id": i[0], "item_list": i[1]}
+        recommendations.append(recommendation)
+
+    generate_submission_csv("../output_files/LinearHybridSubmission.csv", recommendations)
 
 
 if __name__ == '__main__':

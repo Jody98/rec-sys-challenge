@@ -6,6 +6,7 @@ from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
 from Recommenders.Hybrid.GeneralizedLinearHybridRecommender import GeneralizedLinearHybridRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
 from Recommenders.Hybrid.HybridDifferentLoss import DifferentLossScoresHybridRecommender
+from Recommenders.KNN.ItemKNNSimilarityHybridRecommender import ItemKNNSimilarityHybridRecommender
 from Recommenders.MatrixFactorization import IALSRecommender
 from Recommenders.SLIM import SLIMElasticNetRecommender
 from challenge.utils.functions import read_data, generate_submission_csv
@@ -22,15 +23,6 @@ def __main__():
 
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
 
-    ials_recommender = IALSRecommender.IALSRecommender(URM_train)
-    ials_recommender.fit(epochs=100, num_factors=92, confidence_scaling="linear", alpha=2.5431444656816597,
-                         epsilon=0.035779451402656745,
-                         reg=1.5, init_mean=0.0, init_std=0.1)
-
-    results, _ = evaluator.evaluateRecommender(ials_recommender)
-    print("IALSRecommender")
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
     item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
     item_recommender.fit(topK=10, shrink=19, similarity='jaccard', normalize=False,
                          feature_weighting="TF-IDF")
@@ -38,23 +30,6 @@ def __main__():
 
     results, _ = evaluator.evaluateRecommender(item_recommender)
     print("ItemKNNCFRecommender")
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
-    EASE_recommender = EASE_R_Recommender.EASE_R_Recommender(URM_train)
-    EASE_recommender.fit(topK=10, l2_norm=101, normalize_matrix=False)
-    EASE_R_Wsparse = sps.csr_matrix(EASE_recommender.W_sparse)
-
-    results, _ = evaluator.evaluateRecommender(EASE_recommender)
-    print("EASE_R_Recommender")
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
-    P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
-    P3_recommender.fit(topK=64, alpha=0.35496275558011753, min_rating=0.1, implicit=True,
-                       normalize_similarity=True)
-    P3_Wsparse = P3_recommender.W_sparse
-
-    results, _ = evaluator.evaluateRecommender(P3_recommender)
-    print("P3alphaRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_train)
@@ -75,22 +50,21 @@ def __main__():
     print("SLIMElasticNetRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    SLIMRP3 = DifferentLossScoresHybridRecommender(URM_train, RP3_recommender, SLIM_recommender)
-    SLIMRP3.fit(norm=2, alpha=0.4304989217384739)
+    SLIMRP3 = ItemKNNSimilarityHybridRecommender(URM_train, RP3_Wsparse, SLIM_Wsparse)
+    SLIMRP3.fit(alpha=0.5364079633111103, topK=200)
+    SLIMRP3_Wsparse = SLIMRP3.W_sparse
 
     results, _ = evaluator.evaluateRecommender(SLIMRP3)
     print("SLIMRP3")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    recommenders = [ials_recommender, item_recommender, EASE_recommender, P3_recommender, SLIMRP3]
-    alpha = 0.222222
-    beta = 1.8161240086943757
+    recommenders = [item_recommender, item_recommender, item_recommender, RP3_recommender, SLIM_recommender]
     gamma = 1.7842468494380264
     delta = 2.8553272775373806
     epsilon = 3.5
 
     recommender_object = GeneralizedLinearHybridRecommender(URM_train, recommenders=recommenders)
-    recommender_object.fit(alpha=alpha, beta=beta, gamma=gamma, delta=delta, epsilon=epsilon)
+    recommender_object.fit(gamma=gamma, delta=delta, epsilon=epsilon)
 
     recommended_items = recommender_object.recommend(users_list, cutoff=10)
     recommendations = []
@@ -98,7 +72,7 @@ def __main__():
         recommendation = {"user_id": i[0], "item_list": i[1]}
         recommendations.append(recommendation)
 
-    generate_submission_csv("../output_files/HybridSubmission.csv", recommendations)
+    generate_submission_csv("../output_files/GeneralizedHybridSubmission.csv", recommendations)
 
     results, _ = evaluator.evaluateRecommender(recommender_object)
     print("GeneralizedLinearHybridRecommender")

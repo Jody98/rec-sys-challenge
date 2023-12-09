@@ -31,7 +31,7 @@ def __main__():
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
-    item_recommender.fit(topK=10, shrink=19, similarity='tversky', tversky_alpha=0.036424892090848766,
+    item_recommender.fit(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.036424892090848766,
                          tversky_beta=0.9961018325655608)
     item_Wsparse = item_recommender.W_sparse
 
@@ -59,9 +59,9 @@ def __main__():
     recommenders = [item_recommender, item_recommender, item_recommender, RP3_recommender, SLIM_recommender]
 
     hyperparameters_range_dictionary = {
-        "gamma": Real(0, 2),
-        "delta": Real(0, 2),
-        "epsilon": Real(1, 3),
+        "gamma": Real(0, 1),
+        "delta": Real(3, 4),
+        "epsilon": Real(2, 4),
     }
 
     recommender_class = GeneralizedLinearHybridRecommender
@@ -91,7 +91,7 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 200
+    n_cases = 100
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10

@@ -88,7 +88,7 @@ def __main__():
     hyperparameters_range_dictionary = {
         "iALS": Real(0.5, 1.0),
         "ItemKNN": Real(0.7, 1.0),
-        "EASE_R": Real(0.0, 0.3),
+        "EASE_R": Real(0.0, 0.2),
         "P3alpha": Real(0.9, 1.8),
         "RP3beta": Real(0.9, 1.8),
         "SLIM": Real(1.0, 2.0),
@@ -121,7 +121,7 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 33
+    n_cases = 50
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10
