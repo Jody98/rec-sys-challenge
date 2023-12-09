@@ -30,39 +30,13 @@ def __main__():
     evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[10])
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
-    ials_recommender = IALSRecommender.IALSRecommender(URM_train)
-    ials_recommender.fit(epochs=100, num_factors=92, confidence_scaling="linear", alpha=2.5431444656816597,
-                         epsilon=0.035779451402656745,
-                         reg=1.5, init_mean=0.0, init_std=0.1)
-
-    results, _ = evaluator.evaluateRecommender(ials_recommender)
-    print("IALSRecommender")
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
     item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
-    item_recommender.fit(topK=10, shrink=19, similarity='jaccard', normalize=False,
-                         feature_weighting="TF-IDF")
+    item_recommender.fit(topK=10, shrink=19, similarity='tversky', tversky_alpha=0.036424892090848766,
+                         tversky_beta=0.9961018325655608)
     item_Wsparse = item_recommender.W_sparse
 
     results, _ = evaluator.evaluateRecommender(item_recommender)
     print("ItemKNNCFRecommender")
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
-    EASE_recommender = EASE_R_Recommender.EASE_R_Recommender(URM_train)
-    EASE_recommender.fit(topK=10, l2_norm=101, normalize_matrix=False)
-    EASE_R_Wsparse = sps.csr_matrix(EASE_recommender.W_sparse)
-
-    results, _ = evaluator.evaluateRecommender(EASE_recommender)
-    print("EASE_R_Recommender")
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
-    P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
-    P3_recommender.fit(topK=64, alpha=0.35496275558011753, min_rating=0.1, implicit=True,
-                       normalize_similarity=True)
-    P3_Wsparse = P3_recommender.W_sparse
-
-    results, _ = evaluator.evaluateRecommender(P3_recommender)
-    print("P3alphaRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_train)
@@ -75,29 +49,19 @@ def __main__():
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
-    SLIM_recommender.fit(l1_ratio=0.005997129498003861, alpha=0.004503120402472539,
-                         positive_only=True, topK=45)
+    SLIM_recommender.fit(topK=216, l1_ratio=0.0032465600313226354, alpha=0.002589066655986645, positive_only=True)
     SLIM_Wsparse = SLIM_recommender.W_sparse
 
     results, _ = evaluator.evaluateRecommender(SLIM_recommender)
     print("SLIMElasticNetRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    SLIMRP3 = DifferentLossScoresHybridRecommender(URM_train, RP3_recommender, SLIM_recommender)
-    SLIMRP3.fit(norm=2, alpha=0.4304989217384739)
-
-    results, _ = evaluator.evaluateRecommender(SLIMRP3)
-    print("SLIMRP3")
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
-    recommenders = [ials_recommender, item_recommender, EASE_recommender, P3_recommender, SLIMRP3]
+    recommenders = [item_recommender, item_recommender, item_recommender, RP3_recommender, SLIM_recommender]
 
     hyperparameters_range_dictionary = {
-        "alpha": Real(0, 0.2),
-        "beta": Real(0, 0.1),
-        "gamma": Real(1, 2),
-        "delta": Real(3, 4),
-        "epsilon": Real(3, 4),
+        "gamma": Real(0, 2),
+        "delta": Real(0, 2),
+        "epsilon": Real(1, 3),
     }
 
     recommender_class = GeneralizedLinearHybridRecommender
@@ -127,7 +91,7 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 10
+    n_cases = 100
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10

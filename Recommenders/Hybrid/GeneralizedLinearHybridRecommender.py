@@ -13,13 +13,13 @@ class GeneralizedLinearHybridRecommender(BaseRecommender):
 
     def __init__(self, URM_train, recommenders: list, verbose=True):
 
-        self.RECOMMENDER_NAME = 'HybridRecommender'
+        self.RECOMMENDER_NAME = 'GeneralizedHybridRecommender'
 
         super(GeneralizedLinearHybridRecommender, self).__init__(URM_train, verbose=verbose)
 
         self.recommenders = recommenders
 
-    def fit(self, alpha=None, beta=None, gamma=None, delta=None, epsilon=None, alphas=None):
+    def fit(self, alpha=0, beta=0, gamma=0, delta=0, epsilon=0, alphas=None):
         self.alpha = alpha
         self.beta = beta
         self.gamma = gamma

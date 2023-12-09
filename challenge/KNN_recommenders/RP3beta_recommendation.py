@@ -37,7 +37,7 @@ def __main__():
     URM_train = sps.load_npz("../input_files/URM_train_plus_validation.npz")
     URM_test = sps.load_npz("../input_files/URM_test.npz")
 
-    topK = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 500, 750, 1000]
+    topK = [10, 20, 30, 40, 50, 60]
 
     for topk in topK:
         recommender = RP3betaRecommender.RP3betaRecommender(URM_train)

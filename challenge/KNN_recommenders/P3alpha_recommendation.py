@@ -15,27 +15,30 @@ def __main__():
     URM_test = sps.load_npz("../input_files/URM_test.npz")
 
     topK = [40]
+    min_ratings = [0.01]
 
     for topk in topK:
-        recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
-        recommender.fit(topK=topk, alpha=0.3119217553589628, min_rating=0.01, implicit=True,
-                        normalize_similarity=True)
+        for min_rating in min_ratings:
 
-        recommended_items = recommender.recommend(users_list, cutoff=10)
-        recommendations = []
-        for i in zip(users_list, recommended_items):
-            recommendation = {"user_id": i[0], "item_list": i[1]}
-            recommendations.append(recommendation)
+            recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
+            recommender.fit(topK=topk, alpha=0.3119217553589628, min_rating=min_rating, implicit=True,
+                            normalize_similarity=True)
 
-        generate_submission_csv("../output_files/P3alphaSubmission.csv", recommendations)
+            recommended_items = recommender.recommend(users_list, cutoff=10)
+            recommendations = []
+            for i in zip(users_list, recommended_items):
+                recommendation = {"user_id": i[0], "item_list": i[1]}
+                recommendations.append(recommendation)
 
-        evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
-        results, _ = evaluator.evaluateRecommender(recommender)
+            generate_submission_csv("../output_files/P3alphaSubmission.csv", recommendations)
 
-        evaluate_algorithm(URM_test, recommender, cutoff_list[0])
+            evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
+            results, _ = evaluator.evaluateRecommender(recommender)
 
-        print("TopK: {}".format(topk))
-        print("MAP: {}".format(results.loc[10]["MAP"]))
+            evaluate_algorithm(URM_test, recommender, cutoff_list[0])
+
+            print("TopK: {}".format(topk))
+            print("MAP: {}".format(results.loc[10]["MAP"]))
 
 
 if __name__ == '__main__':

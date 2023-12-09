@@ -1,7 +1,7 @@
 import os
 
 import scipy.sparse as sps
-from skopt.space import Integer, Categorical
+from skopt.space import Integer, Categorical, Real
 
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
@@ -18,21 +18,20 @@ def __main__():
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
-    URM_all = sps.coo_matrix(
-        (URM_all_dataframe['Data'].values, (URM_all_dataframe['UserID'].values, URM_all_dataframe['ItemID'].values)))
-    URM_all = URM_all.tocsr()
-
-    URM_train_validation, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.8)
-    URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_train_validation, train_percentage=0.8)
+    URM_train_validation = sps.load_npz('../input_files/URM_train_plus_validation.npz')
+    URM_test = sps.load_npz('../input_files/URM_test.npz')
+    URM_validation = sps.load_npz('../input_files/URM_validation.npz')
+    URM_train = sps.load_npz('../input_files/URM_train.npz')
 
     evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[10])
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(100, 1000),
-        "shrink": Integer(1, 2000),
-        "similarity": Categorical(["jaccard", "cosine", "asymmetric", "dice", "tversky"]),
-        "normalize": Categorical([True, False]),
+        "topK": Integer(1, 20),
+        "shrink": Integer(1, 20),
+        "similarity": Categorical(["tversky"]),
+        "tversky_alpha": Real(low=0, high=1, prior='uniform'),
+        "tversky_beta": Real(low=0, high=1, prior='uniform')
     }
 
     recommender_class = ItemKNNCFRecommender
@@ -94,8 +93,6 @@ def __main__():
     print(best_hyperparameters)
     time_df = search_metadata["time_df"]
     print(time_df)
-    exception_list = search_metadata["exception_list"]
-    print(exception_list)
 
 
 if __name__ == '__main__':
