@@ -30,6 +30,11 @@ def __main__():
     evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[10])
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
+    P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
+    P3_recommender.fit(topK=40, alpha=0.3119217553589628, min_rating=0.01, implicit=True,
+                       normalize_similarity=True)
+    P3_Wsparse = P3_recommender.W_sparse
+
     item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
     item_recommender.fit(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.036424892090848766,
                          tversky_beta=0.9961018325655608)
@@ -56,12 +61,13 @@ def __main__():
     print("SLIMElasticNetRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    recommenders = [item_recommender, item_recommender, item_recommender, RP3_recommender, SLIM_recommender]
+    recommenders = [item_recommender, P3_recommender, item_recommender, RP3_recommender, SLIM_recommender]
 
     hyperparameters_range_dictionary = {
+        "beta": Real(2, 4),
         "gamma": Real(0, 1),
-        "delta": Real(3, 4),
-        "epsilon": Real(2, 4),
+        "delta": Real(4, 5),
+        "epsilon": Real(1, 2),
     }
 
     recommender_class = GeneralizedLinearHybridRecommender

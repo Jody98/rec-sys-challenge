@@ -72,7 +72,7 @@ def __main__():
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     SLIMRP3 = ItemKNNSimilarityHybridRecommender(URM_train, RP3_Wsparse, SLIM_Wsparse)
-    SLIMRP3.fit(alpha=0.5364079633111103, topK=200)
+    SLIMRP3.fit(alpha=0.5364079633111103, topK=468)
     SLIMRP3_Wsparse = SLIMRP3.W_sparse
 
     results, _ = evaluator.evaluateRecommender(SLIMRP3)
