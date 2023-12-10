@@ -61,13 +61,12 @@ def __main__():
     print("SLIMElasticNetRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    recommenders = [item_recommender, P3_recommender, item_recommender, RP3_recommender, SLIM_recommender]
+    recommenders = [item_recommender, item_recommender, item_recommender, RP3_recommender, SLIM_recommender]
 
     hyperparameters_range_dictionary = {
-        "beta": Real(2, 4),
-        "gamma": Real(0, 1),
-        "delta": Real(4, 5),
-        "epsilon": Real(1, 2),
+        "gamma": Real(0, 2),
+        "delta": Real(4, 6),
+        "epsilon": Real(4, 6),
     }
 
     recommender_class = GeneralizedLinearHybridRecommender

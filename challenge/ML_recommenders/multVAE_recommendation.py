@@ -1,4 +1,5 @@
 import scipy.sparse as sps
+import numpy as np
 
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
@@ -19,13 +20,16 @@ def __main__():
 
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
-    recommender = MultVAERecommender.MultVAERecommender(URM_train, force_gpu=True)
-    recommender.fit(learning_rate=1e-3,
-                    batch_size=512,
-                    dropout=0.5,
-                    total_anneal_steps=200000,
-                    anneal_cap=0.2,
-                    l2_reg=0.01)
+    recommender = MultVAERecommender.MultVAERecommender(URM_train)
+    recommender.fit(epochs=100,
+                    learning_rate=0.00885781144759914,
+                    batch_size=430,
+                    dropout=0.12373049267013464,
+                    total_anneal_steps=175783,
+                    anneal_cap=0.18326925049557963,
+                    l2_reg=0.02507554714484008
+                    )
+
 
     recommended_items = recommender.recommend(users_list, cutoff=10)
     recommendations = []
