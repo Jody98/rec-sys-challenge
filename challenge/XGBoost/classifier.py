@@ -1,5 +1,4 @@
 import numpy as np
-import numpy as np
 import pandas as pd
 import scipy.sparse as sps
 import xgboost as xgb
@@ -8,11 +7,12 @@ from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.tree import DecisionTreeClassifier
 from tqdm import tqdm
+from xgboost import plot_importance
 
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
 from Evaluation.Evaluator import EvaluatorHoldout
-from Recommenders.GraphBased import P3alphaRecommender, RP3betaRecommender
+from Recommenders.GraphBased import P3alphaRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
 from Recommenders.NonPersonalizedRecommender import TopPop
 from challenge.utils.functions import read_data
@@ -21,8 +21,8 @@ from challenge.utils.functions import read_data
 def fine_tune_xgboost(X, y):
     param_grid = {
         'n_estimators': [100],
-        'eta': [0.01, 0.1],
-        'max_depth': [3, 5],
+        'eta': [0.01],
+        'max_depth': [3],
         'gamma': [0.1],
         'reg_lambda': [3],
     }
@@ -36,10 +36,49 @@ def fine_tune_xgboost(X, y):
     return grid_search
 
 
+def write_recommendations(recommender, file_name, users_list, cutoff=10):
+    recommendations = 'user_id,item_list'
+    f = open(file_name, "w")
+
+    for user_id in users_list:
+        recommendations_per_user = recommender.recommend(user_id_array=user_id, remove_seen_flag=True, cutoff=cutoff)
+
+        recommendation_string = str(user_id) + ','
+
+        for rec in recommendations_per_user:
+            recommendation_string = recommendation_string + str(rec) + ' '
+
+        recommendation_string = recommendation_string[:-1]
+        recommendations = recommendations + '\n' + recommendation_string
+
+    f.write(recommendations)
+    f.close()
+
+
+def write_reranked_recommendations(file_name, users_list, cutoff=10, reranked_df=None):
+    recommendations = 'user_id,item_list'
+    f = open(file_name, "w")
+
+    for user_id in users_list:
+        recommendations_per_user = reranked_df.loc[reranked_df['UserID'] == user_id]['ItemID'].values[:cutoff]
+
+        recommendation_string = str(user_id) + ','
+
+        for rec in recommendations_per_user:
+            recommendation_string = recommendation_string + str(rec) + ' '
+
+        recommendation_string = recommendation_string[:-1]
+        recommendations = recommendations + '\n' + recommendation_string
+
+    f.write(recommendations)
+    f.close()
+
+
 def __main__():
     cutoff_real = 10
     cutoff_xgb = 20
     submission_file_path = '../output_files/XGBoostSubmission.csv'
+    submission_file_path_reranked = '../output_files/XGBoostSubmissionReranked.csv'
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
 
@@ -55,13 +94,37 @@ def __main__():
 
     n_users, n_items = URM_train.shape
 
-    rp3beta = RP3betaRecommender.RP3betaRecommender(URM_train)
+    item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
+    item_recommender.fit(topK=9, shrink=19, similarity='tversky', tversky_alpha=0.036424892090848766,
+                         tversky_beta=0.9961018325655608)
+
+    results, _ = evaluator.evaluateRecommender(item_recommender)
+    print("ItemKNNCFRecommender MAP: {}".format(results.loc[10]["MAP"]))
+
+    '''rp3beta = RP3betaRecommender.RP3betaRecommender(URM_train)
     rp3beta.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086, min_rating=0.2588031389774553,
                 implicit=True, normalize_similarity=True)
     RP3_Wsparse = rp3beta.W_sparse
 
     results, _ = evaluator.evaluateRecommender(rp3beta)
     print("RP3betaRecommender MAP: {}".format(results.loc[10]["MAP"]))
+
+    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
+    SLIM_recommender.fit(topK=216, l1_ratio=0.0032465600313226354, alpha=0.002589066655986645, positive_only=True)
+
+    results, _ = evaluator.evaluateRecommender(SLIM_recommender)
+    print("SLIMElasticNetRecommender MAP: {}".format(results.loc[10]["MAP"]))
+
+    recommenders = [item_recommender, item_recommender, item_recommender, rp3beta, SLIM_recommender]
+    gamma = 0.42759799127984477
+    delta = 4.3291270788055805
+    epsilon = 4.657898008053695
+
+    hybrid = GeneralizedLinearHybridRecommender(URM_train, recommenders=recommenders)
+    hybrid.fit(gamma=gamma, delta=delta, epsilon=epsilon)
+
+    results, _ = evaluator.evaluateRecommender(hybrid)
+    print("GeneralizedLinearHybridRecommender MAP: {}".format(results.loc[10]["MAP"]))'''
 
     training_dataframe = pd.DataFrame(index=range(0, n_users), columns=["ItemID"])
     training_dataframe.index.name = 'UserID'
@@ -70,7 +133,7 @@ def __main__():
     user_recommendations_user_id = []
 
     for user_id in tqdm(range(n_users)):
-        recommendations = rp3beta.recommend(user_id, cutoff=cutoff_xgb)
+        recommendations = item_recommender.recommend(user_id, cutoff=cutoff_xgb)
         training_dataframe.loc[user_id, "ItemID"] = recommendations
         user_recommendations_items.extend(recommendations)
         user_recommendations_user_id.extend([id] * len(recommendations))
@@ -100,13 +163,6 @@ def __main__():
 
     results, _ = evaluator.evaluateRecommender(topPop)
     print("TopPop MAP: {}".format(results.loc[10]["MAP"]))
-
-    item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
-    item_recommender.fit(topK=9, shrink=19, similarity='tversky', tversky_alpha=0.036424892090848766,
-                         tversky_beta=0.9961018325655608)
-
-    results, _ = evaluator.evaluateRecommender(item_recommender)
-    print("ItemKNNCFRecommender MAP: {}".format(results.loc[10]["MAP"]))
 
     p3alpha = P3alphaRecommender.P3alphaRecommender(URM_train)
     p3alpha.fit(topK=40, alpha=0.3119217553589628, min_rating=0.01, implicit=True,
@@ -149,7 +205,7 @@ def __main__():
 
     best_xgboost_model = xgboost_grid_search.best_estimator_
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    '''X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     dTree_clf = DecisionTreeClassifier()
 
@@ -157,9 +213,33 @@ def __main__():
     y_pred2 = dTree_clf.predict(X_test)
     print("Accuracy before boosting:", accuracy_score(y_test, y_pred2))
 
-    clf, X_test, y_test = model_training(X_train, y_train, n_estimators=500, max_depth=6, gamma=1, reg_lambda=1,
+    clf, X_test, y_test = model_training(X_train, y_train, n_estimators=100, max_depth=6, gamma=1, reg_lambda=1,
                                          eta=0.3)
+
     clf, X_test, y_test = model_training(X_train, y_train, **xgboost_grid_search.best_params_)
+
+    plot1 = plot_importance(clf, importance_type='gain', title='Gain')
+    plot2 = plot_importance(clf, importance_type='cover', title='Cover')
+    plot3 = plot_importance(clf, importance_type='weight', title='Weight (Frequence)')
+
+    plot1.figure.savefig('gain.png')
+    plot2.figure.savefig('cover.png')
+    plot3.figure.savefig('weight.png')'''
+
+    model = xgb.XGBClassifier(use_label_encoder=False, booster='gbtree', **xgboost_grid_search.best_params_,
+                              enable_categorical=True)
+
+    model_fitted = model.fit(X, y)
+    predictions = model_fitted.predict(X)
+
+    print("Accuracy after boosting:", accuracy_score(y, predictions))
+
+    training_dataframe["Recommendation"] = pd.Series(predictions, index=training_dataframe.index)
+    reranked_df = training_dataframe.sort_values(by=['UserID', 'Recommendation'], ascending=[True, False])
+
+    write_recommendations(item_recommender, submission_file_path, users_list, cutoff=cutoff_real)
+    write_reranked_recommendations(submission_file_path_reranked, users_list, cutoff=cutoff_real,
+                                   reranked_df=reranked_df)
 
 
 def model_training(X, y, n_estimators, max_depth, gamma, reg_lambda, eta):
