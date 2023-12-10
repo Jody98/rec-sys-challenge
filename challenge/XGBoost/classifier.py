@@ -5,9 +5,7 @@ import xgboost as xgb
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.tree import DecisionTreeClassifier
 from tqdm import tqdm
-from xgboost import plot_importance
 
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
@@ -15,8 +13,8 @@ from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.GraphBased import P3alphaRecommender, RP3betaRecommender
 from Recommenders.Hybrid.GeneralizedLinearHybridRecommender import GeneralizedLinearHybridRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
-from Recommenders.SLIM import SLIMElasticNetRecommender
 from Recommenders.NonPersonalizedRecommender import TopPop
+from Recommenders.SLIM import SLIMElasticNetRecommender
 from challenge.utils.functions import read_data
 
 
@@ -78,12 +76,12 @@ def model_training(X, y, n_estimators, max_depth, gamma, reg_lambda, reg_alpha, 
 
 def fine_tune_xgboost(X, y):
     param_grid = {
-        'n_estimators': [10, 50, 100],
-        'learning_rate': [1e-3, 1e-2, 1e-1],
-        'max_depth': [3, 5],
-        'gamma': [0.1, 0.5],
-        'reg_lambda': [1e-3, 1e-1, 3],
-        'reg_alpha': [1e-3, 1e-1, 3],
+        'n_estimators': [60],  # da aumentare
+        'learning_rate': [1e-1],  # da diminuire
+        'max_depth': [3],  # da diminuire
+        'gamma': [0.1],
+        'reg_lambda': [1e-4],  # da diminuire
+        'reg_alpha': [5],  # da aumentare
         'booster': ['gbtree'],
     }
 
@@ -152,16 +150,16 @@ def __main__():
 
     evaluator = EvaluatorHoldout(URM_validation, cutoff_list=[10])
 
-    n_users, n_items = URM_train.shape
+    n_users, n_items = URM_all.shape
 
-    item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
+    item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_all)
     item_recommender.fit(topK=9, shrink=19, similarity='tversky', tversky_alpha=0.036424892090848766,
                          tversky_beta=0.9961018325655608)
 
     results, _ = evaluator.evaluateRecommender(item_recommender)
     print("ItemKNNCFRecommender MAP: {}".format(results.loc[10]["MAP"]))
 
-    rp3beta = RP3betaRecommender.RP3betaRecommender(URM_train)
+    rp3beta = RP3betaRecommender.RP3betaRecommender(URM_all)
     rp3beta.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086, min_rating=0.2588031389774553,
                 implicit=True, normalize_similarity=True)
     RP3_Wsparse = rp3beta.W_sparse
@@ -169,7 +167,7 @@ def __main__():
     results, _ = evaluator.evaluateRecommender(rp3beta)
     print("RP3betaRecommender MAP: {}".format(results.loc[10]["MAP"]))
 
-    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
+    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_all)
     SLIM_recommender.fit(topK=216, l1_ratio=0.0032465600313226354, alpha=0.002589066655986645, positive_only=True)
 
     results, _ = evaluator.evaluateRecommender(SLIM_recommender)
@@ -180,7 +178,7 @@ def __main__():
     delta = 4.3291270788055805
     epsilon = 4.657898008053695
 
-    hybrid = GeneralizedLinearHybridRecommender(URM_train, recommenders=recommenders)
+    hybrid = GeneralizedLinearHybridRecommender(URM_all, recommenders=recommenders)
     hybrid.fit(gamma=gamma, delta=delta, epsilon=epsilon)
 
     results, _ = evaluator.evaluateRecommender(hybrid)
@@ -218,13 +216,13 @@ def __main__():
     training_dataframe["Label"] = training_dataframe["Exist"] == "both"
     training_dataframe.drop(columns=['Exist'], inplace=True)
 
-    topPop = TopPop(URM_train)
+    topPop = TopPop(URM_all)
     topPop.fit()
 
     results, _ = evaluator.evaluateRecommender(topPop)
     print("TopPop MAP: {}".format(results.loc[10]["MAP"]))
 
-    p3alpha = P3alphaRecommender.P3alphaRecommender(URM_train)
+    p3alpha = P3alphaRecommender.P3alphaRecommender(URM_all)
     p3alpha.fit(topK=40, alpha=0.3119217553589628, min_rating=0.01, implicit=True,
                 normalize_similarity=True)
 
@@ -263,7 +261,7 @@ def __main__():
     X["UserID"] = X["UserID"].astype("category")
     X["ItemID"] = X["ItemID"].astype("category")
 
-    xgboost_grid_search = fine_tune_xgboost(X, y)
+    '''xgboost_grid_search = fine_tune_xgboost(X, y)
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -281,10 +279,10 @@ def __main__():
 
     plot1.figure.savefig('gain.png')
     plot2.figure.savefig('cover.png')
-    plot3.figure.savefig('weight.png')
+    plot3.figure.savefig('weight.png')'''
 
-    model = xgb.XGBClassifier(use_label_encoder=False, **xgboost_grid_search.best_params_,
-                              enable_categorical=True)
+    model = xgb.XGBClassifier(use_label_encoder=False, booster='gbtree', n_estimators=60, max_depth=3, gamma=0.1,
+                              reg_lambda=1e-4, learning_rate=1e-1, reg_alpha=5, enable_categorical=True)
 
     all_hybrid = model.fit(X, y)
     predictions = model.predict(X)
