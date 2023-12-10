@@ -12,19 +12,79 @@ from xgboost import plot_importance
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
 from Evaluation.Evaluator import EvaluatorHoldout
-from Recommenders.GraphBased import P3alphaRecommender
+from Recommenders.GraphBased import P3alphaRecommender, RP3betaRecommender
+from Recommenders.Hybrid.GeneralizedLinearHybridRecommender import GeneralizedLinearHybridRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
+from Recommenders.SLIM import SLIMElasticNetRecommender
 from Recommenders.NonPersonalizedRecommender import TopPop
 from challenge.utils.functions import read_data
 
 
+def model_training(X, y, n_estimators, max_depth, gamma, reg_lambda, reg_alpha, booster, learning_rate=0.01):
+    ##### Step 1 - Create training and testing samples
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    ##### Step 2 - Set model and its parameters
+    model = xgb.XGBClassifier(use_label_encoder=False,
+                              booster=booster,
+                              n_estimators=n_estimators,
+                              max_depth=max_depth,
+                              gamma=gamma,
+                              reg_lambda=reg_lambda,
+                              learning_rate=learning_rate,
+                              reg_alpha=reg_alpha,
+                              enable_categorical=True,
+                              )
+
+    # Fit the model
+    clf = model.fit(X_train, y_train)
+
+    ##### Step 3
+    # Predict class labels on training data
+    pred_labels_tr = model.predict(X_train)
+    # Predict class labels on a test data
+    pred_labels_te = model.predict(X_test)
+
+    print("Training predictions: ", pred_labels_tr)
+    print("Testing predictions: ", pred_labels_te)
+
+    ##### Step 4 - Model summary
+    # Basic info about the model
+    print('*************** Tree Summary ***************')
+    print('No. of classes: ', clf.n_classes_)
+    print('Classes: ', clf.classes_)
+    print('No. of features: ', clf.n_features_in_)
+    print('No. of Estimators: ', clf.n_estimators)
+    print('--------------------------------------------------------')
+    print("")
+
+    print('*************** Evaluation on Test Data ***************')
+    score_te = model.score(X_test, y_test)
+    print('Accuracy Score: ', score_te)
+    # Look at classification report to evaluate the model
+    print(classification_report(y_test, pred_labels_te, zero_division=1))
+    print('--------------------------------------------------------')
+    print("")
+
+    print('*************** Evaluation on Training Data ***************')
+    score_tr = model.score(X_train, y_train)
+    print('Accuracy Score: ', score_tr)
+    # Look at classification report to evaluate the model
+    print(classification_report(y_train, pred_labels_tr, zero_division=1))
+    print('--------------------------------------------------------')
+
+    return clf, X_test, y_test
+
+
 def fine_tune_xgboost(X, y):
     param_grid = {
-        'n_estimators': [100],
-        'eta': [0.01],
-        'max_depth': [3],
-        'gamma': [0.1],
-        'reg_lambda': [3],
+        'n_estimators': [10, 50, 100],
+        'learning_rate': [1e-3, 1e-2, 1e-1],
+        'max_depth': [3, 5],
+        'gamma': [0.1, 0.5],
+        'reg_lambda': [1e-3, 1e-1, 3],
+        'reg_alpha': [1e-3, 1e-1, 3],
+        'booster': ['gbtree'],
     }
 
     xgb_clf = xgb.XGBClassifier(use_label_encoder=False, enable_categorical=True)
@@ -101,7 +161,7 @@ def __main__():
     results, _ = evaluator.evaluateRecommender(item_recommender)
     print("ItemKNNCFRecommender MAP: {}".format(results.loc[10]["MAP"]))
 
-    '''rp3beta = RP3betaRecommender.RP3betaRecommender(URM_train)
+    rp3beta = RP3betaRecommender.RP3betaRecommender(URM_train)
     rp3beta.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086, min_rating=0.2588031389774553,
                 implicit=True, normalize_similarity=True)
     RP3_Wsparse = rp3beta.W_sparse
@@ -124,7 +184,7 @@ def __main__():
     hybrid.fit(gamma=gamma, delta=delta, epsilon=epsilon)
 
     results, _ = evaluator.evaluateRecommender(hybrid)
-    print("GeneralizedLinearHybridRecommender MAP: {}".format(results.loc[10]["MAP"]))'''
+    print("GeneralizedLinearHybridRecommender MAP: {}".format(results.loc[10]["MAP"]))
 
     training_dataframe = pd.DataFrame(index=range(0, n_users), columns=["ItemID"])
     training_dataframe.index.name = 'UserID'
@@ -133,7 +193,7 @@ def __main__():
     user_recommendations_user_id = []
 
     for user_id in tqdm(range(n_users)):
-        recommendations = item_recommender.recommend(user_id, cutoff=cutoff_xgb)
+        recommendations = hybrid.recommend(user_id, cutoff=cutoff_xgb)
         training_dataframe.loc[user_id, "ItemID"] = recommendations
         user_recommendations_items.extend(recommendations)
         user_recommendations_user_id.extend([id] * len(recommendations))
@@ -175,6 +235,8 @@ def __main__():
         "TopPop": topPop,
         "ItemKNNCF": item_recommender,
         "P3alpha": p3alpha,
+        "RP3beta": rp3beta,
+        "SLIM": SLIM_recommender
     }
 
     training_dataframe = training_dataframe.set_index('UserID')
@@ -194,27 +256,22 @@ def __main__():
     user_popularity = np.ediff1d(sps.csr_matrix(URM_all).indptr)
     training_dataframe['user_profile_len'] = user_popularity[training_dataframe["UserID"].values.astype(int)]
 
-    # training_dataframe['Recommendation'] = pd.Series(target, index=training_dataframe.index)
+    training_dataframe['Recommendation'] = pd.Series(target, index=training_dataframe.index)
 
-    y = training_dataframe["Label"]
-    X = training_dataframe.drop(columns=["Label"])
+    y = training_dataframe["Recommendation"]
+    X = training_dataframe.drop(columns=["Label", "Recommendation"])
     X["UserID"] = X["UserID"].astype("category")
     X["ItemID"] = X["ItemID"].astype("category")
 
     xgboost_grid_search = fine_tune_xgboost(X, y)
 
-    best_xgboost_model = xgboost_grid_search.best_estimator_
-
-    '''X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     dTree_clf = DecisionTreeClassifier()
 
     dTree_clf.fit(X_train, y_train)
     y_pred2 = dTree_clf.predict(X_test)
     print("Accuracy before boosting:", accuracy_score(y_test, y_pred2))
-
-    clf, X_test, y_test = model_training(X_train, y_train, n_estimators=100, max_depth=6, gamma=1, reg_lambda=1,
-                                         eta=0.3)
 
     clf, X_test, y_test = model_training(X_train, y_train, **xgboost_grid_search.best_params_)
 
@@ -224,13 +281,13 @@ def __main__():
 
     plot1.figure.savefig('gain.png')
     plot2.figure.savefig('cover.png')
-    plot3.figure.savefig('weight.png')'''
+    plot3.figure.savefig('weight.png')
 
-    model = xgb.XGBClassifier(use_label_encoder=False, booster='gbtree', **xgboost_grid_search.best_params_,
+    model = xgb.XGBClassifier(use_label_encoder=False, **xgboost_grid_search.best_params_,
                               enable_categorical=True)
 
-    model_fitted = model.fit(X, y)
-    predictions = model_fitted.predict(X)
+    all_hybrid = model.fit(X, y)
+    predictions = model.predict(X)
 
     print("Accuracy after boosting:", accuracy_score(y, predictions))
 
@@ -240,61 +297,6 @@ def __main__():
     write_recommendations(item_recommender, submission_file_path, users_list, cutoff=cutoff_real)
     write_reranked_recommendations(submission_file_path_reranked, users_list, cutoff=cutoff_real,
                                    reranked_df=reranked_df)
-
-
-def model_training(X, y, n_estimators, max_depth, gamma, reg_lambda, eta):
-    ##### Step 1 - Create training and testing samples
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-    ##### Step 2 - Set model and its parameters
-    model = xgb.XGBClassifier(use_label_encoder=False,
-                              booster='gbtree',  # boosting algorithm to use, default gbtree, other: gblinear, dart
-                              n_estimators=n_estimators,  # number of trees, default = 100
-                              eta=eta,  # this is learning rate, default = 0.3
-                              max_depth=max_depth,  # maximum depth of the tree, default = 6
-                              gamma=gamma,  # used for pruning, if gain < gamma the branch will be pruned, default = 0
-                              reg_lambda=reg_lambda,  # regularization parameter, default = 1
-                              enable_categorical=True,
-                              )
-
-    # Fit the model
-    clf = model.fit(X_train, y_train)
-
-    ##### Step 3
-    # Predict class labels on training data
-    pred_labels_tr = model.predict(X_train)
-    # Predict class labels on a test data
-    pred_labels_te = model.predict(X_test)
-
-    print("Training predictions: ", pred_labels_tr)
-    print("Testing predictions: ", pred_labels_te)
-
-    ##### Step 4 - Model summary
-    # Basic info about the model
-    print('*************** Tree Summary ***************')
-    print('No. of classes: ', clf.n_classes_)
-    print('Classes: ', clf.classes_)
-    print('No. of features: ', clf.n_features_in_)
-    print('No. of Estimators: ', clf.n_estimators)
-    print('--------------------------------------------------------')
-    print("")
-
-    print('*************** Evaluation on Test Data ***************')
-    score_te = model.score(X_test, y_test)
-    print('Accuracy Score: ', score_te)
-    # Look at classification report to evaluate the model
-    print(classification_report(y_test, pred_labels_te, zero_division=1))
-    print('--------------------------------------------------------')
-    print("")
-
-    print('*************** Evaluation on Training Data ***************')
-    score_tr = model.score(X_train, y_train)
-    print('Accuracy Score: ', score_tr)
-    # Look at classification report to evaluate the model
-    print(classification_report(y_train, pred_labels_tr, zero_division=1))
-    print('--------------------------------------------------------')
-
-    return clf, X_test, y_test
 
 
 if __name__ == '__main__':
