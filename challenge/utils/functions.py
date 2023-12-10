@@ -251,3 +251,39 @@ def augmentation(URM_train, users_list, num_users_to_create=100, similarity_thre
             URM_train_augmented[random_similar_user, :] += URM_train[model_user, :]
 
     return URM_train_augmented
+
+
+
+
+'''def plot_learning_curve(model, X_train, y_train, X_test, y_test):
+    train_errors, test_errors = [], []
+
+    for m in tqdm(range(1, len(X_train), 100)):
+        model.fit(X_train[:m], y_train[:m])
+        y_train_predict = model.predict(X_train[:m])
+        y_test_predict = model.predict(X_test)
+        train_errors.append(accuracy_score(y_train[:m], y_train_predict))
+        test_errors.append(accuracy_score(y_test, y_test_predict))
+
+    plt.plot(train_errors, "r-", label="Training set")
+    plt.plot(test_errors, "b-", label="Test set")
+    plt.legend()
+    plt.xlabel("Training set size")
+    plt.ylabel("Accuracy")
+    plt.title("Learning Curve")
+    plt.show()
+
+
+def plot_roc_curve(model, X_test, y_test):
+    y_scores = model.predict_proba(X_test)[:, 1]
+    fpr, tpr, thresholds = roc_curve(y_test, y_scores)
+    roc_auc = auc(fpr, tpr)
+
+    plt.figure()
+    plt.plot(fpr, tpr, color='darkorange', lw=2, label='ROC curve (area = {:.2f})'.format(roc_auc))
+    plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('Receiver Operating Characteristic (ROC) Curve')
+    plt.legend(loc="lower right")
+    plt.show()'''

@@ -1,19 +1,39 @@
 import numpy as np
+import numpy as np
 import pandas as pd
 import scipy.sparse as sps
-from sklearn.model_selection import GridSearchCV
-from sklearn.model_selection import train_test_split
-from tqdm import tqdm
-from sklearn.metrics import classification_report
-from sklearn.metrics import accuracy_score
 import xgboost as xgb
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.tree import DecisionTreeClassifier
+from tqdm import tqdm
 
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
+from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.GraphBased import P3alphaRecommender, RP3betaRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
 from Recommenders.NonPersonalizedRecommender import TopPop
 from challenge.utils.functions import read_data
+
+
+def fine_tune_xgboost(X, y):
+    param_grid = {
+        'n_estimators': [100],
+        'eta': [0.01, 0.1],
+        'max_depth': [3, 5],
+        'gamma': [0.1],
+        'reg_lambda': [3],
+    }
+
+    xgb_clf = xgb.XGBClassifier(use_label_encoder=False, enable_categorical=True)
+    grid_search = GridSearchCV(estimator=xgb_clf, param_grid=param_grid, scoring='accuracy', cv=5)
+    grid_search.fit(X, y)
+
+    print("Parametri ottimali della Grid Search:", grid_search.best_params_)
+
+    return grid_search
 
 
 def __main__():
@@ -29,23 +49,9 @@ def __main__():
         (URM_all_dataframe['Data'].values, (URM_all_dataframe['UserID'].values, URM_all_dataframe['ItemID'].values)))
     URM_all = URM_all.tocsr()
 
-    URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
-    URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_train, train_percentage=0.80)
+    URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
-    URM_train_recommenders, URM_train_booster = train_test_split(URM_train, test_size=0.5, random_state=42)
-
-    param_grid = {
-        'n_estimators': [5, 10, 15, 20, 50, 100, 200, 500],
-        'learning_rate': [1e-5, 1e-4, 1e-3, 1e-2, 0.1],
-        'reg_alpha': [0.1, 0.5, 1],
-        'reg_lambda': [0.1, 0.5, 1],
-        'max_depth': [3, 5, 7],
-        'max_leaves': [1, 3, 5, 7],
-        'grow_policy': ['depthwise', 'lossguide'],
-        'objective': ['binary:logistic'],
-        'booster': ['gbtree', 'gblinear', 'dart'],
-        'enable_categorical': [True],
-    }
+    evaluator = EvaluatorHoldout(URM_validation, cutoff_list=[10])
 
     n_users, n_items = URM_train.shape
 
@@ -54,12 +60,27 @@ def __main__():
                 implicit=True, normalize_similarity=True)
     RP3_Wsparse = rp3beta.W_sparse
 
+    results, _ = evaluator.evaluateRecommender(rp3beta)
+    print("RP3betaRecommender MAP: {}".format(results.loc[10]["MAP"]))
+
     training_dataframe = pd.DataFrame(index=range(0, n_users), columns=["ItemID"])
     training_dataframe.index.name = 'UserID'
+
+    user_recommendations_items = []
+    user_recommendations_user_id = []
 
     for user_id in tqdm(range(n_users)):
         recommendations = rp3beta.recommend(user_id, cutoff=cutoff_xgb)
         training_dataframe.loc[user_id, "ItemID"] = recommendations
+        user_recommendations_items.extend(recommendations)
+        user_recommendations_user_id.extend([id] * len(recommendations))
+
+    target = []
+    count = 0
+
+    for user_id, item_id in zip(user_recommendations_user_id, user_recommendations_items):
+        target.append(1 if count % cutoff_xgb < 10 else 0)
+        count = count + 1
 
     training_dataframe = training_dataframe.explode("ItemID")
 
@@ -77,13 +98,22 @@ def __main__():
     topPop = TopPop(URM_train)
     topPop.fit()
 
+    results, _ = evaluator.evaluateRecommender(topPop)
+    print("TopPop MAP: {}".format(results.loc[10]["MAP"]))
+
     item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
-    item_recommender.fit(topK=10, shrink=19, similarity='jaccard', normalize=False,
-                         feature_weighting="TF-IDF")
+    item_recommender.fit(topK=9, shrink=19, similarity='tversky', tversky_alpha=0.036424892090848766,
+                         tversky_beta=0.9961018325655608)
+
+    results, _ = evaluator.evaluateRecommender(item_recommender)
+    print("ItemKNNCFRecommender MAP: {}".format(results.loc[10]["MAP"]))
 
     p3alpha = P3alphaRecommender.P3alphaRecommender(URM_train)
-    p3alpha.fit(topK=64, alpha=0.35496275558011753, min_rating=0.1, implicit=True,
+    p3alpha.fit(topK=40, alpha=0.3119217553589628, min_rating=0.01, implicit=True,
                 normalize_similarity=True)
+
+    results, _ = evaluator.evaluateRecommender(p3alpha)
+    print("P3alphaRecommender MAP: {}".format(results.loc[10]["MAP"]))
 
     other_algorithms = {
         "TopPop": topPop,
@@ -108,43 +138,43 @@ def __main__():
     user_popularity = np.ediff1d(sps.csr_matrix(URM_all).indptr)
     training_dataframe['user_profile_len'] = user_popularity[training_dataframe["UserID"].values.astype(int)]
 
-    y_train = training_dataframe["Label"]
-    X_train = training_dataframe.drop(columns=["Label"])
-    X_train["UserID"] = X_train["UserID"].astype("category")
-    X_train["ItemID"] = X_train["ItemID"].astype("category")
+    # training_dataframe['Recommendation'] = pd.Series(target, index=training_dataframe.index)
 
-    objective = 'logistic'
-    model = xgb.XGBClassifier(objective='binary:{}'.format(objective), enable_categorical=True)
+    y = training_dataframe["Label"]
+    X = training_dataframe.drop(columns=["Label"])
+    X["UserID"] = X["UserID"].astype("category")
+    X["ItemID"] = X["ItemID"].astype("category")
 
-    grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=10, error_score='raise')
-    try:
-        grid_search.fit(X_train, y_train)
-    except ValueError as e:
-        print(e)
-        raise e
+    xgboost_grid_search = fine_tune_xgboost(X, y)
 
-    print("Migliori parametri: ", grid_search.best_params_)
-    print("Miglior score: ", grid_search.best_score_)
-    print("Miglior modello: ", grid_search.best_estimator_)
+    best_xgboost_model = xgboost_grid_search.best_estimator_
 
-    results = pd.DataFrame(grid_search.cv_results_)
-    path = '../result_experiments/XGBoostGridSearchResults.csv'
-    results.to_csv(path, index=False)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    dTree_clf = DecisionTreeClassifier()
+
+    dTree_clf.fit(X_train, y_train)
+    y_pred2 = dTree_clf.predict(X_test)
+    print("Accuracy before boosting:", accuracy_score(y_test, y_pred2))
+
+    clf, X_test, y_test = model_training(X_train, y_train, n_estimators=500, max_depth=6, gamma=1, reg_lambda=1,
+                                         eta=0.3)
+    clf, X_test, y_test = model_training(X_train, y_train, **xgboost_grid_search.best_params_)
 
 
-def model_training(X, y, n_trees, mdepth, gamma, lam):
+def model_training(X, y, n_estimators, max_depth, gamma, reg_lambda, eta):
     ##### Step 1 - Create training and testing samples
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=random_state)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     ##### Step 2 - Set model and its parameters
     model = xgb.XGBClassifier(use_label_encoder=False,
-                              booster='gbtree',  # boosting algorithm to use, default gbtree, othera: gblinear, dart
-                              n_estimators=n_trees,  # number of trees, default = 100
-                              eta=0.3,  # this is learning rate, default = 0.3
-                              max_depth=mdepth,  # maximum depth of the tree, default = 6
+                              booster='gbtree',  # boosting algorithm to use, default gbtree, other: gblinear, dart
+                              n_estimators=n_estimators,  # number of trees, default = 100
+                              eta=eta,  # this is learning rate, default = 0.3
+                              max_depth=max_depth,  # maximum depth of the tree, default = 6
                               gamma=gamma,  # used for pruning, if gain < gamma the branch will be pruned, default = 0
-                              reg_lambda=lam,  # regularization parameter, defautl = 1
-                              # min_child_weight=0 # this refers to Cover which is also responsible for pruning if not set to 0
+                              reg_lambda=reg_lambda,  # regularization parameter, default = 1
+                              enable_categorical=True,
                               )
 
     # Fit the model
@@ -173,7 +203,7 @@ def model_training(X, y, n_trees, mdepth, gamma, lam):
     score_te = model.score(X_test, y_test)
     print('Accuracy Score: ', score_te)
     # Look at classification report to evaluate the model
-    print(classification_report(y_test, pred_labels_te))
+    print(classification_report(y_test, pred_labels_te, zero_division=1))
     print('--------------------------------------------------------')
     print("")
 
@@ -181,7 +211,7 @@ def model_training(X, y, n_trees, mdepth, gamma, lam):
     score_tr = model.score(X_train, y_train)
     print('Accuracy Score: ', score_tr)
     # Look at classification report to evaluate the model
-    print(classification_report(y_train, pred_labels_tr))
+    print(classification_report(y_train, pred_labels_tr, zero_division=1))
     print('--------------------------------------------------------')
 
     return clf, X_test, y_test

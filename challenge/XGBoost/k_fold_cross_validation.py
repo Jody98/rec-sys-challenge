@@ -35,15 +35,15 @@ def __main__():
     URM_train_recommenders, URM_train_booster = train_test_split(URM_train, test_size=0.5, random_state=42)
 
     param_grid = {
-        'n_estimators': [5, 10, 15, 20, 50, 100, 200, 500],
-        'learning_rate': [1e-5, 1e-4, 1e-3, 1e-2, 0.1],
-        'reg_alpha': [0.1, 0.5, 1],
-        'reg_lambda': [0.1, 0.5, 1],
-        'max_depth': [3, 5, 7],
-        'max_leaves': [1, 3, 5, 7],
-        'grow_policy': ['depthwise', 'lossguide'],
+        'n_estimators': [5, 50],
+        'learning_rate': [1e-5, 1e-2],
+        'reg_alpha': [0.5, 1],
+        'reg_lambda': [1],
+        'max_depth': [3, 5],
+        'max_leaves': [3, 5],
+        'grow_policy': ['depthwise'],
         'objective': ['binary:logistic'],
-        'booster': ['gbtree', 'gblinear', 'dart'],
+        'booster': ['gbtree', 'gblinear'],
         'enable_categorical': [True],
     }
 
