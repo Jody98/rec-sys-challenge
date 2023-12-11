@@ -57,4 +57,4 @@ alphas = [0, 1.8161240086943757, 1.7842468494380264, 2.8553272775373806]
 MAP: 0.05086128819105528 -> 0.13494
 
 XGBClassifier(max_depth=5, n_estimators=1000, learning_rate=0.1, n_jobs=4, min_child_weight=2, colsample_bytree=0.8, subsample=0.8, reg_alpha=0.1, reg_lambda=0.1, random_state=42)
-accuracy: 0.7964 -> 0.14001
+accuracy: 0.7964 -> 0.13775
