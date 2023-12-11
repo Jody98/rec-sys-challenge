@@ -30,8 +30,6 @@ def __main__():
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
     results, _ = evaluator.evaluateRecommender(recommender)
 
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
 
 if __name__ == '__main__':
     __main__()

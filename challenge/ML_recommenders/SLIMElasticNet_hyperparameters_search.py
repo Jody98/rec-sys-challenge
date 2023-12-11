@@ -27,10 +27,10 @@ def __main__():
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(low=10, high=500, prior='uniform'),
-        "l1_ratio": Real(low=1e-6, high=1, prior='log-uniform'),
-        "alpha": Real(low=1e-6, high=1e-2, prior='log-uniform'),
-        "positive_only": Categorical([True, False]),
+        "topK": Integer(low=200, high=500, prior='uniform'),
+        "l1_ratio": Real(low=1e-3, high=1e-2, prior='log-uniform'),
+        "alpha": Real(low=1e-4, high=1e-2, prior='log-uniform'),
+        "positive_only": Categorical([True]),
     }
 
     recommender_class = SLIMElasticNetRecommender

@@ -94,7 +94,7 @@ class SearchBayesianSkopt(SearchAbstractClass):
         self.acq_func = acq_func
         self.acq_optimizer = acq_optimizer
         # Ensure that different processes would use different random states to avoid exploring the same configurations
-        self.random_state = int(os.getpid() + time.time()) % np.iinfo(np.int32).max
+        self.random_state = int(os.getpid() + time.time()) % np.iinfo(int).max
         self.n_restarts_optimizer = n_restarts_optimizer
         self.verbose = verbose
         self.xi = xi

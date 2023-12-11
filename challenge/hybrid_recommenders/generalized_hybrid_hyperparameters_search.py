@@ -30,6 +30,11 @@ def __main__():
     evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[10])
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
+    ials_recommender = IALSRecommender.IALSRecommender(URM_train)
+    ials_recommender.fit(epochs=100, num_factors=92, confidence_scaling="linear", alpha=2.5431444656816597,
+                         epsilon=0.035779451402656745,
+                         reg=1.5, init_mean=0.0, init_std=0.1)
+
     P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
     P3_recommender.fit(topK=40, alpha=0.3119217553589628, min_rating=0.01, implicit=True,
                        normalize_similarity=True)
@@ -61,12 +66,12 @@ def __main__():
     print("SLIMElasticNetRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    recommenders = [item_recommender, item_recommender, item_recommender, RP3_recommender, SLIM_recommender]
+    recommenders = [item_recommender, item_recommender, ials_recommender, RP3_recommender, SLIM_recommender]
 
     hyperparameters_range_dictionary = {
         "gamma": Real(0, 2),
-        "delta": Real(4, 6),
-        "epsilon": Real(4, 6),
+        "delta": Real(0, 2),
+        "epsilon": Real(0, 2),
     }
 
     recommender_class = GeneralizedLinearHybridRecommender

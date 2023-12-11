@@ -27,8 +27,8 @@ def __main__():
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(low=1, high=1000, prior='uniform'),
-        "l2_norm": Real(low=0.001, high=1000, prior='log-uniform'),
+        "topK": Integer(low=10, high=1000, prior='uniform'),
+        "l2_norm": Real(low=0.1, high=1000, prior='log-uniform'),
         "normalize_matrix": Categorical([True, False]),
     }
 

@@ -80,10 +80,10 @@ def __main__():
 
     generate_submission_csv("../output_files/SLIMRP3Submission.csv", recommendations)
 
-    recommenders = [item_recommender, item_recommender, item_recommender, RP3_recommender, SLIM_recommender]
-    gamma = 0.5948361953215894
-    delta = 5.927053436016512
-    epsilon = 4.597679200381635
+    recommenders = [item_recommender, item_recommender, ials_recommender, RP3_recommender, SLIM_recommender]
+    gamma = 0.014396392142386638
+    delta = 0.796607329997798
+    epsilon = 0.8236827114556411
 
     recommender_object = GeneralizedLinearHybridRecommender(URM_all, recommenders=recommenders)
     recommender_object.fit(gamma=gamma, delta=delta, epsilon=epsilon)
@@ -93,6 +93,8 @@ def __main__():
     for i in zip(users_list, recommended_items):
         recommendation = {"user_id": i[0], "item_list": i[1]}
         recommendations.append(recommendation)
+
+    generate_submission_csv("../output_files/GeneralizedHybridIALSSubmission.csv", recommendations)
 
     results, _ = evaluator.evaluateRecommender(recommender_object)
     print("GeneralizedLinearHybridRecommender")
