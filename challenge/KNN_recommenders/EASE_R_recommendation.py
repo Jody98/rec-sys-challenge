@@ -22,28 +22,7 @@ def __main__():
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
     recommender = EASE_R_Recommender.EASE_R_Recommender(URM_train)
-    recommender.fit(topK=10, l2_norm=101, normalize_matrix=False)
-    EASE_R_Wsparse = sps.csr_matrix(recommender.W_sparse)
-
-    # save W_sparse as .npz
-    sps.save_npz('EASE_R_WsparseALL.npz', EASE_R_Wsparse)
-
-    recommended_items = recommender.recommend(users_list, cutoff=10)
-    recommendations = []
-    for i in zip(users_list, recommended_items):
-        recommendation = {"user_id": i[0], "item_list": i[1]}
-        recommendations.append(recommendation)
-
-    generate_submission_csv("../output_files/EASE_R_Recommender_submission.csv", recommendations)
-
-    evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
-    results, _ = evaluator.evaluateRecommender(recommender)
-
-    for result in results.items():
-        print(result)
-
-    recommender = EASE_R_Recommender.EASE_R_Recommender(URM_train)
-    recommender.fit(topK=84, l2_norm=21.34806083087376, normalize_matrix=False)
+    recommender.fit(topK=59, l2_norm=29.792347118106623, normalize_matrix=False)
     EASE_R_Wsparse = sps.csr_matrix(recommender.W_sparse)
 
     # save W_sparse as .npz
