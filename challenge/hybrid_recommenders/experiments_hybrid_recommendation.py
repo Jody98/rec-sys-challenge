@@ -75,21 +75,16 @@ def __main__():
     print("SLIMRP3")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    SLIMitem = ItemKNNSimilarityHybridRecommender(URM_train, item_Wsparse, SLIM_Wsparse)
-    SLIMitem.fit(alpha=0.18015836647732283, topK=398)
-    SLIMRP3_Wsparse = SLIMitem.W_sparse
-
-    results, _ = evaluator.evaluateRecommender(SLIMitem)
-    print("SLIMitem")
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
     SLIMall = ItemKNNSimilarityHybridRecommender(URM_train, hybrid_Wsparse, SLIM_Wsparse)
     SLIMall.fit(alpha=0.8553097431594563, topK=222)
-    SLIMRP3_Wsparse = SLIMitem.W_sparse
 
-    results, _ = evaluator.evaluateRecommender(SLIMitem)
+    results, _ = evaluator.evaluateRecommender(SLIMall)
     print("SLIMall")
     print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    recommenders = [item_recommender, item_recommender, item_recommender, hybrid_recommender, SLIM_recommender]
+
+    generalized =GeneralizedLinearHybridRecomme
 
 
 if __name__ == '__main__':

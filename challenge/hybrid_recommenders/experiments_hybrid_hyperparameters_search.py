@@ -13,7 +13,7 @@ from Recommenders.DataIO import DataIO
 from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
 from Recommenders.SLIM import SLIMElasticNetRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
-from Recommenders.KNN.ItemKNNSimilarityHybridRecommender import ItemKNNSimilarityHybridRecommender
+from Recommenders.Hybrid.GeneralizedLinearHybridRecommender import GeneralizedLinearHybridRecommender
 from Recommenders.KNN.ItemKNNSimilarityTripleHybridRecommender import ItemKNNSimilarityTripleHybridRecommender
 from challenge.utils.functions import read_data
 
@@ -70,19 +70,21 @@ def __main__():
     SLIM_recommender.fit(topK=216, l1_ratio=0.0032465600313226354, alpha=0.002589066655986645, positive_only=True)
     SLIM_Wsparse = SLIM_recommender.W_sparse
 
+    recommenders = [item_recommender, item_recommender, item_recommender, hybrid_recommender, SLIM_recommender]
+
     hyperparameters_range_dictionary = {
-        "topK": Integer(20, 1000),
-        "alpha": Real(0, 1, prior='uniform'),
+        "delta": Real(0, 2),
+        "epsilon": Real(0, 2),
     }
 
-    recommender_class = ItemKNNSimilarityHybridRecommender
+    recommender_class = GeneralizedLinearHybridRecommender
 
     hyperparameterSearch = SearchBayesianSkopt(recommender_class,
                                                evaluator_validation=evaluator_validation,
                                                evaluator_test=evaluator)
 
     recommender_input_args = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, hybrid_Wsparse, SLIM_Wsparse],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, recommenders],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},
@@ -90,7 +92,7 @@ def __main__():
     )
 
     recommender_input_args_last_test = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, hybrid_Wsparse, SLIM_Wsparse],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, recommenders],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},
@@ -102,7 +104,7 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 100
+    n_cases = 50
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10
