@@ -47,7 +47,7 @@ def __main__():
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     hybrid_recommender = ItemKNNSimilarityTripleHybridRecommender(URM_train, p3alpha_Wsparse, item_Wsparse, RP3_Wsparse)
-    hybrid_recommender.fit(topK=172, alpha=0.5945330832329442, beta=0.12089434724108711)
+    hybrid_recommender.fit(topK=225, alpha=0.4976629488640914, beta=0.13017801200221196)
 
     results, _ = evaluator.evaluateRecommender(hybrid_recommender)
     print("ItemKNNSimilarityTripleHybridRecommender")
