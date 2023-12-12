@@ -6,6 +6,7 @@ from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
 from Recommenders.Hybrid.HybridLinear import HybridLinear
 from Recommenders.KNN import ItemKNNCFRecommender
 from Recommenders.KNN.ItemKNNSimilarityHybridRecommender import ItemKNNSimilarityHybridRecommender
+from Recommenders.KNN.ItemKNNSimilarityTripleHybridRecommender import ItemKNNSimilarityTripleHybridRecommender
 from Recommenders.SLIM import SLIMElasticNetRecommender
 from Recommenders.MatrixFactorization import IALSRecommender
 from challenge.utils.functions import read_data, generate_submission_csv
@@ -23,8 +24,17 @@ def __main__():
 
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
 
+    p3alpha = P3alphaRecommender.P3alphaRecommender(URM_train)
+    p3alpha.fit(topK=40, alpha=0.3119217553589628, min_rating=0.01, implicit=True,
+                normalize_similarity=True)
+    p3alpha_Wsparse = p3alpha.W_sparse
+
+    results, _ = evaluator.evaluateRecommender(p3alpha)
+    print("P3alphaRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
     item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
-    item_recommender.fit(topK=9, shrink=19, similarity='tversky', tversky_alpha=0.036424892090848766,
+    item_recommender.fit(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.036424892090848766,
                          tversky_beta=0.9961018325655608)
     item_Wsparse = item_recommender.W_sparse
 
@@ -39,6 +49,14 @@ def __main__():
 
     results, _ = evaluator.evaluateRecommender(RP3_recommender)
     print("RP3betaRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    hybrid_recommender = ItemKNNSimilarityTripleHybridRecommender(URM_train, p3alpha_Wsparse, item_Wsparse, RP3_Wsparse)
+    hybrid_recommender.fit(topK=225, alpha=0.4976629488640914, beta=0.13017801200221196)
+    hybrid_Wsparse = hybrid_recommender.W_sparse
+
+    results, _ = evaluator.evaluateRecommender(hybrid_recommender)
+    print("ItemKNNSimilarityTripleHybridRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
@@ -63,6 +81,14 @@ def __main__():
 
     results, _ = evaluator.evaluateRecommender(SLIMitem)
     print("SLIMitem")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    SLIMall = ItemKNNSimilarityHybridRecommender(URM_train, hybrid_Wsparse, SLIM_Wsparse)
+    SLIMall.fit(alpha=0.8553097431594563, topK=222)
+    SLIMRP3_Wsparse = SLIMitem.W_sparse
+
+    results, _ = evaluator.evaluateRecommender(SLIMitem)
+    print("SLIMall")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
 
