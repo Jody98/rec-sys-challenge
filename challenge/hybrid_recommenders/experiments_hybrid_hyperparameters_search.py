@@ -16,6 +16,8 @@ from Recommenders.KNN import ItemKNNCFRecommender
 from Recommenders.Hybrid.GeneralizedLinearHybridRecommender import GeneralizedLinearHybridRecommender
 from Recommenders.KNN.ItemKNNSimilarityTripleHybridRecommender import ItemKNNSimilarityTripleHybridRecommender
 from challenge.utils.functions import read_data
+from Recommenders.EASE_R import EASE_R_Recommender
+from Recommenders.MatrixFactorization import IALSRecommender
 
 
 def __main__():
@@ -70,11 +72,22 @@ def __main__():
     SLIM_recommender.fit(topK=216, l1_ratio=0.0032465600313226354, alpha=0.002589066655986645, positive_only=True)
     SLIM_Wsparse = SLIM_recommender.W_sparse
 
-    recommenders = [item_recommender, item_recommender, item_recommender, hybrid_recommender, SLIM_recommender]
+    EASE_R = EASE_R_Recommender.EASE_R_Recommender(URM_train)
+    EASE_R.fit(topK=59, l2_norm=29.792347118106623, normalize_matrix=False)
+    EASE_R_Wsparse = sps.csr_matrix(EASE_R.W_sparse)
+
+    ials_recommender = IALSRecommender.IALSRecommender(URM_train)
+    ials_recommender.fit(epochs=100, num_factors=92, confidence_scaling="linear", alpha=2.5431444656816597,
+                         epsilon=0.035779451402656745,
+                         reg=1.5, init_mean=0.0, init_std=0.1)
+
+    recommenders = [item_recommender, ials_recommender, EASE_R, hybrid_recommender, SLIM_recommender]
 
     hyperparameters_range_dictionary = {
-        "delta": Real(0, 2),
-        "epsilon": Real(0, 2),
+        "beta": Real(0, 3),
+        "gamma": Real(0, 3),
+        "delta": Real(3, 5),
+        "epsilon": Real(0, 3),
     }
 
     recommender_class = GeneralizedLinearHybridRecommender

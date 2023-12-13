@@ -79,10 +79,10 @@ def model_training(X, y, n_estimators, max_depth, gamma, reg_lambda, reg_alpha, 
 def fine_tune_xgboost(X, y):
     param_grid = {
         'n_estimators': [80, 100, 125],  # da aumentare
-        'learning_rate': [1e-4, 1e-3, 1e-2, 1e-1],  # da diminuire
-        'max_depth': [1, 3, 5],  # da diminuire
-        'gamma': [0.1, 0.5],
-        'reg_lambda': [1e-7, 1e-6, 1e-5],  # da diminuire
+        'learning_rate': [1e-4, 1e-3, 1e-2, 1e-1],  # da aumenatare
+        'max_depth': [1, 3, 5],  # da aumentare
+        'gamma': [0.1, 0.5], #da aumentare
+        'reg_lambda': [1e-7, 1e-6, 1e-5],  # da aumentare
         'reg_alpha': [6, 7, 8],  # da aumentare
         'booster': ['gbtree'],
     }

@@ -7,6 +7,7 @@ from Recommenders.Hybrid.HybridLinear import HybridLinear
 from Recommenders.KNN import ItemKNNCFRecommender
 from Recommenders.KNN.ItemKNNSimilarityHybridRecommender import ItemKNNSimilarityHybridRecommender
 from Recommenders.KNN.ItemKNNSimilarityTripleHybridRecommender import ItemKNNSimilarityTripleHybridRecommender
+from Recommenders.Hybrid.GeneralizedLinearHybridRecommender import GeneralizedLinearHybridRecommender
 from Recommenders.SLIM import SLIMElasticNetRecommender
 from Recommenders.MatrixFactorization import IALSRecommender
 from challenge.utils.functions import read_data, generate_submission_csv
@@ -82,9 +83,31 @@ def __main__():
     print("SLIMall")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    recommenders = [item_recommender, item_recommender, item_recommender, hybrid_recommender, SLIM_recommender]
+    EASE_R = EASE_R_Recommender.EASE_R_Recommender(URM_train)
+    EASE_R.fit(topK=59, l2_norm=29.792347118106623, normalize_matrix=False)
+    EASE_R_Wsparse = sps.csr_matrix(EASE_R.W_sparse)
 
-    generalized =GeneralizedLinearHybridRecomme
+    ials_recommender = IALSRecommender.IALSRecommender(URM_train)
+    ials_recommender.fit(epochs=100, num_factors=92, confidence_scaling="linear", alpha=2.5431444656816597,
+                         epsilon=0.035779451402656745,
+                         reg=1.5, init_mean=0.0, init_std=0.1)
+
+    recommenders = [item_recommender, ials_recommender, EASE_R, hybrid_recommender, SLIM_recommender]
+
+    recommender_object = GeneralizedLinearHybridRecommender(URM_train, recommenders=recommenders)
+    recommender_object.fit(beta=0.10610296203624361, gamma=0.11461850785767883, delta=3.0041873148937674, epsilon=0.257101124714804)
+
+    recommended_items = recommender_object.recommend(users_list, cutoff=10)
+    recommendations = []
+    for i in zip(users_list, recommended_items):
+        recommendation = {"user_id": i[0], "item_list": i[1]}
+        recommendations.append(recommendation)
+
+    generate_submission_csv("../output_files/GeneralizedHybridTwoSubmission.csv", recommendations)
+
+    results, _ = evaluator.evaluateRecommender(recommender_object)
+    print("GeneralizedLinearHybridRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
 
 
 if __name__ == '__main__':
