@@ -19,9 +19,11 @@ def __main__():
     URM_test = sps.load_npz('../input_files/URM_test.npz')
     URM_all = sps.load_npz('../input_files/URM_all.npz')
 
-    tops = [50] # 20, 25, 30, 40, 50, 59, 60, 300
-    l2_norms = [10, 25, 30, 40, 50, 75, 100]
+    tops = [32, 34] # 20, 25, 30, 40, 50, 59, 60, 70 300
+    l2_norms = [38, 40] #[10, 25, 30, 40, 50, 75, 100]
     # l2_norms = [100, 250, 300, 400, 500, 750, 1000]
+
+    # best 30, 40
 
     for topk in tops:
         for l2_norm in l2_norms:
