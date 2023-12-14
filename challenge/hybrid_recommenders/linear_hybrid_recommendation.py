@@ -93,7 +93,7 @@ def __main__():
 
     all_recommender = HybridLinear(URM_train, recommenders)
     all_recommender.fit(iALS=0.9674103723952641, PureSVD=0.9885478633045848,
-                        EASE_R=0.02470494636545416, hybrid=1.0, SLIM=1.9018687827525076)
+                        EASE_R=0.02470494636545416, Hybrid=1.0, SLIM=1.9018687827525076)
 
     results, _ = evaluator.evaluateRecommender(all_recommender)
     print("HybridLinear")

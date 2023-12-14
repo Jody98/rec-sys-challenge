@@ -68,11 +68,11 @@ def __main__():
     print("SLIMRP3")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    SLIMRP3Item = DifferentLossScoresHybridRecommender(URM_train, RP3_recommender, SLIMRP3)
-    SLIMRP3Item.fit(norm=1, alpha=0.22382181657958472)
+    SLIMRP3Normalized = DifferentLossScoresHybridRecommender(URM_train, RP3_recommender, SLIMRP3)
+    SLIMRP3Normalized.fit(norm=1, alpha=0.22382181657958472)
 
-    results, _ = evaluator.evaluateRecommender(SLIMRP3)
-    print("SLIMRP3 MAP: {}".format(results.loc[10]["MAP"]))
+    results, _ = evaluator.evaluateRecommender(SLIMRP3Normalized)
+    print("SLIMRP3Normalized MAP: {}".format(results.loc[10]["MAP"]))
 
     hyperparameters_range_dictionary = {
         "norm": Categorical([1, 2, np.inf]),

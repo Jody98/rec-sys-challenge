@@ -23,7 +23,7 @@ def __main__():
     l2_norms = [38, 40] #[10, 25, 30, 40, 50, 75, 100]
     # l2_norms = [100, 250, 300, 400, 500, 750, 1000]
 
-    # best 30, 40
+    # best 32, 40
 
     for topk in tops:
         for l2_norm in l2_norms:
