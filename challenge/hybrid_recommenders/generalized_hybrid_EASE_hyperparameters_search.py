@@ -12,8 +12,7 @@ from Recommenders.Hybrid.GeneralizedLinearHybridRecommender import GeneralizedLi
 from Recommenders.EASE_R import EASE_R_Recommender
 from Recommenders.SLIM import SLIMElasticNetRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
-from Recommenders.MatrixFactorization import IALSRecommender
-from Recommenders.Hybrid.HybridDifferentLoss import DifferentLossScoresHybridRecommender
+from Recommenders.MatrixFactorization import IALSRecommender, PureSVDRecommender
 from Recommenders.KNN.ItemKNNSimilarityTripleHybridRecommender import ItemKNNSimilarityTripleHybridRecommender
 from challenge.utils.functions import read_data
 
@@ -81,10 +80,26 @@ def __main__():
     print("SLIMElasticNetRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
+    pureSVDitem = PureSVDRecommender.PureSVDItemRecommender(URM_train)
+    pureSVDitem.fit(num_factors=145, topK=28)
+
+    results, _ = evaluator.evaluateRecommender(pureSVDitem)
+    print("PureSVDItem MAP: {}".format(results.loc[10]["MAP"]))
+
+    ials_recommender = IALSRecommender.IALSRecommender(URM_train)
+    ials_recommender.fit(epochs=10, num_factors=92, confidence_scaling="linear", alpha=2.5431444656816597,
+                         epsilon=0.035779451402656745,
+                         reg=1.5, init_mean=0.0, init_std=0.1)
+
+    results, _ = evaluator.evaluateRecommender(ials_recommender)
+    print("IALSRecommender MAP: {}".format(results.loc[10]["MAP"]))
+
     recommenders = [item_recommender, item_recommender, hybrid_recommender, EASE_R, SLIM_recommender]
 
     hyperparameters_range_dictionary = {
-        "gamma": Real(1, 4),
+        "alpha":Real(0, 3),
+        "beta": Real(0,3),
+        "gamma": Real(0, 3),
         "delta": Real(0, 3),
         "epsilon": Real(0, 3),
     }

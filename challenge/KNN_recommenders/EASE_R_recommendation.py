@@ -15,14 +15,13 @@ def __main__():
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
-    URM_all = sps.coo_matrix(
-        (URM_all_dataframe['Data'].values, (URM_all_dataframe['UserID'].values, URM_all_dataframe['ItemID'].values)))
-    URM_all = URM_all.tocsr()
+    URM_train = sps.load_npz('../input_files/URM_train_plus_validation.npz')
+    URM_test = sps.load_npz('../input_files/URM_test.npz')
+    URM_all = sps.load_npz('../input_files/URM_all.npz')
 
-    URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
-
-    tops = [60, 80, 100, 150]
-    l2_norms = [10, 20, 25, 30, 40, 50, 75, 100]
+    tops = [50] # 20, 25, 30, 40, 50, 59, 60, 300
+    l2_norms = [10, 25, 30, 40, 50, 75, 100]
+    # l2_norms = [100, 250, 300, 400, 500, 750, 1000]
 
     for topk in tops:
         for l2_norm in l2_norms:

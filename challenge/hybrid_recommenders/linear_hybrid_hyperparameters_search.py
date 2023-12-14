@@ -12,7 +12,8 @@ from Recommenders.Hybrid.HybridLinear import HybridLinear
 from Recommenders.EASE_R import EASE_R_Recommender
 from Recommenders.SLIM import SLIMElasticNetRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
-from Recommenders.MatrixFactorization import IALSRecommender
+from Recommenders.MatrixFactorization import IALSRecommender, PureSVDRecommender
+from Recommenders.KNN.ItemKNNSimilarityTripleHybridRecommender import ItemKNNSimilarityTripleHybridRecommender
 from challenge.utils.functions import read_data
 
 
@@ -43,17 +44,17 @@ def __main__():
     print("ItemKNNCFRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    EASE_R_recommender = EASE_R_Recommender.EASE_R_Recommender(URM_train)
-    EASE_R_recommender.fit(topK=10, l2_norm=101, normalize_matrix=False)
-    EASE_R_Wsparse = sps.csr_matrix(EASE_R_recommender.W_sparse)
+    EASE_R = EASE_R_Recommender.EASE_R_Recommender(URM_train)
+    EASE_R.fit(topK=59, l2_norm=29.792347118106623, normalize_matrix=False)
+    EASE_R_Wsparse = sps.csr_matrix(EASE_R.W_sparse)
 
-    results, _ = evaluator.evaluateRecommender(EASE_R_recommender)
+    results, _ = evaluator.evaluateRecommender(EASE_R)
     print("EASE_R_Recommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
     P3_recommender.fit(topK=40, alpha=0.3119217553589628, min_rating=0.01, implicit=True, normalize_similarity=True)
-    P3_Wsparse = P3_recommender.W_sparse
+    p3alpha_Wsparse = P3_recommender.W_sparse
 
     results, _ = evaluator.evaluateRecommender(P3_recommender)
     print("P3alphaRecommender")
@@ -76,23 +77,36 @@ def __main__():
     print("SLIMElasticNetRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
+    hybrid_recommender = ItemKNNSimilarityTripleHybridRecommender(URM_train, p3alpha_Wsparse, item_Wsparse, RP3_Wsparse)
+    hybrid_recommender.fit(topK=225, alpha=0.4976629488640914, beta=0.13017801200221196)
+
+    results, _ = evaluator.evaluateRecommender(hybrid_recommender)
+    print("ItemKNNSimilarityTripleHybridRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    pureSVDitem = PureSVDRecommender.PureSVDItemRecommender(URM_train)
+    pureSVDitem.fit(num_factors=145, topK=28)
+
+    results, _ = evaluator.evaluateRecommender(pureSVDitem)
+    print("PureSVDItem MAP: {}".format(results.loc[10]["MAP"]))
+
     recommenders = {
         "iALS": ials_recommender,
-        "ItemKNN": item_recommender,
-        "EASE_R": EASE_R_recommender,
-        "P3alpha": P3_recommender,
-        "RP3beta": RP3_recommender,
+        "PureSVD": item_recommender,
+        "EASE_R": EASE_R,
+        "Hybrid": hybrid_recommender,
         "SLIM": SLIM_recommender
     }
 
     hyperparameters_range_dictionary = {
-        "iALS": Real(0.5, 1.0),
-        "ItemKNN": Real(0.7, 1.0),
-        "EASE_R": Real(0.0, 0.2),
-        "P3alpha": Real(0.9, 1.8),
-        "RP3beta": Real(0.9, 1.8),
-        "SLIM": Real(1.0, 2.0),
+        "iALS": Real(0.0, 1.0),
+        "PureSVD": Real(0.0, 1.0),
+        "EASE_R": Real(0.0, 1.0),
+        "Hybrid": Real(0.0, 3.0),
+        "SLIM": Real(0.0, 3.0),
     }
+
+    # {'iALS': 0.8778923696476916, 'PureSVD': 0.341585008267241, 'EASE_R': 0.06531288064531472, 'Hybrid': 1.6744854973111267, 'SLIM': 0.8320957713755792}
 
     recommender_class = HybridLinear
 

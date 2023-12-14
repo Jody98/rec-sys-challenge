@@ -92,7 +92,7 @@ def __main__():
     generate_submission_csv("../output_files/SLIMRP3Submission.csv", recommendations)
 
     recommenders = [item_recommender, item_recommender, hybrid_recommender, EASE_R, SLIM_recommender]
-    gamma = 2.8356738889291866
+    gamma = 0
     delta = 1.0
     epsilon = 1.23261182149927
 
