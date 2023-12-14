@@ -22,7 +22,7 @@ def __main__():
     cutoff_list = [10]
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
-    URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
+    URM_train_dataframe, users_list = read_data(data_file_path, users_file_path)
 
     URM_train_validation = sps.load_npz('../input_files/URM_train_plus_validation.npz')
     URM_test = sps.load_npz('../input_files/URM_test.npz')
@@ -32,12 +32,21 @@ def __main__():
     evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[10])
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
+    EASE_R = EASE_R_Recommender.EASE_R_Recommender(URM_train)
+    EASE_R.fit(topK=32, l2_norm=38, normalize_matrix=False)
+    EASE_R_Wsparse = sps.csr_matrix(EASE_R.W_sparse)
+
+    results, _ = evaluator.evaluateRecommender(EASE_R)
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
     item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
-    item_recommender.fit(topK=9, shrink=19, similarity='tversky', tversky_alpha=0.036424892090848766,
+    item_recommender.fit(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.03642489209084876,
                          tversky_beta=0.9961018325655608)
+    item_Wsparse = item_recommender.W_sparse
 
     results, _ = evaluator.evaluateRecommender(item_recommender)
-    print("ItemKNNCFRecommender MAP: {}".format(results.loc[10]["MAP"]))
+    print("ItemKNNCFRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
 
     RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_train)
     RP3_recommender.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086, min_rating=0.2588031389774553,
@@ -54,12 +63,6 @@ def __main__():
     results, _ = evaluator.evaluateRecommender(SLIM_recommender)
     print("SLIM MAP: {}".format(results.loc[10]["MAP"]))
 
-    SLIMRP3 = DifferentLossScoresHybridRecommender(URM_train, RP3_recommender, SLIM_recommender)
-    SLIMRP3.fit(norm=2, alpha=0.4180524044424313)
-
-    results, _ = evaluator.evaluateRecommender(SLIMRP3)
-    print("SLIMRP3 MAP: {}".format(results.loc[10]["MAP"]))
-
     SLIMRP3 = ItemKNNSimilarityHybridRecommender(URM_train, RP3_Wsparse, SLIM_Wsparse)
     SLIMRP3.fit(alpha=0.5364079633111103, topK=468)
     SLIMRP3_Wsparse = SLIMRP3.W_sparse
@@ -68,11 +71,12 @@ def __main__():
     print("SLIMRP3")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    SLIMRP3Normalized = DifferentLossScoresHybridRecommender(URM_train, RP3_recommender, SLIMRP3)
-    SLIMRP3Normalized.fit(norm=1, alpha=0.22382181657958472)
+    recommender = DifferentLossScoresHybridRecommender(URM_train, item_recommender, SLIMRP3)
+    recommender.fit(norm=1, alpha=0.16987693419766395)
 
-    results, _ = evaluator.evaluateRecommender(SLIMRP3Normalized)
-    print("SLIMRP3Normalized MAP: {}".format(results.loc[10]["MAP"]))
+    results, _ = evaluator.evaluateRecommender(recommender)
+    print("DifferentLossScoresHybridRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
 
     hyperparameters_range_dictionary = {
         "norm": Categorical([1, 2, np.inf]),
@@ -86,7 +90,7 @@ def __main__():
                                                evaluator_test=evaluator)
 
     recommender_input_args = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, item_recommender, SLIMRP3],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, EASE_R, recommender],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},
@@ -94,7 +98,7 @@ def __main__():
     )
 
     recommender_input_args_last_test = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, item_recommender, SLIMRP3],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, EASE_R, recommender],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},
@@ -106,7 +110,7 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 50
+    n_cases = 100
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10
