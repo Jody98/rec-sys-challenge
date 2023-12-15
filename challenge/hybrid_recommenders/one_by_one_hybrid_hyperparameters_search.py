@@ -14,33 +14,46 @@ from Recommenders.EASE_R import EASE_R_Recommender
 from Recommenders.SLIM import SLIMElasticNetRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
 from Recommenders.Hybrid.HybridDifferentLoss import DifferentLossScoresHybridRecommender
-from Recommenders.KNN.ItemKNNSimilarityHybridRecommender import ItemKNNSimilarityHybridRecommender
+from Recommenders.KNN.ItemKNNSimilarityTripleHybridRecommender import ItemKNNSimilarityTripleHybridRecommender
 from challenge.utils.functions import read_data
+from Data_manager.split_functions.split_train_validation_random_holdout import \
+    split_train_in_two_percentage_global_sample
 
 
 def __main__():
     cutoff_list = [10]
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
-    URM_train_dataframe, users_list = read_data(data_file_path, users_file_path)
+    URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
-    URM_train_validation = sps.load_npz('../input_files/URM_train_plus_validation.npz')
-    URM_test = sps.load_npz('../input_files/URM_test.npz')
-    URM_validation = sps.load_npz('../input_files/URM_validation.npz')
-    URM_train = sps.load_npz('../input_files/URM_train.npz')
+    URM_all = sps.coo_matrix(
+        (URM_all_dataframe['Data'].values, (URM_all_dataframe['UserID'].values, URM_all_dataframe['ItemID'].values)))
+    URM_all = URM_all.tocsr()
+
+    URM_train_validation, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.8)
+    URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_train_validation, train_percentage=0.8)
 
     evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[10])
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
-    EASE_R = EASE_R_Recommender.EASE_R_Recommender(URM_train)
-    EASE_R.fit(topK=32, l2_norm=38, normalize_matrix=False)
-    EASE_R_Wsparse = sps.csr_matrix(EASE_R.W_sparse)
+    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
+    SLIM_recommender.fit(topK=216, l1_ratio=0.0032465600313226354, alpha=0.002589066655986645, positive_only=True)
+    SLIM_Wsparse = SLIM_recommender.W_sparse
 
-    results, _ = evaluator.evaluateRecommender(EASE_R)
+    results, _ = evaluator.evaluateRecommender(SLIM_recommender)
+    print("SLIM MAP: {}".format(results.loc[10]["MAP"]))
+
+    p3alpha = P3alphaRecommender.P3alphaRecommender(URM_train)
+    p3alpha.fit(topK=40, alpha=0.3119217553589628, min_rating=0.01, implicit=True,
+                normalize_similarity=True)
+    p3alpha_Wsparse = p3alpha.W_sparse
+
+    results, _ = evaluator.evaluateRecommender(p3alpha)
+    print("P3alphaRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
-    item_recommender.fit(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.03642489209084876,
+    item_recommender.fit(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.036424892090848766,
                          tversky_beta=0.9961018325655608)
     item_Wsparse = item_recommender.W_sparse
 
@@ -54,28 +67,14 @@ def __main__():
     RP3_Wsparse = RP3_recommender.W_sparse
 
     results, _ = evaluator.evaluateRecommender(RP3_recommender)
-    print("RP3betaRecommender MAP: {}".format(results.loc[10]["MAP"]))
-
-    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
-    SLIM_recommender.fit(topK=216, l1_ratio=0.0032465600313226354, alpha=0.002589066655986645, positive_only=True)
-    SLIM_Wsparse = SLIM_recommender.W_sparse
-
-    results, _ = evaluator.evaluateRecommender(SLIM_recommender)
-    print("SLIM MAP: {}".format(results.loc[10]["MAP"]))
-
-    SLIMRP3 = ItemKNNSimilarityHybridRecommender(URM_train, RP3_Wsparse, SLIM_Wsparse)
-    SLIMRP3.fit(alpha=0.5364079633111103, topK=468)
-    SLIMRP3_Wsparse = SLIMRP3.W_sparse
-
-    results, _ = evaluator.evaluateRecommender(SLIMRP3)
-    print("SLIMRP3")
+    print("RP3betaRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    recommender = DifferentLossScoresHybridRecommender(URM_train, item_recommender, SLIMRP3)
-    recommender.fit(norm=1, alpha=0.16987693419766395)
+    hybrid_recommender = ItemKNNSimilarityTripleHybridRecommender(URM_train, p3alpha_Wsparse, item_Wsparse, RP3_Wsparse)
+    hybrid_recommender.fit(topK=225, alpha=0.4976629488640914, beta=0.13017801200221196)
 
-    results, _ = evaluator.evaluateRecommender(recommender)
-    print("DifferentLossScoresHybridRecommender")
+    results, _ = evaluator.evaluateRecommender(hybrid_recommender)
+    print("ItemKNNSimilarityTripleHybridRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     hyperparameters_range_dictionary = {
@@ -90,7 +89,7 @@ def __main__():
                                                evaluator_test=evaluator)
 
     recommender_input_args = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, EASE_R, recommender],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, hybrid_recommender, SLIM_recommender],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},
@@ -98,7 +97,7 @@ def __main__():
     )
 
     recommender_input_args_last_test = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, EASE_R, recommender],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, hybrid_recommender, SLIM_recommender],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},

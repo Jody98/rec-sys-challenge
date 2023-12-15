@@ -20,8 +20,8 @@ def __main__():
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
 
     recommender = IALSRecommender.IALSRecommender(URM_train)
-    recommender.fit(epochs=100, num_factors=67, confidence_scaling="linear", alpha=1.0, epsilon=0.001,
-                    reg=0.014494658043657516, init_mean=0.0, init_std=0.1)
+    recommender.fit(epochs=100, num_factors=173, confidence_scaling="linear", alpha=7.31319386499139, epsilon=0.0019197416753549824,
+                    reg=0.6581722208487086, init_mean=0.0, init_std=0.1)
 
     recommended_items = recommender.recommend(users_list, cutoff=10)
     recommendations = []

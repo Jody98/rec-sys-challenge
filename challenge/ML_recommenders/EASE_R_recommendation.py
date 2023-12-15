@@ -19,25 +19,14 @@ def __main__():
     URM_test = sps.load_npz('../input_files/URM_test.npz')
     URM_all = sps.load_npz('../input_files/URM_all.npz')
 
-    tops = [32, 34] # 20, 25, 30, 40, 50, 59, 60, 70 300
-    l2_norms = [38, 40] #[10, 25, 30, 40, 50, 75, 100]
-    # l2_norms = [100, 250, 300, 400, 500, 750, 1000]
+    EASE_R = EASE_R_Recommender.EASE_R_Recommender(URM_train)
+    EASE_R.fit(topK=32, l2_norm=38, normalize_matrix=False)
+    EASE_R_Wsparse = sps.csr_matrix(EASE_R.W_sparse)
 
-    # best 32, 40
+    evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
 
-    for topk in tops:
-        for l2_norm in l2_norms:
-            EASE_R = EASE_R_Recommender.EASE_R_Recommender(URM_train)
-            # EASE_R.fit(topK=59, l2_norm=29.792347118106623, normalize_matrix=False)
-            EASE_R.fit(topK=topk, l2_norm=l2_norm, normalize_matrix=False)
-            EASE_R_Wsparse = sps.csr_matrix(EASE_R.W_sparse)
-
-            evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
-
-            results, _ = evaluator.evaluateRecommender(EASE_R)
-            print("topk: {}".format(topk))
-            print("l2_norm: {}".format(l2_norm))
-            print("MAP: {}".format(results.loc[10]["MAP"]))
+    results, _ = evaluator.evaluateRecommender(EASE_R)
+    print("MAP: {}".format(results.loc[10]["MAP"]))
 
 
 if __name__ == '__main__':

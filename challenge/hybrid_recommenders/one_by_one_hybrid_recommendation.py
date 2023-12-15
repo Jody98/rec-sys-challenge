@@ -1,12 +1,11 @@
 import scipy.sparse as sps
 
 from Evaluation.Evaluator import EvaluatorHoldout
-from Recommenders.GraphBased import RP3betaRecommender
+from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
 from Recommenders.Hybrid.HybridDifferentLoss import DifferentLossScoresHybridRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
-from Recommenders.KNN.ItemKNNSimilarityHybridRecommender import ItemKNNSimilarityHybridRecommender
+from Recommenders.KNN.ItemKNNSimilarityTripleHybridRecommender import ItemKNNSimilarityTripleHybridRecommender
 from Recommenders.SLIM import SLIMElasticNetRecommender
-from Recommenders.EASE_R import EASE_R_Recommender
 from challenge.utils.functions import read_data, generate_submission_csv
 
 
@@ -22,8 +21,17 @@ def __main__():
 
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
 
+    p3alpha = P3alphaRecommender.P3alphaRecommender(URM_all)
+    p3alpha.fit(topK=40, alpha=0.3119217553589628, min_rating=0.01, implicit=True,
+                normalize_similarity=True)
+    p3alpha_Wsparse = p3alpha.W_sparse
+
+    results, _ = evaluator.evaluateRecommender(p3alpha)
+    print("P3alphaRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
     item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_all)
-    item_recommender.fit(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.03642489209084876,
+    item_recommender.fit(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.036424892090848766,
                          tversky_beta=0.9961018325655608)
     item_Wsparse = item_recommender.W_sparse
 
@@ -37,7 +45,15 @@ def __main__():
     RP3_Wsparse = RP3_recommender.W_sparse
 
     results, _ = evaluator.evaluateRecommender(RP3_recommender)
-    print("RP3betaRecommender MAP: {}".format(results.loc[10]["MAP"]))
+    print("RP3betaRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    hybrid_recommender = ItemKNNSimilarityTripleHybridRecommender(URM_all, p3alpha_Wsparse, item_Wsparse, RP3_Wsparse)
+    hybrid_recommender.fit(topK=225, alpha=0.4976629488640914, beta=0.13017801200221196)
+
+    results, _ = evaluator.evaluateRecommender(hybrid_recommender)
+    print("ItemKNNSimilarityTripleHybridRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
 
     SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_all)
     SLIM_recommender.fit(topK=216, l1_ratio=0.0032465600313226354, alpha=0.002589066655986645, positive_only=True)
@@ -46,30 +62,8 @@ def __main__():
     results, _ = evaluator.evaluateRecommender(SLIM_recommender)
     print("SLIM MAP: {}".format(results.loc[10]["MAP"]))
 
-    SLIMRP3 = ItemKNNSimilarityHybridRecommender(URM_all, RP3_Wsparse, SLIM_Wsparse)
-    SLIMRP3.fit(alpha=0.5364079633111103, topK=468)
-    SLIMRP3_Wsparse = SLIMRP3.W_sparse
-
-    results, _ = evaluator.evaluateRecommender(SLIMRP3)
-    print("SLIMRP3")
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
-    recommender = DifferentLossScoresHybridRecommender(URM_all, item_recommender, SLIMRP3)
-    recommender.fit(norm=1, alpha=0.16987693419766395)
-
-    results, _ = evaluator.evaluateRecommender(recommender)
-    print("DifferentLossScoresHybridRecommender")
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
-    EASE_R = EASE_R_Recommender.EASE_R_Recommender(URM_all)
-    EASE_R.fit(topK=32, l2_norm=38, normalize_matrix=False)
-    EASE_R_Wsparse = sps.csr_matrix(EASE_R.W_sparse)
-
-    results, _ = evaluator.evaluateRecommender(EASE_R)
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
-    recommender = DifferentLossScoresHybridRecommender(URM_all, EASE_R, recommender)
-    recommender.fit(norm=1, alpha=0.16987693419766395)
+    recommender = DifferentLossScoresHybridRecommender(URM_all, hybrid_recommender, SLIM_recommender)
+    recommender.fit(norm=1, alpha=0.70918052775199)
 
     results, _ = evaluator.evaluateRecommender(recommender)
     print("DifferentLossScoresHybridRecommender")
