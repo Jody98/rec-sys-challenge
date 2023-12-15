@@ -89,7 +89,7 @@ def __main__():
                                                evaluator_test=evaluator)
 
     recommender_input_args = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, hybrid_recommender, SLIM_recommender],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, item_recommender, SLIM_recommender],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},
@@ -97,7 +97,7 @@ def __main__():
     )
 
     recommender_input_args_last_test = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, hybrid_recommender, SLIM_recommender],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, item_recommender, SLIM_recommender],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},

@@ -23,6 +23,8 @@ def __main__():
     EASE_R.fit(topK=32, l2_norm=38, normalize_matrix=False)
     EASE_R_Wsparse = sps.csr_matrix(EASE_R.W_sparse)
 
+    EASE_R.save_model()
+
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
 
     results, _ = evaluator.evaluateRecommender(EASE_R)
