@@ -16,7 +16,7 @@ def __main__():
     URM_train = sps.load_npz("../input_files/URM_train_plus_validation.npz")
     URM_test = sps.load_npz("../input_files/URM_test.npz")
 
-    num_factors = [100, 105, 110, 115, 120]
+    num_factors = [130]
 
     for num in num_factors:
         recommender = PureSVDRecommender.PureSVDRecommender(URM_train)

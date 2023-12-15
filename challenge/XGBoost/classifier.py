@@ -144,7 +144,7 @@ def __main__():
     n_users, n_items = URM_all.shape
 
     item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_all)
-    item_recommender.fit(topK=9, shrink=19, similarity='tversky', tversky_alpha=0.036424892090848766,
+    item_recommender.fit(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.036424892090848766,
                          tversky_beta=0.9961018325655608)
 
     results, _ = evaluator.evaluateRecommender(item_recommender)
@@ -168,6 +168,8 @@ def __main__():
     gamma = 0.42759799127984477
     delta = 4.3291270788055805
     epsilon = 4.657898008053695
+
+    # TODO: ottimizzare la recall e non la MAP
 
     hybrid = GeneralizedLinearHybridRecommender(URM_all, recommenders=recommenders)
     hybrid.fit(gamma=gamma, delta=delta, epsilon=epsilon)

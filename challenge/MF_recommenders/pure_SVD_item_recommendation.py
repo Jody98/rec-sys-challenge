@@ -17,7 +17,7 @@ def __main__():
     URM_test = sps.load_npz("../input_files/URM_test.npz")
 
     num_factors = [145]
-    topK = [28]
+    topK = [60]
 
     for num_factor in num_factors:
         for topk in topK:

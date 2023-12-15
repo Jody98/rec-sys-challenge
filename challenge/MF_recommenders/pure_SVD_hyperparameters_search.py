@@ -29,7 +29,7 @@ def __main__():
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "num_factors": Integer(low=10, high=100, prior='uniform'),
+        "num_factors": Integer(low=10, high=2000, prior='uniform'),
     }
 
     recommender_class = PureSVDRecommender
@@ -59,7 +59,7 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 20
+    n_cases = 200
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10

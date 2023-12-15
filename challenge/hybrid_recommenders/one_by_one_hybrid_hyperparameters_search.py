@@ -10,7 +10,7 @@ from HyperparameterTuning.SearchBayesianSkopt import SearchBayesianSkopt
 from Recommenders.DataIO import DataIO
 from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
 from Recommenders.Hybrid.HybridLinear import HybridLinear
-from Recommenders.EASE_R import EASE_R_Recommender
+from Recommenders.MatrixFactorization import IALSRecommender
 from Recommenders.SLIM import SLIMElasticNetRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
 from Recommenders.Hybrid.HybridDifferentLoss import DifferentLossScoresHybridRecommender
