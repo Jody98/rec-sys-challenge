@@ -11,30 +11,6 @@ def __main__():
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
-    URM_train_plus_validation = sps.load_npz('../input_files/URM_train_plus_validation.npz')
-    URM_test = sps.load_npz('../input_files/URM_test.npz')
-    URM_all = sps.load_npz('../input_files/URM_all.npz')
-
-    recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train_plus_validation)
-    recommender.fit(topK=80, l1_ratio=0.02515808645930968, alpha=0.0020708761507802933, positive_only=True)
-
-    recommender.save_model(folder_path="../result_experiments/", file_name="SLIMElasticNetRecommender_best_model80.zip")
-
-    evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
-    results, _ = evaluator.evaluateRecommender(recommender)
-
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
-    recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_all)
-    recommender.fit(topK=80, l1_ratio=0.02515808645930968, alpha=0.0020708761507802933, positive_only=True)
-
-    recommender.save_model(folder_path="../result_experiments/", file_name="SLIMElasticNetRecommender_best_model100.zip")
-
-    evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
-    results, _ = evaluator.evaluateRecommender(recommender)
-
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
     URM_train = sps.load_npz('../input_files/URM_train.npz')
     URM_test = sps.load_npz('../input_files/URM_test.npz')
     URM_all = sps.load_npz('../input_files/URM_all.npz')
