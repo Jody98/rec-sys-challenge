@@ -9,10 +9,10 @@ class HybridLinear(BaseRecommender):
 
         self.recommenders = recommenders
 
-    def fit(self, iALS, PureSVD, EASE_R, Hybrid, SLIM):
+    def fit(self, MultVAE, ALS, EASE_R, Hybrid, SLIM):
         self.weights = {
-            "iALS": iALS,
-            "PureSVD": PureSVD,
+            "MultVAE": MultVAE,
+            "ALS": ALS,
             "EASE_R": EASE_R,
             "Hybrid": Hybrid,
             "SLIM": SLIM

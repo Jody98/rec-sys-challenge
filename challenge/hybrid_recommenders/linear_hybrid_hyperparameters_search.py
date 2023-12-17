@@ -3,37 +3,42 @@ import os
 import scipy.sparse as sps
 from skopt.space import Real
 
+from Data_manager.split_functions.split_train_validation_random_holdout import \
+    split_train_in_two_percentage_global_sample
 from Evaluation.Evaluator import EvaluatorHoldout
 from HyperparameterTuning.SearchAbstractClass import SearchInputRecommenderArgs
 from HyperparameterTuning.SearchBayesianSkopt import SearchBayesianSkopt
 from Recommenders.DataIO import DataIO
+from Recommenders.EASE_R import EASE_R_Recommender
 from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
 from Recommenders.Hybrid.HybridLinear import HybridLinear
-from Recommenders.EASE_R import EASE_R_Recommender
-from Recommenders.SLIM import SLIMElasticNetRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
-from Recommenders.MatrixFactorization import IALSRecommender, PureSVDRecommender
 from Recommenders.KNN.ItemKNNSimilarityTripleHybridRecommender import ItemKNNSimilarityTripleHybridRecommender
+from Recommenders.MatrixFactorization import ALSRecommender
+from Recommenders.Neural.MultVAERecommender import MultVAERecommender_PyTorch_OptimizerMask
+from Recommenders.SLIM import SLIMElasticNetRecommender
 from challenge.utils.functions import read_data
 
 
 def __main__():
+    folder_path = "../result_experiments/"
+    EASE64 = "EASE_R_Recommender_best_model64.zip"
+    SLIM64 = "SLIMElasticNetRecommender_best_model64.zip"
+    MultVAE64 = "MultVAERecommender_best_model64.zip"
+    ALS64 = "ALSRecommender_best_model64.zip"
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
-    URM_train_validation = sps.load_npz('../input_files/URM_train_plus_validation.npz')
-    URM_test = sps.load_npz('../input_files/URM_test.npz')
-    URM_validation = sps.load_npz('../input_files/URM_validation.npz')
-    URM_train = sps.load_npz('../input_files/URM_train.npz')
+    URM_all = sps.coo_matrix(
+        (URM_all_dataframe['Data'].values, (URM_all_dataframe['UserID'].values, URM_all_dataframe['ItemID'].values)))
+    URM_all = URM_all.tocsr()
+
+    URM_train_validation, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
+    URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_train_validation, train_percentage=0.80)
 
     evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[10])
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=[10])
-
-    ials_recommender = IALSRecommender.IALSRecommender(URM_train)
-    ials_recommender.fit(epochs=100, num_factors=92, confidence_scaling="linear", alpha=2.5431444656816597,
-                         epsilon=0.035779451402656745,
-                         reg=1.5, init_mean=0.0, init_std=0.1)
 
     item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
     item_recommender.fit(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.03642489209084876,
@@ -45,7 +50,7 @@ def __main__():
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     EASE_R = EASE_R_Recommender.EASE_R_Recommender(URM_train)
-    EASE_R.fit(topK=59, l2_norm=29.792347118106623, normalize_matrix=False)
+    EASE_R.load_model(folder_path, EASE64)
     EASE_R_Wsparse = sps.csr_matrix(EASE_R.W_sparse)
 
     results, _ = evaluator.evaluateRecommender(EASE_R)
@@ -70,7 +75,7 @@ def __main__():
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
-    SLIM_recommender.fit(topK=216, l1_ratio=0.0032465600313226354, alpha=0.002589066655986645, positive_only=True)
+    SLIM_recommender.load_model(folder_path, SLIM64)
     SLIM_Wsparse = SLIM_recommender.W_sparse
 
     results, _ = evaluator.evaluateRecommender(SLIM_recommender)
@@ -84,29 +89,34 @@ def __main__():
     print("ItemKNNSimilarityTripleHybridRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    pureSVDitem = PureSVDRecommender.PureSVDItemRecommender(URM_train)
-    pureSVDitem.fit(num_factors=145, topK=28)
+    ALS = ALSRecommender.ALS(URM_train)
+    ALS.load_model(folder_path, ALS64)
 
-    results, _ = evaluator.evaluateRecommender(pureSVDitem)
-    print("PureSVDItem MAP: {}".format(results.loc[10]["MAP"]))
+    results, _ = evaluator.evaluateRecommender(ALS)
+    print("ALSRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    MultVAE = MultVAERecommender_PyTorch_OptimizerMask(URM_train)
+    MultVAE.load_model(folder_path, MultVAE64)
+
+    results, _ = evaluator.evaluateRecommender(MultVAE)
+    print("MultVAE MAP: {}".format(results.loc[10]["MAP"]))
 
     recommenders = {
-        "iALS": ials_recommender,
-        "PureSVD": item_recommender,
+        "MultVAE": MultVAE,
+        "ALS": ALS,
         "EASE_R": EASE_R,
         "Hybrid": hybrid_recommender,
         "SLIM": SLIM_recommender
     }
 
     hyperparameters_range_dictionary = {
-        "iALS": Real(0.0, 1.0),
-        "PureSVD": Real(0.0, 1.0),
-        "EASE_R": Real(0.0, 1.0),
-        "Hybrid": Real(0.0, 3.0),
-        "SLIM": Real(0.0, 3.0),
+        "MultVAE": Real(low=29.0, high=33.0, prior='uniform'),
+        "ALS": Real(low=2.0, high=3.0, prior='uniform'),
+        "EASE_R": Real(low=-2.0, high=0.0, prior='uniform'),
+        "Hybrid": Real(low=8.0, high=10, prior='uniform'),
+        "SLIM": Real(low=2.0, high=3.0, prior='uniform'),
     }
-
-    # {'iALS': 0.8778923696476916, 'PureSVD': 0.341585008267241, 'EASE_R': 0.06531288064531472, 'Hybrid': 1.6744854973111267, 'SLIM': 0.8320957713755792}
 
     recommender_class = HybridLinear
 
@@ -135,7 +145,7 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 50
+    n_cases = 20
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10
