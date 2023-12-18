@@ -8,7 +8,7 @@ from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
 from Recommenders.Hybrid.HybridLinear import HybridLinear
 from Recommenders.KNN import ItemKNNCFRecommender
 from Recommenders.KNN.ItemKNNSimilarityTripleHybridRecommender import ItemKNNSimilarityTripleHybridRecommender
-from Recommenders.MatrixFactorization import ALSRecommender
+from Recommenders.MatrixFactorization import ALSRecommender, IALSRecommender
 from Recommenders.Neural.MultVAERecommender import MultVAERecommender_PyTorch_OptimizerMask
 from Recommenders.SLIM import SLIMElasticNetRecommender
 from challenge.utils.functions import read_data, generate_submission_csv
@@ -21,29 +21,22 @@ def __main__():
     SLIM80 = "SLIMElasticNetRecommender_best_model100.zip"
     MultVAE80 = "MultVAERecommender_best_model100.zip"
     ALS80 = "ALSRecommender_best_model100.zip"
+    IALS80 = "IALSRecommender_best_model100.zip"
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
-    URM_all = sps.coo_matrix(
-        (URM_all_dataframe['Data'].values, (URM_all_dataframe['UserID'].values, URM_all_dataframe['ItemID'].values)))
-    URM_all = URM_all.tocsr()
-
-    URM_training, URM_testing = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
-
-    URM_train = sps.load_npz('../input_files/URM_train_plus_validation.npz')
     URM_test = sps.load_npz('../input_files/URM_test.npz')
     URM_all = sps.load_npz('../input_files/URM_all.npz')
 
     evaluator_train = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
-    evaluator_training = EvaluatorHoldout(URM_testing, cutoff_list=cutoff_list)
 
     item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_all)
     item_recommender.fit(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.03642489209084876,
                          tversky_beta=0.9961018325655608)
     item_Wsparse = item_recommender.W_sparse
 
-    results, _ = evaluator_training.evaluateRecommender(item_recommender)
+    results, _ = evaluator_train.evaluateRecommender(item_recommender)
     print("ItemKNNCFRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
@@ -51,7 +44,7 @@ def __main__():
     P3_recommender.fit(topK=40, alpha=0.3119217553589628, min_rating=0.01, implicit=True, normalize_similarity=True)
     p3alpha_Wsparse = P3_recommender.W_sparse
 
-    results, _ = evaluator_training.evaluateRecommender(P3_recommender)
+    results, _ = evaluator_train.evaluateRecommender(P3_recommender)
     print("P3alphaRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
@@ -60,14 +53,14 @@ def __main__():
                         implicit=True, normalize_similarity=True)
     RP3_Wsparse = RP3_recommender.W_sparse
 
-    results, _ = evaluator_training.evaluateRecommender(RP3_recommender)
+    results, _ = evaluator_train.evaluateRecommender(RP3_recommender)
     print("RP3betaRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     hybrid_recommender = ItemKNNSimilarityTripleHybridRecommender(URM_all, p3alpha_Wsparse, item_Wsparse, RP3_Wsparse)
     hybrid_recommender.fit(topK=225, alpha=0.4976629488640914, beta=0.13017801200221196)
 
-    results, _ = evaluator_training.evaluateRecommender(hybrid_recommender)
+    results, _ = evaluator_train.evaluateRecommender(hybrid_recommender)
     print("ItemKNNSimilarityTripleHybridRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
@@ -100,17 +93,24 @@ def __main__():
     results, _ = evaluator_train.evaluateRecommender(MultVAE)
     print("MultVAE MAP: {}".format(results.loc[10]["MAP"]))
 
+    IALS = IALSRecommender.IALSRecommender(URM_all)
+    IALS.load_model(folder_path, IALS80)
+
+    results, _ = evaluator_train.evaluateRecommender(IALS)
+    print("IALSRecommender MAP: {}".format(results.loc[10]["MAP"]))
+
     recommenders = {
         "MultVAE": MultVAE,
-        "ALS": ALS,
+        "ALS": IALS,
         "EASE_R": EASE_R,
-        "Hybrid": hybrid_recommender,
-        "SLIM": SLIM_recommender
+        "Hybrid": RP3_recommender,
+        "SLIM": SLIM_recommender,
+        "Item": item_recommender
     }
 
     all_recommender = HybridLinear(URM_all, recommenders)
-    all_recommender.fit(MultVAE=29.944688627331626, ALS=2.2107714587860885,
-                        EASE_R=-1.1438551527333594, Hybrid=8.1326192455624, SLIM=2.6235961755903983)
+    all_recommender.fit(MultVAE=18.234181652023064, ALS=0.9683608848343739, EASE_R=-0.5361755922412472,
+                        Hybrid=2.733233072276764, SLIM=2.369827855774208, Item=1.9690164229453446)
 
     results, _ = evaluator_train.evaluateRecommender(all_recommender)
     print("HybridLinear")

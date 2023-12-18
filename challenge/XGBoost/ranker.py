@@ -1,12 +1,10 @@
 import numpy as np
 import pandas as pd
 import scipy.sparse as sps
-from sklearn.metrics import precision_recall_curve
-from sklearn.metrics import precision_score, recall_score, average_precision_score
+import xgboost as xgb
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 from xgboost import XGBRanker
-import xgboost as xgb
 
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
@@ -176,36 +174,36 @@ def __main__():
     average_precision = average_precision_score(y_test, y_pred_balanced)
     print(f'Precision: {precision}')
     print(f'Recall: {recall}')
-    print(f'Mean Average Precision (MAP): {average_precision}')'''
+    print(f'Mean Average Precision (MAP): {average_precision}')
 
+    reranked_df = pd.DataFrame(index=range(0, n_users), columns=["ItemID"])
+    reranked_df.index.name = 'UserID'
+    
+    for user_id in tqdm(range(n_users)):
+        X_to_predict = X_train[X_train["UserID"] == user_id]
+        X_prediction = XGB_model.predict(X_to_predict)
+        dict_prediction = dict(zip(X_to_predict["ItemID"], X_prediction))
+        dict_prediction = {k: v for k, v in sorted(dict_prediction.items(), key=lambda item: item[1], reverse=True)}
+        list_prediction = list(dict_prediction.keys())[:cutoff_real]
+        reranked_df.loc[user_id, "ItemID"] = list_prediction
+    
+    reranked_df['UserID'] = reranked_df.index
+    
+    with open(submission_file_path, 'w') as file:
+        file.write('user_id,item_list\n')
+        for user_id in tqdm(users_list):
+            item_list = reranked_df.loc[user_id, "ItemID"]
+            user_string = f"{user_id},{' '.join(map(str, item_list))}\n"
+            file.write(user_string)
+    
+    plot1 = plot_importance(XGB_model, importance_type='gain', title='Gain')
+    plot2 = plot_importance(XGB_model, importance_type='cover', title='Cover')
+    plot3 = plot_importance(XGB_model, importance_type='weight', title='Weight (Frequence)')
+    
+    plot1.figure.savefig('gain.png')
+    plot2.figure.savefig('cover.png')
+    plot3.figure.savefig('weight.png')'''
 
-'''reranked_df = pd.DataFrame(index=range(0, n_users), columns=["ItemID"])
-reranked_df.index.name = 'UserID'
-
-for user_id in tqdm(range(n_users)):
-    X_to_predict = X_train[X_train["UserID"] == user_id]
-    X_prediction = XGB_model.predict(X_to_predict)
-    dict_prediction = dict(zip(X_to_predict["ItemID"], X_prediction))
-    dict_prediction = {k: v for k, v in sorted(dict_prediction.items(), key=lambda item: item[1], reverse=True)}
-    list_prediction = list(dict_prediction.keys())[:cutoff_real]
-    reranked_df.loc[user_id, "ItemID"] = list_prediction
-
-reranked_df['UserID'] = reranked_df.index
-
-with open(submission_file_path, 'w') as file:
-    file.write('user_id,item_list\n')
-    for user_id in tqdm(users_list):
-        item_list = reranked_df.loc[user_id, "ItemID"]
-        user_string = f"{user_id},{' '.join(map(str, item_list))}\n"
-        file.write(user_string)
-
-plot1 = plot_importance(XGB_model, importance_type='gain', title='Gain')
-plot2 = plot_importance(XGB_model, importance_type='cover', title='Cover')
-plot3 = plot_importance(XGB_model, importance_type='weight', title='Weight (Frequence)')
-
-plot1.figure.savefig('gain.png')
-plot2.figure.savefig('cover.png')
-plot3.figure.savefig('weight.png')'''
 
 if __name__ == '__main__':
     __main__()

@@ -63,7 +63,7 @@ def __main__():
 
     n_cases = 100
     n_random_starts = int(n_cases * 0.3)
-    metric_to_optimize = "MAP"
+    metric_to_optimize = "RECALL"
     cutoff_to_optimize = 10
 
     hyperparameterSearch.search(recommender_input_args,
