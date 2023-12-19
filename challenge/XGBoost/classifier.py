@@ -423,3 +423,4 @@ def __main__():
 
 if __name__ == '__main__':
     __main__()
+    # Parametri ottimali della Grid Search: {'booster': 'gbtree', 'gamma': 0.05, 'learning_rate': 0.01, 'max_depth': 1, 'n_estimators': 350, 'reg_alpha': 7, 'reg_lambda': 0.001}

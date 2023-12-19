@@ -1,12 +1,11 @@
 import numpy as np
 import pandas as pd
 import scipy.sparse as sps
+import xgboost as xgb
+from sklearn.metrics import classification_report
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
-from sklearn.metrics import classification_report
-from sklearn.metrics import accuracy_score
-import xgboost as xgb
 
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
@@ -35,15 +34,15 @@ def __main__():
     URM_train_recommenders, URM_train_booster = train_test_split(URM_train, test_size=0.5, random_state=42)
 
     param_grid = {
-        'n_estimators': [5, 50],
-        'learning_rate': [1e-5, 1e-2],
-        'reg_alpha': [0.5, 1],
+        'n_estimators': [50],
+        'learning_rate': [1e-2],
+        'reg_alpha': [1],
         'reg_lambda': [1],
-        'max_depth': [3, 5],
-        'max_leaves': [3, 5],
+        'max_depth': [5],
+        'max_leaves': [5],
         'grow_policy': ['depthwise'],
         'objective': ['binary:logistic'],
-        'booster': ['gbtree', 'gblinear'],
+        'booster': ['gbtree'],
         'enable_categorical': [True],
     }
 
@@ -113,15 +112,13 @@ def __main__():
     X_train["UserID"] = X_train["UserID"].astype("category")
     X_train["ItemID"] = X_train["ItemID"].astype("category")
 
-    objective = 'logistic'
-    model = xgb.XGBClassifier(objective='binary:{}'.format(objective), enable_categorical=True)
+    groups = training_dataframe.groupby("UserID").size().values
+
+    objective = 'pairwise'
+    model = xgb.XGBRanker(objective='rank:{}'.format(objective), enable_categorical=True)
 
     grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=10, error_score='raise')
-    try:
-        grid_search.fit(X_train, y_train)
-    except ValueError as e:
-        print(e)
-        raise e
+    grid_search.fit(X_train, y_train, group=groups, verbose=True)
 
     print("Migliori parametri: ", grid_search.best_params_)
     print("Miglior score: ", grid_search.best_score_)
