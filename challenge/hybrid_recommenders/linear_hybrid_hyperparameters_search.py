@@ -14,7 +14,7 @@ from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
 from Recommenders.Hybrid.HybridLinear import HybridLinear
 from Recommenders.KNN import ItemKNNCFRecommender
 from Recommenders.KNN.ItemKNNSimilarityTripleHybridRecommender import ItemKNNSimilarityTripleHybridRecommender
-from Recommenders.MatrixFactorization import ALSRecommender
+from Recommenders.MatrixFactorization import IALSRecommender
 from Recommenders.Neural.MultVAERecommender import MultVAERecommender_PyTorch_OptimizerMask
 from Recommenders.SLIM import SLIMElasticNetRecommender
 from challenge.utils.functions import read_data
@@ -25,17 +25,15 @@ def __main__():
     EASE64 = "EASE_R_Recommender_best_model64.zip"
     SLIM64 = "SLIMElasticNetRecommender_best_model64.zip"
     MultVAE64 = "MultVAERecommender_best_model64.zip"
-    ALS64 = "ALSRecommender_best_model64.zip"
+    IALS64 = "IALSRecommender_best_model64.zip"
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
-    URM_all = sps.coo_matrix(
-        (URM_all_dataframe['Data'].values, (URM_all_dataframe['UserID'].values, URM_all_dataframe['ItemID'].values)))
-    URM_all = URM_all.tocsr()
-
-    URM_train_validation, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
-    URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_train_validation, train_percentage=0.80)
+    URM_train_validation = sps.load_npz('../input_files/URM_train_plus_validation.npz')
+    URM_test = sps.load_npz('../input_files/URM_test.npz')
+    URM_validation = sps.load_npz('../input_files/URM_validation.npz')
+    URM_train = sps.load_npz('../input_files/URM_train.npz')
 
     evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[10])
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=[10])
@@ -89,10 +87,10 @@ def __main__():
     print("ItemKNNSimilarityTripleHybridRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    ALS = ALSRecommender.ALS(URM_train)
-    ALS.load_model(folder_path, ALS64)
+    IALS = IALSRecommender.IALSRecommender(URM_train)
+    IALS.load_model(folder_path, IALS64)
 
-    results, _ = evaluator.evaluateRecommender(ALS)
+    results, _ = evaluator.evaluateRecommender(IALS)
     print("ALSRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
@@ -104,18 +102,16 @@ def __main__():
 
     recommenders = {
         "MultVAE": MultVAE,
-        "ALS": ALS,
-        "EASE_R": EASE_R,
+        "IALS": IALS,
         "Hybrid": hybrid_recommender,
         "SLIM": SLIM_recommender
     }
 
     hyperparameters_range_dictionary = {
-        "MultVAE": Real(low=29.0, high=33.0, prior='uniform'),
-        "ALS": Real(low=2.0, high=3.0, prior='uniform'),
-        "EASE_R": Real(low=-2.0, high=0.0, prior='uniform'),
-        "Hybrid": Real(low=8.0, high=10, prior='uniform'),
-        "SLIM": Real(low=2.0, high=3.0, prior='uniform'),
+        "MultVAE": Real(low=12.0, high=15.0, prior='uniform'),
+        "IALS": Real(low=-2.0, high=3.0, prior='uniform'),
+        "Hybrid": Real(low=1.0, high=5.0, prior='uniform'),
+        "SLIM": Real(low=1.0, high=3.0, prior='uniform'),
     }
 
     recommender_class = HybridLinear

@@ -2,7 +2,7 @@ import scipy.sparse as sps
 
 from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.SLIM import SLIMElasticNetRecommender
-from challenge.utils.functions import read_data, generate_submission_csv
+from challenge.utils.functions import read_data
 
 
 def __main__():
@@ -14,9 +14,10 @@ def __main__():
     URM_train = sps.load_npz('../input_files/URM_train.npz')
     URM_test = sps.load_npz('../input_files/URM_test.npz')
     URM_all = sps.load_npz('../input_files/URM_all.npz')
+    URM_train_validation = sps.load_npz('../input_files/URM_train_plus_validation.npz')
 
     recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
-    recommender.fit(topK=80, l1_ratio=0.02515808645930968, alpha=0.0020708761507802933, positive_only=True)
+    recommender.fit(topK=300, l1_ratio=0.08108498131748361, alpha=0.0011722684324277951, positive_only=True)
 
     recommender.save_model(folder_path="../result_experiments/", file_name="SLIMElasticNetRecommender_best_model64.zip")
 
@@ -25,6 +26,26 @@ def __main__():
 
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
+    recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train_validation)
+    recommender.fit(topK=300, l1_ratio=0.08108498131748361, alpha=0.0011722684324277951, positive_only=True)
+
+    recommender.save_model(folder_path="../result_experiments/", file_name="SLIMElasticNetRecommender_best_model80.zip")
+
+    evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
+    results, _ = evaluator.evaluateRecommender(recommender)
+
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_all)
+    recommender.fit(topK=300, l1_ratio=0.08108498131748361, alpha=0.0011722684324277951, positive_only=True)
+
+    recommender.save_model(folder_path="../result_experiments/",
+                           file_name="SLIMElasticNetRecommender_best_model100.zip")
+
+    evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
+    results, _ = evaluator.evaluateRecommender(recommender)
+
+    print("MAP: {}".format(results.loc[10]["MAP"]))
 
 
 if __name__ == '__main__':
