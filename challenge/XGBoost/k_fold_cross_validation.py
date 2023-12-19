@@ -2,22 +2,57 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sps
 import xgboost as xgb
-from sklearn.metrics import classification_report
-from sklearn.model_selection import GridSearchCV
+from hyperopt import fmin, tpe, Trials, STATUS_OK, hp
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
+from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.GraphBased import P3alphaRecommender, RP3betaRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
 from Recommenders.NonPersonalizedRecommender import TopPop
 from challenge.utils.functions import read_data
 
 
+def evaluate_model(model, X_val, y_val, groups_val, cutoff):
+    y_pred = model.predict(X_val)
+
+    ap_scores = []
+    start = 0
+    for group_size in groups_val:
+        end = start + group_size
+        actual_items = set(y_val[start:end])
+        predicted_items = y_pred[start:end]
+        predicted_items_sorted = [x for _, x in sorted(zip(predicted_items, range(len(predicted_items))), reverse=True)]
+        ap_scores.append(average_precision(cutoff, actual_items, predicted_items_sorted))
+        start = end
+
+    return np.mean(ap_scores)
+
+
+def average_precision(at_k, true_items, predicted_items):
+    if len(predicted_items) > at_k:
+        predicted_items = predicted_items[:at_k]
+
+    score = 0.0
+    num_hits = 0.0
+
+    for i, p in enumerate(predicted_items):
+        if p in true_items and p not in predicted_items[:i]:
+            num_hits += 1.0
+            score += num_hits / (i + 1.0)
+
+    if not true_items:
+        return 0.0
+
+    return score / min(len(true_items), at_k)
+
+
 def __main__():
     cutoff_real = 10
     cutoff_xgb = 20
+    cutoff_list = [cutoff_real]
     submission_file_path = '../output_files/XGBoostSubmission.csv'
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
@@ -31,19 +66,18 @@ def __main__():
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
     URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_train, train_percentage=0.80)
 
-    URM_train_recommenders, URM_train_booster = train_test_split(URM_train, test_size=0.5, random_state=42)
+    evaluator = EvaluatorHoldout(URM_validation, cutoff_list=cutoff_list)
 
-    param_grid = {
-        'n_estimators': [50],
-        'learning_rate': [1e-2],
-        'reg_alpha': [1],
-        'reg_lambda': [1],
-        'max_depth': [5],
-        'max_leaves': [5],
-        'grow_policy': ['depthwise'],
-        'objective': ['binary:logistic'],
-        'booster': ['gbtree'],
-        'enable_categorical': [True],
+    space = {
+        'n_estimators': hp.choice('n_estimators', [50, 100, 200]),
+        'learning_rate': hp.loguniform('learning_rate', np.log(0.01), np.log(0.2)),
+        'reg_alpha': hp.uniform('reg_alpha', 0, 5),
+        'reg_lambda': hp.uniform('reg_lambda', 0, 5),
+        'max_depth': hp.choice('max_depth', [5, 10, 15]),
+        'max_leaves': hp.choice('max_leaves', [0, 5, 10]),
+        'grow_policy': hp.choice('grow_policy', ['depthwise', 'lossguide']),
+        'booster': 'gbtree',
+        'enable_categorical': True
     }
 
     n_users, n_items = URM_train.shape
@@ -52,6 +86,11 @@ def __main__():
     rp3beta.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086, min_rating=0.2588031389774553,
                 implicit=True, normalize_similarity=True)
     RP3_Wsparse = rp3beta.W_sparse
+
+    results, _ = evaluator.evaluateRecommender(rp3beta)
+    print("RP3betaRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+    baseline_map = results.loc[10]["MAP"]
 
     training_dataframe = pd.DataFrame(index=range(0, n_users), columns=["ItemID"])
     training_dataframe.index.name = 'UserID'
@@ -112,76 +151,51 @@ def __main__():
     X_train["UserID"] = X_train["UserID"].astype("category")
     X_train["ItemID"] = X_train["ItemID"].astype("category")
 
-    groups = training_dataframe.groupby("UserID").size().values
+    X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.2, random_state=42)
 
-    objective = 'pairwise'
-    model = xgb.XGBRanker(objective='rank:{}'.format(objective), enable_categorical=True)
+    groups_val = X_val.groupby("UserID").size().values
+    groups = X_train.groupby("UserID").size().values
 
-    grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=10, error_score='raise')
-    grid_search.fit(X_train, y_train, group=groups, verbose=True)
+    def obj(params):
+        model = xgb.XGBRanker(objective='rank:pairwise', **params)
+        model.fit(X_train, y_train, group=groups, verbose=True)
 
-    print("Migliori parametri: ", grid_search.best_params_)
-    print("Miglior score: ", grid_search.best_score_)
-    print("Miglior modello: ", grid_search.best_estimator_)
+        y_pred = model.predict(X_val)
 
-    results = pd.DataFrame(grid_search.cv_results_)
-    path = '../result_experiments/XGBoostGridSearchResults.csv'
+        ap_scores = []
+        start = 0
+        for group_size in groups_val:  # groups_val è l'array che indica la dimensione di ciascun gruppo nel set di validazione
+            end = start + group_size
+            actual_items = set(y_val[start:end])
+            predicted_items = y_pred[start:end]
+            predicted_items_sorted = [x for _, x in
+                                      sorted(zip(predicted_items, range(len(predicted_items))), reverse=True)]
+            ap_scores.append(average_precision(cutoff_real, actual_items, predicted_items_sorted))
+            start = end
+
+        score = np.mean(ap_scores)
+
+        return {'loss': -score, 'status': STATUS_OK}
+
+    trials = Trials()
+    best_params = fmin(fn=obj,
+                       space=space,
+                       algo=tpe.suggest,
+                       max_evals=2,
+                       trials=trials)
+
+    print("Migliori parametri: ", best_params)
+
+    model_optimized = xgb.XGBRanker(objective='rank:pairwise', **best_params, enable_categorical=True)
+    model_optimized.fit(X_train, y_train, group=groups, verbose=True)
+    optimized_map = evaluate_model(model_optimized, X_val, y_val, groups_val, cutoff_real)
+    print("Optimized MAP: ", optimized_map)
+
+    print(f"Improvement: {optimized_map - baseline_map}")
+
+    results = pd.DataFrame(trials.results)
+    path = '../result_experiments/XGBoostBayesianOptimizationResults.csv'
     results.to_csv(path, index=False)
-
-
-def model_training(X, y, n_trees, mdepth, gamma, lam):
-    ##### Step 1 - Create training and testing samples
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-    ##### Step 2 - Set model and its parameters
-    model = xgb.XGBClassifier(use_label_encoder=False,
-                              booster='gbtree',  # boosting algorithm to use, default gbtree, othera: gblinear, dart
-                              n_estimators=n_trees,  # number of trees, default = 100
-                              eta=0.3,  # this is learning rate, default = 0.3
-                              max_depth=mdepth,  # maximum depth of the tree, default = 6
-                              gamma=gamma,  # used for pruning, if gain < gamma the branch will be pruned, default = 0
-                              reg_lambda=lam,  # regularization parameter, defautl = 1
-                              # min_child_weight=0 # this refers to Cover which is also responsible for pruning if not set to 0
-                              )
-
-    # Fit the model
-    clf = model.fit(X_train, y_train)
-
-    ##### Step 3
-    # Predict class labels on training data
-    pred_labels_tr = model.predict(X_train)
-    # Predict class labels on a test data
-    pred_labels_te = model.predict(X_test)
-
-    print("Training predictions: ", pred_labels_tr)
-    print("Testing predictions: ", pred_labels_te)
-
-    ##### Step 4 - Model summary
-    # Basic info about the model
-    print('*************** Tree Summary ***************')
-    print('No. of classes: ', clf.n_classes_)
-    print('Classes: ', clf.classes_)
-    print('No. of features: ', clf.n_features_in_)
-    print('No. of Estimators: ', clf.n_estimators)
-    print('--------------------------------------------------------')
-    print("")
-
-    print('*************** Evaluation on Test Data ***************')
-    score_te = model.score(X_test, y_test)
-    print('Accuracy Score: ', score_te)
-    # Look at classification report to evaluate the model
-    print(classification_report(y_test, pred_labels_te))
-    print('--------------------------------------------------------')
-    print("")
-
-    print('*************** Evaluation on Training Data ***************')
-    score_tr = model.score(X_train, y_train)
-    print('Accuracy Score: ', score_tr)
-    # Look at classification report to evaluate the model
-    print(classification_report(y_train, pred_labels_tr))
-    print('--------------------------------------------------------')
-
-    return clf, X_test, y_test
 
 
 if __name__ == '__main__':
