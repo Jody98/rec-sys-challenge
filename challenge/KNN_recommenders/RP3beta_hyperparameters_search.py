@@ -23,8 +23,8 @@ def __main__():
     URM_validation = sps.load_npz('../input_files/URM_validation.npz')
     URM_train = sps.load_npz('../input_files/URM_train.npz')
 
-    evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[10])
-    evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
+    evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[15])
+    evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[15])
 
     hyperparameters_range_dictionary = {
         "topK": Integer(20, 40),
@@ -63,7 +63,7 @@ def __main__():
     n_cases = 100
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
-    cutoff_to_optimize = 10
+    cutoff_to_optimize = 15
 
     hyperparameterSearch.search(recommender_input_args,
                                 recommender_input_args_last_test=recommender_input_args_last_test,
