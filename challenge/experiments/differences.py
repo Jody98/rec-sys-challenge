@@ -18,4 +18,4 @@ def confronta_csv(file1, file2):
             print(f"Riga {index}:\n{row}\n")
 
 
-confronta_csv('../output_files/XGBoostSubmissionReranked.csv', '../output_files/XGBoostSubmission.csv')
+confronta_csv('../output_files/RP3betaSubmission.csv', '../output_files/XGBoostSubmission.csv')

@@ -15,12 +15,13 @@ def __main__():
 
     URM_train = sps.load_npz("../input_files/URM_train_plus_validation.npz")
     URM_test = sps.load_npz("../input_files/URM_test.npz")
+    URM_all = sps.load_npz("../input_files/URM_all.npz")
 
-    recommender = RP3betaRecommender.RP3betaRecommender(URM_train)
+    recommender = RP3betaRecommender.RP3betaRecommender(URM_all)
     recommender.fit(topK=34, alpha=0.3448482467180575, beta=0.13785489866910575, min_rating=0.47764865453012056,
                     implicit=True, normalize_similarity=True)
 
-    recommended_items = recommender.recommend(users_list, cutoff=15)
+    recommended_items = recommender.recommend(users_list, cutoff=10)
     recommendations = []
     for i in zip(users_list, recommended_items):
         recommendation = {"user_id": i[0], "item_list": i[1]}

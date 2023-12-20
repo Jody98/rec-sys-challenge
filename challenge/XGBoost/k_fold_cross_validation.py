@@ -2,14 +2,11 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sps
 import xgboost as xgb
-from hyperopt import fmin, tpe, Trials, STATUS_OK, hp
-from sklearn.model_selection import GroupKFold
-from sklearn.model_selection import KFold
+from hyperopt import hp
+from sklearn.model_selection import GroupKFold, train_test_split
 from tqdm import tqdm
 from xgboost import plot_importance
 
-from Data_manager.split_functions.split_train_validation_random_holdout import \
-    split_train_in_two_percentage_global_sample
 from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.GraphBased import P3alphaRecommender, RP3betaRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
@@ -48,41 +45,6 @@ def cross_val_score_model(X, y, groups_fitting, params, n_splits=5):
 
         # Calcola MAP per il fold corrente
         map_score = mean_average_precision(recommendations, relevancies, k=10)
-        map_scores.append(map_score)
-
-    return np.mean(map_scores)
-
-
-def cross_val_score_modelv2(X, y, groups, params, n_splits=5):
-    cutoff_real = 10
-    kf = KFold(n_splits=n_splits, shuffle=True, random_state=42)
-    map_scores = []
-
-    for train_index, test_index in kf.split(X, groups=groups):
-        X_train, X_val = X.iloc[train_index], X.iloc[test_index]
-        y_train, y_val = y.iloc[train_index], y.iloc[test_index]
-        groups_train, groups_val = groups[train_index], groups[test_index]
-
-        model = xgb.XGBRanker(objective='rank:pairwise', **params, enable_categorical=True, booster='gbtree')
-        model.fit(X_train, y_train, group=groups_train, verbose=False)
-
-        # Preparare le raccomandazioni e le rilevanze
-        recommendations = []
-        relevancies = []
-        unique_users = X_val['UserID'].unique()
-        for user_id in unique_users:
-            user_data = X_val[X_val['UserID'] == user_id]
-            user_items = user_data['ItemID'].values
-            user_true_item = y_val[X_val['UserID'] == user_id].values
-            user_pred = model.predict(user_data)
-
-            # Ordina gli items per il punteggio predetto
-            recommended_items = user_items[np.argsort(user_pred)[::-1]]
-            recommendations.append(recommended_items)
-            relevancies.append(user_true_item)
-
-        # Calcola MAP per il fold corrente
-        map_score = mean_average_precision(recommendations, relevancies, k=cutoff_real)
         map_scores.append(map_score)
 
     return np.mean(map_scores)
@@ -174,11 +136,9 @@ def __main__():
 
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
-    URM_all = sps.coo_matrix(
-        (URM_all_dataframe['Data'].values, (URM_all_dataframe['UserID'].values, URM_all_dataframe['ItemID'].values)))
-    URM_all = URM_all.tocsr()
-
-    URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
+    URM_train = sps.load_npz('../input_files/URM_train_plus_validation.npz')
+    URM_validation = sps.load_npz('../input_files/URM_test.npz')
+    URM_all = sps.load_npz('../input_files/URM_all.npz')
 
     evaluator = EvaluatorHoldout(URM_validation, cutoff_list=cutoff_list)
 
@@ -207,7 +167,7 @@ def __main__():
         relevant_items = URM_validation.indices[start_pos:end_pos]
         relevancies.append(relevant_items)
 
-    rp3beta = RP3betaRecommender.RP3betaRecommender(URM_train)
+    rp3beta = RP3betaRecommender.RP3betaRecommender(URM_all)
     rp3beta.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086, min_rating=0.2588031389774553,
                 implicit=True, normalize_similarity=True)
     RP3_Wsparse = rp3beta.W_sparse
@@ -244,14 +204,14 @@ def __main__():
     training_dataframe["Label"] = training_dataframe["Exist"] == "both"
     training_dataframe.drop(columns=['Exist'], inplace=True)
 
-    topPop = TopPop(URM_train)
+    topPop = TopPop(URM_all)
     topPop.fit()
 
     results, _ = evaluator.evaluateRecommender(topPop)
     print("TopPop")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
+    item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_all)
     item_recommender.fit(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.03642489209084876,
                          tversky_beta=0.9961018325655608)
     item_Wsparse = item_recommender.W_sparse
@@ -260,7 +220,7 @@ def __main__():
     print("ItemKNNCFRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
+    P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_all)
     P3_recommender.fit(topK=40, alpha=0.3119217553589628, min_rating=0.01, implicit=True, normalize_similarity=True)
     p3alpha_Wsparse = P3_recommender.W_sparse
 
@@ -268,7 +228,7 @@ def __main__():
     print("P3alphaRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
+    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_all)
     SLIM_recommender.load_model(folder_path, SLIM80)
     SLIM_Wsparse = SLIM_recommender.W_sparse
 
@@ -276,14 +236,14 @@ def __main__():
     print("SLIMElasticNetRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    ALS = ALSRecommender.ALS(URM_train)
+    ALS = ALSRecommender.ALS(URM_all)
     ALS.load_model(folder_path, ALS80)
 
     results, _ = evaluator.evaluateRecommender(ALS)
     print("ALSRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    MultVAE = MultVAERecommender_PyTorch_OptimizerMask(URM_train)
+    MultVAE = MultVAERecommender_PyTorch_OptimizerMask(URM_all)
     MultVAE.load_model(folder_path, MultVAE80)
 
     results, _ = evaluator.evaluateRecommender(MultVAE)
@@ -292,7 +252,10 @@ def __main__():
     other_algorithms = {
         "TopPop": topPop,
         "ItemKNNCF": item_recommender,
-        "P3alpha": p3alpha,
+        "P3alpha": P3_recommender,
+        "SLIM": SLIM_recommender,
+        "ALS": ALS,
+        "MultVAE": MultVAE,
     }
 
     training_dataframe = training_dataframe.set_index('UserID')
@@ -312,15 +275,15 @@ def __main__():
     user_popularity = np.ediff1d(sps.csr_matrix(URM_all).indptr)
     training_dataframe['user_profile_len'] = user_popularity[training_dataframe["UserID"].values.astype(int)]
 
-    y_train = training_dataframe["Label"]
-    X_train = training_dataframe.drop(columns=["Label"])
-    X_train["UserID"] = X_train["UserID"].astype("category")
-    X_train["ItemID"] = X_train["ItemID"].astype("category")
+    y = training_dataframe["Label"]
+    X = training_dataframe.drop(columns=["Label"])
+    X["UserID"] = X["UserID"].astype("category")
+    X["ItemID"] = X["ItemID"].astype("category")
 
-    groups = X_train.groupby("UserID").size().values
+    groups = X.groupby("UserID").size().values
 
-    def obj(params):
-        score = cross_val_score_model(X_train, y_train, groups, params)
+    '''def obj(params):
+        score = cross_val_score_model(X, y, groups, params)
         return {'loss': -score, 'status': STATUS_OK}
 
     trials = Trials()
@@ -336,21 +299,23 @@ def __main__():
         'grow_policy': grow_policy_choices[best_indices['grow_policy']],
     }
 
-    print("Best Hyperparameters: ", best_params)
+    print("Best Hyperparameters: ", best_params)'''
+
+    best_params = {'n_estimators': 500, 'learning_rate': 0.01976628967921279, 'reg_alpha': 4.485706814295765,
+                   'reg_lambda': 1.892473750149165, 'max_depth': 10, 'max_leaves': 10, 'grow_policy': 'lossguide'}
+
+    # split train and test
+    X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, shuffle=True)
 
     model_optimized = xgb.XGBRanker(objective='rank:pairwise', **best_params, enable_categorical=True, booster='gbtree')
-    model_optimized.fit(X_train, y_train, group=groups, verbose=True)
-
-    results = pd.DataFrame(trials.results)
-    path = '../result_experiments/XGBoostBayesianOptimizationResults.csv'
-    results.to_csv(path, index=False)
+    model_optimized.fit(X, y, group=groups, verbose=True) # , eval_set=[(X_val, y_val)], eval_group=[groups_val])
 
     reranked_df = pd.DataFrame(index=range(0, n_users), columns=["ItemID"])
     reranked_df.index.name = 'UserID'
 
     recommendations = []
     for user_id in tqdm(range(n_users)):
-        X_to_predict = X_train[X_train["UserID"] == user_id]
+        X_to_predict = X[X["UserID"] == user_id]
         X_prediction = model_optimized.predict(X_to_predict)
         dict_prediction = dict(zip(X_to_predict["ItemID"], X_prediction))
         dict_prediction = {k: v for k, v in sorted(dict_prediction.items(), key=lambda item: item[1], reverse=True)}
