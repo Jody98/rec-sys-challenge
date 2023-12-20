@@ -13,7 +13,10 @@ from Data_manager.split_functions.split_train_validation_random_holdout import \
 from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.GraphBased import P3alphaRecommender, RP3betaRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
+from Recommenders.MatrixFactorization import ALSRecommender
+from Recommenders.Neural.MultVAERecommender import MultVAERecommender_PyTorch_OptimizerMask
 from Recommenders.NonPersonalizedRecommender import TopPop
+from Recommenders.SLIM import SLIMElasticNetRecommender
 from challenge.utils.functions import read_data
 
 
@@ -159,6 +162,12 @@ def __main__():
     cutoff_real = 10
     cutoff_xgb = 20
     cutoff_list = [cutoff_real]
+    folder_path = "../result_experiments/"
+    EASE80 = "EASE_R_Recommender_best_model80.zip"
+    SLIM80 = "SLIMElasticNetRecommender_best_model80.zip"
+    MultVAE80 = "MultVAERecommender_best_model80.zip"
+    ALS80 = "ALSRecommender_best_model80.zip"
+    IALS80 = "IALSRecommender_best_model80.zip"
     submission_file_path = '../output_files/XGBoostSubmission.csv'
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
@@ -238,13 +247,47 @@ def __main__():
     topPop = TopPop(URM_train)
     topPop.fit()
 
-    item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
-    item_recommender.fit(topK=10, shrink=19, similarity='jaccard', normalize=False,
-                         feature_weighting="TF-IDF")
+    results, _ = evaluator.evaluateRecommender(topPop)
+    print("TopPop")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    p3alpha = P3alphaRecommender.P3alphaRecommender(URM_train)
-    p3alpha.fit(topK=64, alpha=0.35496275558011753, min_rating=0.1, implicit=True,
-                normalize_similarity=True)
+    item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
+    item_recommender.fit(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.03642489209084876,
+                         tversky_beta=0.9961018325655608)
+    item_Wsparse = item_recommender.W_sparse
+
+    results, _ = evaluator.evaluateRecommender(item_recommender)
+    print("ItemKNNCFRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
+    P3_recommender.fit(topK=40, alpha=0.3119217553589628, min_rating=0.01, implicit=True, normalize_similarity=True)
+    p3alpha_Wsparse = P3_recommender.W_sparse
+
+    results, _ = evaluator.evaluateRecommender(P3_recommender)
+    print("P3alphaRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
+    SLIM_recommender.load_model(folder_path, SLIM80)
+    SLIM_Wsparse = SLIM_recommender.W_sparse
+
+    results, _ = evaluator.evaluateRecommender(SLIM_recommender)
+    print("SLIMElasticNetRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    ALS = ALSRecommender.ALS(URM_train)
+    ALS.load_model(folder_path, ALS80)
+
+    results, _ = evaluator.evaluateRecommender(ALS)
+    print("ALSRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    MultVAE = MultVAERecommender_PyTorch_OptimizerMask(URM_train)
+    MultVAE.load_model(folder_path, MultVAE80)
+
+    results, _ = evaluator.evaluateRecommender(MultVAE)
+    print("MultVAE MAP: {}".format(results.loc[10]["MAP"]))
 
     other_algorithms = {
         "TopPop": topPop,
@@ -276,33 +319,12 @@ def __main__():
 
     groups = X_train.groupby("UserID").size().values
 
-    '''def obj(params):
-        model = xgb.XGBRanker(objective='rank:pairwise', **params, enable_categorical=True, booster='gbtree')
-        model.fit(X_train, y_train, group=groups, verbose=True)
-
-        y_pred = model.predict(X_val)
-
-        ap_scores = []
-        start = 0
-        for group_size in groups_val:  # groups_val è l'array che indica la dimensione di ciascun gruppo nel set di validazione
-            end = start + group_size
-            actual_items = set(y_val[start:end])
-            predicted_items = y_pred[start:end]
-            predicted_items_sorted = [x for _, x in
-                                      sorted(zip(predicted_items, range(len(predicted_items))), reverse=True)]
-            ap_scores.append(average_precision(cutoff_real, actual_items, predicted_items_sorted))
-            start = end
-
-        score = np.mean(ap_scores)
-
-        return {'loss': -score, 'status': STATUS_OK}'''
-
     def obj(params):
         score = cross_val_score_model(X_train, y_train, groups, params)
         return {'loss': -score, 'status': STATUS_OK}
 
     trials = Trials()
-    best_indices = fmin(fn=obj, space=space, algo=tpe.suggest, max_evals=2, trials=trials)
+    best_indices = fmin(fn=obj, space=space, algo=tpe.suggest, max_evals=10, trials=trials)
 
     best_params = {
         'n_estimators': n_estimators_choices[best_indices['n_estimators']],
