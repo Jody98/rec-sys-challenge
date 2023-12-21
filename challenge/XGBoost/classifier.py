@@ -205,6 +205,7 @@ def __main__():
     results, _ = evaluator.evaluateRecommender(RP3_recommender)
     print("RP3betaRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
+    print("RECALL: {}".format(results.loc[10]["RECALL"]))
 
     hybrid_recommender = ItemKNNSimilarityTripleHybridRecommender(URM_train, p3alpha_Wsparse, item_Wsparse, RP3_Wsparse)
     hybrid_recommender.fit(topK=225, alpha=0.4976629488640914, beta=0.13017801200221196)
@@ -251,19 +252,19 @@ def __main__():
     recommenders = {
         "MultVAE": MultVAE,
         "ALS": IALS,
-        "EASE_R": EASE_R,
         "Hybrid": RP3_recommender,
         "SLIM": SLIM_recommender,
         "Item": item_recommender
     }
 
     all_recommender = HybridLinear(URM_train, recommenders)
-    all_recommender.fit(MultVAE=12, ALS=-0.38442274063330273, EASE_R=0,
-                        Hybrid=1.7016467362004866, SLIM=1.9523771152704132, Item=0.5974437062485289)
+    all_recommender.fit(MultVAE=14.180249222221073, ALS=-0.38442274063330273,
+                        Hybrid=2.060407131177933, SLIM=2.945116702486108, Item=0.9737256690221096)
 
     results, _ = evaluator.evaluateRecommender(all_recommender)
     print("HybridLinear")
     print("MAP: {}".format(results.loc[10]["MAP"]))
+    print("RECALL: {}".format(results.loc[10]["RECALL"]))
 
     training_dataframe = pd.DataFrame(index=range(0, n_users), columns=["ItemID"])
     training_dataframe.index.name = 'UserID'

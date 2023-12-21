@@ -102,16 +102,18 @@ def __main__():
 
     recommenders = {
         "MultVAE": MultVAE,
-        "IALS": IALS,
-        "Hybrid": hybrid_recommender,
-        "SLIM": SLIM_recommender
+        "ALS": IALS,
+        "Hybrid": RP3_recommender,
+        "SLIM": SLIM_recommender,
+        "Item": item_recommender
     }
 
     hyperparameters_range_dictionary = {
-        "MultVAE": Real(low=12.0, high=15.0, prior='uniform'),
-        "IALS": Real(low=-2.0, high=3.0, prior='uniform'),
-        "Hybrid": Real(low=1.0, high=5.0, prior='uniform'),
-        "SLIM": Real(low=1.0, high=3.0, prior='uniform'),
+        "MultVAE": Real(low=11.0, high=17.0, prior='uniform'),
+        "ALS": Real(low=-2.0, high=3.0, prior='uniform'),
+        "Hybrid": Real(low=0.0, high=5.0, prior='uniform'),
+        "SLIM": Real(low=0.0, high=3.0, prior='uniform'),
+        "Item": Real(low=0.0, high=3.0, prior='uniform'),
     }
 
     recommender_class = HybridLinear
@@ -143,7 +145,7 @@ def __main__():
 
     n_cases = 20
     n_random_starts = int(n_cases * 0.3)
-    metric_to_optimize = "MAP"
+    metric_to_optimize = "RECALL"
     cutoff_to_optimize = 10
 
     hyperparameterSearch.search(recommender_input_args,
