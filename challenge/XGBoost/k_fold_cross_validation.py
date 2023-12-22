@@ -174,18 +174,18 @@ def __main__():
     evaluator = EvaluatorHoldout(URM_validation, cutoff_list=cutoff_list)
 
     space = {
-        'n_estimators': hp.choice('n_estimators', [150, 250, 400, 500, 750]),
-        'learning_rate': hp.loguniform('learning_rate', np.log(0.0001), np.log(0.1)),
-        'reg_alpha': hp.uniform('reg_alpha', 0, 5),
-        'reg_lambda': hp.uniform('reg_lambda', 0, 5),
-        'max_depth': hp.choice('max_depth', [1, 2, 3, 5, 10, 15]),
-        'max_leaves': hp.choice('max_leaves', [0, 1, 2, 3, 5, 10]),
+        'n_estimators': hp.choice('n_estimators', [50, 100, 150, 250, 400, 500, 750]),
+        'learning_rate': hp.loguniform('learning_rate', np.log(0.00001), np.log(0.1)),
+        'reg_alpha': hp.uniform('reg_alpha', 0, 7),
+        'reg_lambda': hp.uniform('reg_lambda', 0, 7),
+        'max_depth': hp.choice('max_depth', [0, 1, 2, 3, 5, 7, 10]),
+        'max_leaves': hp.choice('max_leaves', [0, 1, 2, 3, 5, 7, 10]),
         'grow_policy': hp.choice('grow_policy', ['depthwise', 'lossguide']),
     }
 
-    n_estimators_choices = [150, 250, 400, 500, 750]
-    max_depth_choices = [1, 2, 3, 5, 10, 15]
-    max_leaves_choices = [0, 1, 2, 3, 5, 10]
+    n_estimators_choices = [50, 100, 150, 250, 400, 500, 750]
+    max_depth_choices = [0, 1, 2, 3, 5, 7, 10]
+    max_leaves_choices = [0, 1, 2, 3, 5, 7, 10]
     grow_policy_choices = ['depthwise', 'lossguide']
 
     n_users, n_items = URM_all.shape
