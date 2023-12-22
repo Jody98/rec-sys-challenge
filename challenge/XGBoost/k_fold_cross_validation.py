@@ -20,6 +20,23 @@ from Recommenders.SLIM import SLIMElasticNetRecommender
 from challenge.utils.functions import read_data
 
 
+def get_additional_recommendations(user_id, num_additional_items, URM, popular_items):
+    user_interactions = URM[user_id].indices
+    additional_recommendations = []
+
+    for item in popular_items:
+        if item not in user_interactions and len(additional_recommendations) < num_additional_items:
+            additional_recommendations.append(item)
+
+    return additional_recommendations
+
+
+def get_popular_items(URM):
+    item_popularity = np.ediff1d(URM.tocsc().indptr)
+    popular_items = np.argsort(item_popularity)[::-1]
+    return popular_items
+
+
 def cross_val_score_model(X, y, groups_fitting, params, n_splits=5):
     gkf = GroupKFold(n_splits=n_splits)
     map_scores = []
@@ -27,11 +44,23 @@ def cross_val_score_model(X, y, groups_fitting, params, n_splits=5):
     groups = X['UserID'].values
 
     for train_index, test_index in gkf.split(X, y, groups=groups):
-        X_train, X_val = X.iloc[train_index], X.iloc[test_index]
-        y_train, y_val = y.iloc[train_index], y.iloc[test_index]
+        X_train_full, X_val = X.iloc[train_index], X.iloc[test_index]
+        y_train_full, y_val = y.iloc[train_index], y.iloc[test_index]
+
+        X_train, X_internal_val, y_train, y_internal_val = train_test_split(
+            X_train_full, y_train_full, test_size=0.2, random_state=42)
 
         model = xgb.XGBRanker(objective='rank:pairwise', **params, enable_categorical=True, booster='gbtree')
-        model.fit(X_train, y_train, group=groups_fitting[:10420], verbose=False)
+
+        model.fit(
+            X_train, y_train,
+            group=groups_fitting[:int(len(X_train)/20)],
+            eval_set=[(X_internal_val, y_internal_val)],
+            eval_group=[groups_fitting[:int(len(X_internal_val)/20)]],
+            verbose=False,
+            early_stopping_rounds=20,
+            eval_metric='map@10'
+        )
 
         recommendations = []
         relevancies = []
@@ -46,7 +75,6 @@ def cross_val_score_model(X, y, groups_fitting, params, n_splits=5):
             recommendations.append(recommended_items)
             relevancies.append(user_true_item)
 
-        # Calcola MAP per il fold corrente
         map_score = mean_average_precision(recommendations, relevancies, k=10)
         map_scores.append(map_score)
 
@@ -128,11 +156,11 @@ def __main__():
     cutoff_xgb = 20
     cutoff_list = [cutoff_real]
     folder_path = "../result_experiments/"
-    EASE80 = "EASE_R_Recommender_best_model80.zip"
-    SLIM80 = "SLIMElasticNetRecommender_best_model80.zip"
-    MultVAE80 = "MultVAERecommender_best_model80.zip"
-    ALS80 = "ALSRecommender_best_model80.zip"
-    IALS80 = "IALSRecommender_best_model80.zip"
+    EASE80 = "EASE_R_Recommender_best_model100.zip"
+    SLIM80 = "SLIMElasticNetRecommender_best_model100.zip"
+    MultVAE80 = "MultVAERecommender_best_model100.zip"
+    ALS80 = "ALSRecommender_best_model100.zip"
+    IALS80 = "IALSRecommender_best_model100.zip"
     submission_file_path = '../output_files/XGBoostSubmission.csv'
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
@@ -146,21 +174,21 @@ def __main__():
     evaluator = EvaluatorHoldout(URM_validation, cutoff_list=cutoff_list)
 
     space = {
-        'n_estimators': hp.choice('n_estimators', [250, 400, 500]),
-        'learning_rate': hp.loguniform('learning_rate', np.log(0.01), np.log(0.2)),
+        'n_estimators': hp.choice('n_estimators', [150, 250, 400, 500, 750]),
+        'learning_rate': hp.loguniform('learning_rate', np.log(0.0001), np.log(0.1)),
         'reg_alpha': hp.uniform('reg_alpha', 0, 5),
         'reg_lambda': hp.uniform('reg_lambda', 0, 5),
-        'max_depth': hp.choice('max_depth', [5, 10, 15]),
-        'max_leaves': hp.choice('max_leaves', [0, 5, 10]),
+        'max_depth': hp.choice('max_depth', [1, 2, 3, 5, 10, 15]),
+        'max_leaves': hp.choice('max_leaves', [0, 1, 2, 3, 5, 10]),
         'grow_policy': hp.choice('grow_policy', ['depthwise', 'lossguide']),
     }
 
-    n_estimators_choices = [250, 400, 500]
-    max_depth_choices = [5, 10, 15]
-    max_leaves_choices = [0, 5, 10]
+    n_estimators_choices = [150, 250, 400, 500, 750]
+    max_depth_choices = [1, 2, 3, 5, 10, 15]
+    max_leaves_choices = [0, 1, 2, 3, 5, 10]
     grow_policy_choices = ['depthwise', 'lossguide']
 
-    n_users, n_items = URM_train.shape
+    n_users, n_items = URM_all.shape
 
     relevancies = []
     for user_id in range(n_users):
@@ -170,31 +198,31 @@ def __main__():
         relevant_items = URM_validation.indices[start_pos:end_pos]
         relevancies.append(relevant_items)
 
-    topPop = TopPop(URM_train)
+    topPop = TopPop(URM_all)
     topPop.fit()
 
     results, _ = evaluator.evaluateRecommender(topPop)
     print("TopPop MAP: {}".format(results.loc[10]["MAP"]))
 
-    User = UserKNNCFRecommender.UserKNNCFRecommender(URM_train)
+    User = UserKNNCFRecommender.UserKNNCFRecommender(URM_all)
     User.fit(topK=400, shrink=8, similarity='jaccard', normalize=False, feature_weighting="TF-IDF")
 
     results, _ = evaluator.evaluateRecommender(User)
     print("UserKNNCFRecommender MAP: {}".format(results.loc[10]["MAP"]))
 
-    pureSVD = PureSVDRecommender.PureSVDRecommender(URM_train)
+    pureSVD = PureSVDRecommender.PureSVDRecommender(URM_all)
     pureSVD.fit(num_factors=43)
 
     results, _ = evaluator.evaluateRecommender(pureSVD)
     print("PureSVD MAP: {}".format(results.loc[10]["MAP"]))
 
-    pureSVDitem = PureSVDRecommender.PureSVDItemRecommender(URM_train)
+    pureSVDitem = PureSVDRecommender.PureSVDItemRecommender(URM_all)
     pureSVDitem.fit(num_factors=145, topK=28)
 
     results, _ = evaluator.evaluateRecommender(pureSVDitem)
     print("PureSVDItem MAP: {}".format(results.loc[10]["MAP"]))
 
-    item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
+    item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_all)
     item_recommender.fit(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.03642489209084876,
                          tversky_beta=0.9961018325655608)
     item_Wsparse = item_recommender.W_sparse
@@ -203,7 +231,7 @@ def __main__():
     print("ItemKNNCFRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
+    P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_all)
     P3_recommender.fit(topK=40, alpha=0.3119217553589628, min_rating=0.01, implicit=True, normalize_similarity=True)
     p3alpha_Wsparse = P3_recommender.W_sparse
 
@@ -211,7 +239,7 @@ def __main__():
     print("P3alphaRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_train)
+    RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_all)
     RP3_recommender.fit(topK=30, alpha=0.26362900188025656, beta=0.17133265585189086, min_rating=0.2588031389774553,
                         implicit=True, normalize_similarity=True)
     RP3_Wsparse = RP3_recommender.W_sparse
@@ -221,14 +249,14 @@ def __main__():
     print("MAP: {}".format(results.loc[10]["MAP"]))
     print("RECALL: {}".format(results.loc[10]["RECALL"]))
 
-    hybrid_recommender = ItemKNNSimilarityTripleHybridRecommender(URM_train, p3alpha_Wsparse, item_Wsparse, RP3_Wsparse)
+    hybrid_recommender = ItemKNNSimilarityTripleHybridRecommender(URM_all, p3alpha_Wsparse, item_Wsparse, RP3_Wsparse)
     hybrid_recommender.fit(topK=225, alpha=0.4976629488640914, beta=0.13017801200221196)
 
     results, _ = evaluator.evaluateRecommender(hybrid_recommender)
     print("ItemKNNSimilarityTripleHybridRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    EASE_R = EASE_R_Recommender.EASE_R_Recommender(URM_train)
+    EASE_R = EASE_R_Recommender.EASE_R_Recommender(URM_all)
     EASE_R.load_model(folder_path, EASE80)
     EASE_R_Wsparse = sps.csr_matrix(EASE_R.W_sparse)
 
@@ -236,7 +264,7 @@ def __main__():
     print("EASE_R_Recommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
+    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_all)
     SLIM_recommender.load_model(folder_path, SLIM80)
     SLIM_Wsparse = SLIM_recommender.W_sparse
 
@@ -244,20 +272,20 @@ def __main__():
     print("SLIMElasticNetRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    ALS = ALSRecommender.ALS(URM_train)
+    ALS = ALSRecommender.ALS(URM_all)
     ALS.load_model(folder_path, ALS80)
 
     results, _ = evaluator.evaluateRecommender(ALS)
     print("ALSRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    MultVAE = MultVAERecommender_PyTorch_OptimizerMask(URM_train)
+    MultVAE = MultVAERecommender_PyTorch_OptimizerMask(URM_all)
     MultVAE.load_model(folder_path, MultVAE80)
 
     results, _ = evaluator.evaluateRecommender(MultVAE)
     print("MultVAE MAP: {}".format(results.loc[10]["MAP"]))
 
-    IALS = IALSRecommender.IALSRecommender(URM_train)
+    IALS = IALSRecommender.IALSRecommender(URM_all)
     IALS.load_model(folder_path, IALS80)
 
     results, _ = evaluator.evaluateRecommender(IALS)
@@ -271,7 +299,7 @@ def __main__():
         "Item": item_recommender
     }
 
-    all_recommender = HybridLinear(URM_train, recommenders)
+    all_recommender = HybridLinear(URM_all, recommenders)
     all_recommender.fit(MultVAE=14.180249222221073, ALS=-0.38442274063330273,
                         Hybrid=2.060407131177933, SLIM=2.945116702486108, Item=0.9737256690221096)
 
@@ -283,9 +311,17 @@ def __main__():
     training_dataframe = pd.DataFrame(index=range(0, n_users), columns=["ItemID"])
     training_dataframe.index.name = 'UserID'
 
+    popular_items = get_popular_items(URM_all)
+
     recommendations = []
     for user_id in tqdm(range(n_users)):
         recommended_items = all_recommender.recommend(user_id, cutoff=cutoff_xgb)
+
+        if len(recommended_items) < cutoff_xgb:
+            num_additional_items = cutoff_xgb - len(recommended_items)
+            additional_items = get_additional_recommendations(user_id, num_additional_items, URM_all, popular_items)
+            recommended_items.extend(additional_items)
+
         training_dataframe.loc[user_id, "ItemID"] = recommended_items
         recommendations.append(recommended_items)
 
@@ -316,6 +352,12 @@ def __main__():
         "ALS": ALS,
         "MultVAE": MultVAE,
         "SLIM": SLIM_recommender,
+        "PureSVD": pureSVD,
+        "PureSVDitem": pureSVDitem,
+        "RP3beta": RP3_recommender,
+        "IALS": IALS,
+        "Hybrid": hybrid_recommender,
+        "EASE_R": EASE_R,
     }
 
     training_dataframe = training_dataframe.set_index('UserID')
@@ -354,12 +396,12 @@ def __main__():
 
     groups = X.groupby("UserID").size().values
 
-    def obj(params):
+    '''def obj(params):
         score = cross_val_score_model(X, y, groups, params)
         return {'loss': -score, 'status': STATUS_OK}
 
     trials = Trials()
-    best_indices = fmin(fn=obj, space=space, algo=tpe.suggest, max_evals=10, trials=trials)
+    best_indices = fmin(fn=obj, space=space, algo=tpe.suggest, max_evals=25, trials=trials)
 
     best_params = {
         'n_estimators': n_estimators_choices[best_indices['n_estimators']],
@@ -371,10 +413,10 @@ def __main__():
         'grow_policy': grow_policy_choices[best_indices['grow_policy']],
     }
 
-    print("Best Hyperparameters: ", best_params)
+    print("Best Hyperparameters: ", best_params)'''
 
-    # best_params = {'n_estimators': 500, 'learning_rate': 0.01976628967921279, 'reg_alpha': 4.485706814295765,
-    #              'reg_lambda': 1.892473750149165, 'max_depth': 10, 'max_leaves': 10, 'grow_policy': 'lossguide'}
+    best_params = {'n_estimators': 150, 'learning_rate': 0.00013609784874641523, 'reg_alpha': 4.67667151797596,
+                   'reg_lambda': 3.4764904641581107, 'max_depth': 5, 'max_leaves': 0, 'grow_policy': 'lossguide'}
 
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, shuffle=True)
     groups_train = groups[:10420]
@@ -384,12 +426,12 @@ def __main__():
                                     **best_params,
                                     enable_categorical=True,
                                     booster='gbtree',
-                                    eval_metric='map@10',
-                                    early_stopping_rounds=20,
+                                    #eval_metric='map@10',
+                                    #early_stopping_rounds=20,
                                     verbose=True)
     eval_set = [(X_val, y_val)]
     eval_group = [groups_val]
-    model_optimized.fit(X_train, y_train, group=groups_train, verbose=True, eval_set=eval_set, eval_group=eval_group)
+    model_optimized.fit(X, y, group=groups, verbose=True) # , eval_set=eval_set, eval_group=eval_group)
 
     reranked_df = pd.DataFrame(index=range(0, n_users), columns=["ItemID"])
     reranked_df.index.name = 'UserID'
