@@ -5,3 +5,38 @@ P@K: 0.08005374280230326
 R@K: 0.11363819419794978
 
 
+Hyperparameters: {'n_estimators': 10, 'learning_rate': 0.04022229786530477, 'reg_alpha': 6.027418060633826, 'reg_lambda': 6.994318856034219, 'max_depth': 2, 'max_leaves': 0, 'grow_policy': 'depthwise'}
+Improvement: 0.0006157893369598127
+MAP: 0.05854354284360883
+P@K: 0.07991554702495202
+R@K: 0.11454374356391017
+
+
+Hyperparameters: {'n_estimators': 25, 'learning_rate': 0.020802983948775434, 'reg_alpha': 4.984010312718711, 'reg_lambda': 6.542858440879238, 'max_depth': 3, 'max_leaves': 3, 'grow_policy': 'lossguide'}
+Improvement: 0.0007403929540690662
+MAP: 0.04472436188929354
+P@K: 0.053796545105566224
+R@K: 0.09520217186827104
+
+
+Hyperparameters: {'n_estimators': 100, 'learning_rate': 0.059037845910351265, 'reg_alpha': 6.622715176717106, 'reg_lambda': 1.2031250824790114, 'max_depth': 2, 'max_leaves': 5, 'grow_policy': 'lossguide'}
+Improvement: 0.003319574990635149
+MAP: 0.04730354392585962
+P@K: 0.0564299424184261
+R@K: 0.09856082972567883
+
+
+Hyperparameters: {'n_estimators': 5, 'learning_rate': 0.017768573640957453, 'reg_alpha': 5.904124457363594, 'reg_lambda': 1.8921010268376035, 'max_depth': 3, 'max_leaves': 7, 'grow_policy': 'lossguide'}
+Improvement: 0.0017552011530318837
+MAP: 0.059682954659680904
+P@K: 0.08142034548944338
+R@K: 0.11523474664231446
+
+
+Hyperparameters: {'n_estimators': 5, 'learning_rate': 0.017768573640957453, 'reg_alpha': 5.904124457363594, 'reg_lambda': 1.8921010268376035, 'max_depth': 3, 'max_leaves': 7, 'grow_policy': 'lossguide'}
+Improvement: 0.0
+MAP: 0.0
+P@K: 0.0
+R@K: 0.0
+
+
