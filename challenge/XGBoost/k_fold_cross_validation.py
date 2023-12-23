@@ -50,16 +50,21 @@ def cross_val_score_model(X, y, groups_fitting, params, n_splits=5):
         X_train, X_internal_val, y_train, y_internal_val = train_test_split(
             X_train_full, y_train_full, test_size=0.2, random_state=42)
 
-        model = xgb.XGBRanker(objective='rank:pairwise', **params, enable_categorical=True, booster='gbtree')
+        model = xgb.XGBRanker(
+            objective='rank:pairwise',
+            **params,
+            enable_categorical=True,
+            booster='gbtree',
+            early_stopping_rounds=20,
+            eval_metric='map@10'
+        )
 
         model.fit(
             X_train, y_train,
-            group=groups_fitting[:int(len(X_train)/20)],
+            group=groups_fitting[:int(len(X_train) / 20)],
             eval_set=[(X_internal_val, y_internal_val)],
-            eval_group=[groups_fitting[:int(len(X_internal_val)/20)]],
+            eval_group=[groups_fitting[:int(len(X_internal_val) / 20)]],
             verbose=False,
-            early_stopping_rounds=20,
-            eval_metric='map@10'
         )
 
         recommendations = []
@@ -338,8 +343,13 @@ def __main__():
     correct_recommendations = pd.DataFrame({"UserID": URM_validation_coo.row,
                                             "ItemID": URM_validation_coo.col})
 
-    training_dataframe = pd.merge(training_dataframe, correct_recommendations, on=['UserID', 'ItemID'], how='left',
-                                  indicator='Exist')
+    training_dataframe = pd.merge(
+        training_dataframe,
+        correct_recommendations,
+        on=['UserID', 'ItemID'],
+        how='left',
+        indicator='Exist'
+    )
 
     training_dataframe["Label"] = training_dataframe["Exist"] == "both"
     training_dataframe.drop(columns=['Exist'], inplace=True)
@@ -415,8 +425,8 @@ def __main__():
 
     print("Best Hyperparameters: ", best_params)
 
-    #best_params = {'n_estimators': 150, 'learning_rate': 0.00013609784874641523, 'reg_alpha': 4.67667151797596,
-    #               'reg_lambda': 3.4764904641581107, 'max_depth': 5, 'max_leaves': 0, 'grow_policy': 'lossguide'}
+    best_params = {'n_estimators': 50, 'learning_rate': 0.019465170738477183, 'reg_alpha': 3.5948331805557103,
+                   'reg_lambda': 5.4931538454823325, 'max_depth': 0, 'max_leaves': 0, 'grow_policy': 'depthwise'}
 
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, shuffle=True)
     groups_train = groups[:10420]
