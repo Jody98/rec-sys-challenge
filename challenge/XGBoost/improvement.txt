@@ -33,10 +33,3 @@ P@K: 0.08142034548944338
 R@K: 0.11523474664231446
 
 
-Hyperparameters: {'n_estimators': 5, 'learning_rate': 0.017768573640957453, 'reg_alpha': 5.904124457363594, 'reg_lambda': 1.8921010268376035, 'max_depth': 3, 'max_leaves': 7, 'grow_policy': 'lossguide'}
-Improvement: 0.0
-MAP: 0.0
-P@K: 0.0
-R@K: 0.0
-
-

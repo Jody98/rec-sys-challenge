@@ -255,18 +255,18 @@ def __main__():
     URM_all = sps.load_npz('../input_files/URM_all.npz')
 
     space = {
-        'n_estimators': hp.choice('n_estimators', [5, 10, 25, 50, 100]),
-        'learning_rate': hp.loguniform('learning_rate', np.log(0.0001), np.log(0.1)),
-        'reg_alpha': hp.uniform('reg_alpha', 1, 7),
-        'reg_lambda': hp.uniform('reg_lambda', 1, 7),
-        'max_depth': hp.choice('max_depth', [0, 1, 2, 3, 5]),
-        'max_leaves': hp.choice('max_leaves', [3, 5, 7]),
+        'n_estimators': hp.choice('n_estimators', [1, 2, 3, 5, 10, 25, 50, 80]),
+        'learning_rate': hp.loguniform('learning_rate', np.log(0.001), np.log(0.5)),
+        'reg_alpha': hp.uniform('reg_alpha', 0, 7),
+        'reg_lambda': hp.uniform('reg_lambda', 0, 7),
+        'max_depth': hp.choice('max_depth', [0, 1, 2, 3, 5, 7]),
+        'max_leaves': hp.choice('max_leaves', [3, 5, 7, 8, 10, 13]),
         'grow_policy': hp.choice('grow_policy', ['depthwise', 'lossguide']),
     }
 
-    n_estimators_choices = [5, 10, 25, 50, 100]
-    max_depth_choices = [0, 1, 2, 3, 5]
-    max_leaves_choices = [3, 5, 7]
+    n_estimators_choices = [1, 2, 3, 5, 10, 25, 50, 80]
+    max_depth_choices = [0, 1, 2, 3, 5, 7]
+    max_leaves_choices = [3, 5, 7, 8, 10, 13]
     grow_policy_choices = ['depthwise', 'lossguide']
 
     # best params using 80% of the data
@@ -366,12 +366,12 @@ def __main__():
 
     groups = X.groupby("UserID").size().values
 
-    '''def obj(params):
+    def obj(params):
         score = cross_val_score_model(X, y, groups, params)
         return {'loss': -score, 'status': STATUS_OK}
 
     trials = Trials()
-    best_indices = fmin(fn=obj, space=space, algo=tpe.suggest, max_evals=40, trials=trials)
+    best_indices = fmin(fn=obj, space=space, algo=tpe.suggest, max_evals=250, trials=trials)
 
     best_params = {
         'n_estimators': n_estimators_choices[best_indices['n_estimators']],
@@ -386,15 +386,15 @@ def __main__():
     print("Best Hyperparameters: ", best_params)
 
     with open("best_hyperparameters.txt", "a") as file:
-        file.write(str(best_params) + "\n")'''
+        file.write(str(best_params) + "\n")
 
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, shuffle=True)
     groups_train = groups[:10420]
     groups_val = groups[10420:]
 
     # best params using 80% of the data
-    best_params = {'n_estimators': 5, 'learning_rate': 0.017768573640957453, 'reg_alpha': 5.904124457363594,
-                   'reg_lambda': 1.8921010268376035, 'max_depth': 3, 'max_leaves': 7, 'grow_policy': 'lossguide'}
+    #best_params = {'n_estimators': 5, 'learning_rate': 0.017768573640957453, 'reg_alpha': 5.904124457363594,
+    #               'reg_lambda': 1.8921010268376035, 'max_depth': 3, 'max_leaves': 7, 'grow_policy': 'lossguide'}
 
     model_optimized = xgb.XGBRanker(
         objective='rank:pairwise',
@@ -407,9 +407,9 @@ def __main__():
     eval_set = [(X_val, y_val)]
     eval_group = [groups_val]
     model_optimized.fit(
-        X,
-        y,
-        group=groups,
+        X_train,
+        y_train,
+        group=groups_train,
         verbose=True,
     )
 
