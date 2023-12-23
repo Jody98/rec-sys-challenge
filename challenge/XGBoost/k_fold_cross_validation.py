@@ -179,19 +179,22 @@ def __main__():
     evaluator = EvaluatorHoldout(URM_validation, cutoff_list=cutoff_list)
 
     space = {
-        'n_estimators': hp.choice('n_estimators', [50, 100, 150, 250, 400, 500, 750]),
-        'learning_rate': hp.loguniform('learning_rate', np.log(0.00001), np.log(0.1)),
-        'reg_alpha': hp.uniform('reg_alpha', 0, 7),
-        'reg_lambda': hp.uniform('reg_lambda', 0, 7),
-        'max_depth': hp.choice('max_depth', [0, 1, 2, 3, 5, 7, 10]),
-        'max_leaves': hp.choice('max_leaves', [0, 1, 2, 3, 5, 7, 10]),
+        'n_estimators': hp.choice('n_estimators', [5, 10, 25, 50]),
+        'learning_rate': hp.loguniform('learning_rate', np.log(0.001), np.log(0.1)),
+        'reg_alpha': hp.uniform('reg_alpha', 3, 7),
+        'reg_lambda': hp.uniform('reg_lambda', 5, 7),
+        'max_depth': hp.choice('max_depth', [0, 1, 2, 3]),
+        'max_leaves': hp.choice('max_leaves', [0, 1, 2, 3]),
         'grow_policy': hp.choice('grow_policy', ['depthwise', 'lossguide']),
     }
 
-    n_estimators_choices = [50, 100, 150, 250, 400, 500, 750]
-    max_depth_choices = [0, 1, 2, 3, 5, 7, 10]
-    max_leaves_choices = [0, 1, 2, 3, 5, 7, 10]
+    n_estimators_choices = [5, 10, 25, 50]
+    max_depth_choices = [0, 1, 2, 3]
+    max_leaves_choices = [0, 1, 2, 3]
     grow_policy_choices = ['depthwise', 'lossguide']
+
+    best_params = {'n_estimators': 50, 'learning_rate': 0.019465170738477183, 'reg_alpha': 3.5948331805557103,
+                   'reg_lambda': 5.4931538454823325, 'max_depth': 0, 'max_leaves': 0, 'grow_policy': 'depthwise'}
 
     n_users, n_items = URM_all.shape
 
@@ -355,16 +358,16 @@ def __main__():
     training_dataframe.drop(columns=['Exist'], inplace=True)
 
     other_algorithms = {
-        "TopPop": topPop,
-        "UserKNNCF": User,
-        "ItemKNNCF": item_recommender,
-        "P3alpha": P3_recommender,
+        "Top": topPop,
+        "User": User,
+        "Item": item_recommender,
+        "P3": P3_recommender,
         "ALS": ALS,
         "MultVAE": MultVAE,
         "SLIM": SLIM_recommender,
-        "PureSVD": pureSVD,
-        "PureSVDitem": pureSVDitem,
-        "RP3beta": RP3_recommender,
+        "SVD": pureSVD,
+        "SVDitem": pureSVDitem,
+        "RP3": RP3_recommender,
         "IALS": IALS,
         "Hybrid": hybrid_recommender,
         "EASE_R": EASE_R,
@@ -411,7 +414,7 @@ def __main__():
         return {'loss': -score, 'status': STATUS_OK}
 
     trials = Trials()
-    best_indices = fmin(fn=obj, space=space, algo=tpe.suggest, max_evals=200, trials=trials)
+    best_indices = fmin(fn=obj, space=space, algo=tpe.suggest, max_evals=2, trials=trials)
 
     best_params = {
         'n_estimators': n_estimators_choices[best_indices['n_estimators']],
@@ -425,8 +428,8 @@ def __main__():
 
     print("Best Hyperparameters: ", best_params)
 
-    best_params = {'n_estimators': 50, 'learning_rate': 0.019465170738477183, 'reg_alpha': 3.5948331805557103,
-                   'reg_lambda': 5.4931538454823325, 'max_depth': 0, 'max_leaves': 0, 'grow_policy': 'depthwise'}
+    with open("best_hyperparameters.txt", "a") as file:
+        file.write(str(best_params) + "\n")
 
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, shuffle=True)
     groups_train = groups[:10420]
@@ -462,6 +465,14 @@ def __main__():
 
     print(f"MAP: {optimized_map}, P@K: {p_at_k}, R@K: {r_at_k}")
     print(f"Improvement: {optimized_map - baseline_map}")
+
+    with open("improvement.txt", "a") as file:
+        file.write("Hyperparameters: " + str(best_params) + "\n")
+        file.write("Improvement: " + str(optimized_map - baseline_map) + "\n")
+        file.write("MAP: " + str(optimized_map) + "\n")
+        file.write("P@K: " + str(p_at_k) + "\n")
+        file.write("R@K: " + str(r_at_k) + "\n")
+        file.write("\n\n")
 
     reranked_df['UserID'] = reranked_df.index
 

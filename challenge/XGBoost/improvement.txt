@@ -1,0 +1,7 @@
+Hyperparameters: {'n_estimators': 50, 'learning_rate': 0.0015100712663868889, 'reg_alpha': 4.0175364993891085, 'reg_lambda': 5.304413429846788, 'max_depth': 2, 'max_leaves': 1, 'grow_policy': 'depthwise'}
+Improvement: 0.0
+MAP: 0.05792775350664902
+P@K: 0.08005374280230326
+R@K: 0.11363819419794978
+
+

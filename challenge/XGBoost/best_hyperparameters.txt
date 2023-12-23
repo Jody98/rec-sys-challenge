@@ -1,0 +1,1 @@
+{'n_estimators': 50, 'learning_rate': 0.0015100712663868889, 'reg_alpha': 4.0175364993891085, 'reg_lambda': 5.304413429846788, 'max_depth': 2, 'max_leaves': 1, 'grow_policy': 'depthwise'}
