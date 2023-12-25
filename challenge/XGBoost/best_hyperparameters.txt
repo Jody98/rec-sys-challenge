@@ -3,3 +3,7 @@
 {'n_estimators': 25, 'learning_rate': 0.020802983948775434, 'reg_alpha': 4.984010312718711, 'reg_lambda': 6.542858440879238, 'max_depth': 3, 'max_leaves': 3, 'grow_policy': 'lossguide'}
 {'n_estimators': 100, 'learning_rate': 0.059037845910351265, 'reg_alpha': 6.622715176717106, 'reg_lambda': 1.2031250824790114, 'max_depth': 2, 'max_leaves': 5, 'grow_policy': 'lossguide'}
 {'n_estimators': 5, 'learning_rate': 0.017768573640957453, 'reg_alpha': 5.904124457363594, 'reg_lambda': 1.8921010268376035, 'max_depth': 3, 'max_leaves': 7, 'grow_policy': 'lossguide'}
+{'n_estimators': 3, 'learning_rate': 0.0035480615552776597, 'reg_alpha': 6.959417655252148, 'reg_lambda': 5.099029676267202, 'max_depth': 1, 'max_leaves': 7, 'grow_policy': 'depthwise'}
+{'n_estimators': 3, 'learning_rate': 0.0023185773040503544, 'reg_alpha': 6.50731354599449, 'reg_lambda': 5.008137366881983, 'max_depth': 1, 'max_leaves': 7, 'grow_policy': 'depthwise'}
+{'n_estimators': 100, 'learning_rate': 0.0026757244477811325, 'reg_alpha': 6.888153302117306, 'reg_lambda': 5.498580574996694, 'max_depth': 5, 'max_leaves': 9, 'grow_policy': 'depthwise'}
+{'n_estimators': 5, 'learning_rate': 0.0026072070993311837, 'reg_alpha': 8.842925592959542, 'reg_lambda': 7.780142430689461, 'max_depth': 7, 'max_leaves': 5, 'grow_policy': 'depthwise'}

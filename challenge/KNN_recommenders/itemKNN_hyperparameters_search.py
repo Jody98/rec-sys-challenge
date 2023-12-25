@@ -27,11 +27,11 @@ def __main__():
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(1, 20),
-        "shrink": Integer(1, 20),
+        "topK": Integer(8, 13),
+        "shrink": Integer(12, 15),
         "similarity": Categorical(["tversky"]),
-        "tversky_alpha": Real(low=0, high=1, prior='uniform'),
-        "tversky_beta": Real(low=0, high=1, prior='uniform')
+        "tversky_alpha": Real(low=0, high=0.1, prior='uniform'),
+        "tversky_beta": Real(low=0.9, high=1, prior='uniform')
     }
 
     recommender_class = ItemKNNCFRecommender
@@ -63,7 +63,7 @@ def __main__():
 
     n_cases = 100
     n_random_starts = int(n_cases * 0.3)
-    metric_to_optimize = "RECALL"
+    metric_to_optimize = "MAP"
     cutoff_to_optimize = 10
 
     hyperparameterSearch.search(recommender_input_args,

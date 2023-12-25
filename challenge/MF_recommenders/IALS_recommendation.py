@@ -1,10 +1,8 @@
 import scipy.sparse as sps
 
-from Data_manager.split_functions.split_train_validation_random_holdout import \
-    split_train_in_two_percentage_global_sample
 from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.MatrixFactorization import IALSRecommender
-from challenge.utils.functions import read_data, generate_submission_csv, evaluate_algorithm
+from challenge.utils.functions import read_data
 
 
 def __main__():
@@ -18,8 +16,9 @@ def __main__():
     URM_all = sps.load_npz('../input_files/URM_all.npz')
 
     recommender = IALSRecommender.IALSRecommender(URM_train_plus_validation)
-    recommender.fit(epochs=100, num_factors=173, confidence_scaling="linear", alpha=7.31319386499139, epsilon=0.0019197416753549824,
-                    reg=0.6581722208487086, init_mean=0.0, init_std=0.1)
+    recommender.fit(epochs=27, num_factors=157, confidence_scaling="linear", alpha=3.200536137225281,
+                    epsilon=0.0020667154823803733,
+                    reg=0.3275956463846864, init_mean=0.0, init_std=0.1)
 
     recommender.save_model(folder_path="../result_experiments/", file_name="IALSRecommender_best_model80.zip")
 

@@ -33,3 +33,45 @@ P@K: 0.08142034548944338
 R@K: 0.11523474664231446
 
 
+Hyperparameters: {'n_estimators': 3, 'learning_rate': 0.0035480615552776597, 'reg_alpha': 6.959417655252148, 'reg_lambda': 5.099029676267202, 'max_depth': 1, 'max_leaves': 7, 'grow_policy': 'depthwise'}
+Improvement: 0.0
+MAP: 0.0
+P@K: 0.0
+R@K: 0.0
+
+
+Hyperparameters: {'n_estimators': 3, 'learning_rate': 0.0023185773040503544, 'reg_alpha': 6.50731354599449, 'reg_lambda': 5.008137366881983, 'max_depth': 1, 'max_leaves': 7, 'grow_policy': 'depthwise'}
+Improvement: -5.215225994021494e-05
+MAP: 0.057875601246708805
+P@K: 0.07984644913627639
+R@K: 0.11358172541446851
+
+
+Hyperparameters: {'n_estimators': 100, 'learning_rate': 0.0026757244477811325, 'reg_alpha': 6.888153302117306, 'reg_lambda': 5.498580574996694, 'max_depth': 5, 'max_leaves': 9, 'grow_policy': 'depthwise'}
+Improvement: 0.0029039209915782335
+MAP: 0.06083167449822725
+P@K: 0.08278694817658348
+R@K: 0.11915419837539368
+
+
+Hyperparameters: {'n_estimators': 5, 'learning_rate': 0.0026072070993311837, 'reg_alpha': 8.842925592959542, 'reg_lambda': 7.780142430689461, 'max_depth': 7, 'max_leaves': 5, 'grow_policy': 'depthwise'}
+Improvement: 0.00034628432024161326
+MAP: 0.058466584739726185
+P@K: 0.08000767754318618
+R@K: 0.11515579442979522
+
+
+Hyperparameters: {'n_estimators': 5, 'learning_rate': 0.0026072070993311837, 'reg_alpha': 8.842925592959542, 'reg_lambda': 7.780142430689461, 'max_depth': 7, 'max_leaves': 5, 'grow_policy': 'depthwise'}
+Improvement: 0.0005681381957773513
+MAP: 0.0005681381957773513
+P@K: 0.00010748560460652593
+R@K: 0.0010748560460652591
+
+
+Hyperparameters: {'n_estimators': 5, 'learning_rate': 0.0026072070993311837, 'reg_alpha': 8.842925592959542, 'reg_lambda': 7.780142430689461, 'max_depth': 7, 'max_leaves': 5, 'grow_policy': 'depthwise'}
+Improvement: 0.0005681381957773513
+MAP: 0.0005681381957773513
+P@K: 0.00010748560460652593
+R@K: 0.0010748560460652591
+
+

@@ -2,7 +2,7 @@ import scipy.sparse as sps
 
 from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.KNN import ItemKNNCFRecommender
-from challenge.utils.functions import read_data, generate_submission_csv
+from challenge.utils.functions import read_data
 
 
 def __main__():
@@ -14,26 +14,21 @@ def __main__():
     URM_train = sps.load_npz("../input_files/URM_train_plus_validation.npz")
     URM_test = sps.load_npz("../input_files/URM_test.npz")
 
-    topk = [9]
+    evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
 
-    for k in topk:
-        recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
-        recommender.fit(topK=k, shrink=13, similarity='tversky', tversky_alpha=0.036424892090848766,
-                        tversky_beta=0.9961018325655608)
+    recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
+    recommender.fit(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.036424892090848766,
+                    tversky_beta=0.9961018325655608)
 
-        recommended_items = recommender.recommend(users_list, cutoff=10)
-        recommendations = []
-        for i in zip(users_list, recommended_items):
-            recommendation = {"user_id": i[0], "item_list": i[1]}
-            recommendations.append(recommendation)
+    results, _ = evaluator_test.evaluateRecommender(recommender)
+    print("MAP: {}".format(results.loc[10]["MAP"]))
 
-        generate_submission_csv("../output_files/P3alphaSubmission.csv", recommendations)
+    recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
+    recommender.fit(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.029873869886469468,
+                    tversky_beta=0.9937782758482816)
 
-        evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
-        results, _ = evaluator.evaluateRecommender(recommender)
-
-        print("TopK: {}".format(k))
-        print("MAP: {}".format(results.loc[10]["MAP"]))
+    results, _ = evaluator_test.evaluateRecommender(recommender)
+    print("MAP: {}".format(results.loc[10]["MAP"]))
 
 
 if __name__ == '__main__':

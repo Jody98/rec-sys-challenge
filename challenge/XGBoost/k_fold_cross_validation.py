@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sps
 import xgboost as xgb
-from hyperopt import hp, Trials, fmin, STATUS_OK, tpe
+from hyperopt import hp
 from sklearn.model_selection import GroupKFold, train_test_split
 from tqdm import tqdm
 from xgboost import plot_importance
@@ -25,7 +25,7 @@ cutoff_list = [10]
 folder_path = "../result_experiments/"
 EASE80 = "EASE_R_Recommender_best_model100.zip"
 SLIM80 = "SLIMElasticNetRecommender_best_model100.zip"
-MultVAE80 = "MultVAERecommender_best_model100.zip"
+MultVAE80 = "Mult_VAE_Recommender_best_model100.zip"
 ALS80 = "ALSRecommender_best_model100.zip"
 IALS80 = "IALSRecommender_best_model100.zip"
 submission_file_path = '../output_files/XGBoostSubmission.csv'
@@ -227,11 +227,8 @@ def train_recommenders(URM_train):
         "ALS": ALS,
         "MultVAE": MultVAE,
         "SLIM": SLIM_recommender,
-        "SVD": pureSVD,
         "SVDitem": pureSVDitem,
         "RP3": RP3_recommender,
-        "IALS": IALS,
-        "Hybrid": hybrid_recommender,
         "EASE_R": EASE_R,
         "All": all_recommender,
     }
@@ -255,18 +252,18 @@ def __main__():
     URM_all = sps.load_npz('../input_files/URM_all.npz')
 
     space = {
-        'n_estimators': hp.choice('n_estimators', [1, 2, 3, 5, 10, 25, 50, 80]),
-        'learning_rate': hp.loguniform('learning_rate', np.log(0.001), np.log(0.5)),
-        'reg_alpha': hp.uniform('reg_alpha', 0, 7),
-        'reg_lambda': hp.uniform('reg_lambda', 0, 7),
-        'max_depth': hp.choice('max_depth', [0, 1, 2, 3, 5, 7]),
-        'max_leaves': hp.choice('max_leaves', [3, 5, 7, 8, 10, 13]),
-        'grow_policy': hp.choice('grow_policy', ['depthwise', 'lossguide']),
+        'n_estimators': hp.choice('n_estimators', [10, 20, 50, 100, 150, 200]),
+        'learning_rate': hp.loguniform('learning_rate', np.log(0.001), np.log(0.01)),
+        'reg_alpha': hp.uniform('reg_alpha', 4, 9),
+        'reg_lambda': hp.uniform('reg_lambda', 4, 9),
+        'max_depth': hp.choice('max_depth', [1, 3, 5, 7, 9]),
+        'max_leaves': hp.choice('max_leaves', [5, 7, 9, 11, 13]),
+        'grow_policy': hp.choice('grow_policy', ['depthwise']),
     }
 
-    n_estimators_choices = [1, 2, 3, 5, 10, 25, 50, 80]
-    max_depth_choices = [0, 1, 2, 3, 5, 7]
-    max_leaves_choices = [3, 5, 7, 8, 10, 13]
+    n_estimators_choices = [3, 5, 10, 20, 50, 100]
+    max_depth_choices = [1, 3, 5, 7, 9]
+    max_leaves_choices = [1, 3, 5, 7, 9]
     grow_policy_choices = ['depthwise', 'lossguide']
 
     # best params using 80% of the data
@@ -366,12 +363,12 @@ def __main__():
 
     groups = X.groupby("UserID").size().values
 
-    def obj(params):
+    '''def obj(params):
         score = cross_val_score_model(X, y, groups, params)
         return {'loss': -score, 'status': STATUS_OK}
 
     trials = Trials()
-    best_indices = fmin(fn=obj, space=space, algo=tpe.suggest, max_evals=250, trials=trials)
+    best_indices = fmin(fn=obj, space=space, algo=tpe.suggest, max_evals=50, trials=trials)
 
     best_params = {
         'n_estimators': n_estimators_choices[best_indices['n_estimators']],
@@ -386,26 +383,22 @@ def __main__():
     print("Best Hyperparameters: ", best_params)
 
     with open("best_hyperparameters.txt", "a") as file:
-        file.write(str(best_params) + "\n")
+        file.write(str(best_params) + "\n")'''
 
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, shuffle=True)
     groups_train = groups[:10420]
-    groups_val = groups[10420:]
 
     # best params using 80% of the data
-    #best_params = {'n_estimators': 5, 'learning_rate': 0.017768573640957453, 'reg_alpha': 5.904124457363594,
-    #               'reg_lambda': 1.8921010268376035, 'max_depth': 3, 'max_leaves': 7, 'grow_policy': 'lossguide'}
+    best_params = {'n_estimators': 5, 'learning_rate': 0.0026072070993311837, 'reg_alpha': 8.842925592959542,
+                   'reg_lambda': 7.780142430689461, 'max_depth': 7, 'max_leaves': 5, 'grow_policy': 'depthwise'}
 
     model_optimized = xgb.XGBRanker(
         objective='rank:pairwise',
         **best_params,
         enable_categorical=True,
-        booster='gbtree',
-        verbose=True
+        booster='gbtree'
     )
 
-    eval_set = [(X_val, y_val)]
-    eval_group = [groups_val]
     model_optimized.fit(
         X_train,
         y_train,
@@ -423,7 +416,7 @@ def __main__():
 
     recommendations = []
     for user_id in tqdm(range(n_users)):
-        if URM_all[user_id].nnz == 0:
+        if URM_all[user_id].nnz == 0 or URM_all[user_id].nnz == 1:
             reranked_df.loc[user_id, "ItemID"] = predefined[:cutoff_real]
             recommendations.append(predefined[:cutoff_real])
         else:
