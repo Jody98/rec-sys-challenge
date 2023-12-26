@@ -29,12 +29,12 @@ def __main__():
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "epochs": Integer(low=5, high=30, prior='uniform'),
-        "num_factors": Integer(low=100, high=200, prior='uniform'),
+        "epochs": Integer(low=5, high=100, prior='uniform'),
+        "num_factors": Integer(low=10, high=200, prior='uniform'),
         "confidence_scaling": Categorical(["linear"]),
         "alpha": Real(low=0.01, high=10, prior='uniform'),
-        "epsilon": Real(low=0.0001, high=0.1, prior='log-uniform'),
-        "reg": Real(low=1e-3, high=1, prior='log-uniform'),
+        "epsilon": Real(low=0.0001, high=1, prior='log-uniform'),
+        "reg": Real(low=1e-4, high=1, prior='log-uniform'),
         "init_mean": Real(low=0, high=1, prior='uniform'),
         "init_std": Real(low=0, high=1, prior='uniform'),
     }

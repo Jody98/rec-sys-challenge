@@ -1,7 +1,7 @@
 import os
 
 import scipy.sparse as sps
-from skopt.space import Integer, Real
+from skopt.space import Integer, Real, Categorical
 
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
@@ -18,22 +18,21 @@ def __main__():
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
-    URM_all = sps.coo_matrix(
-        (URM_all_dataframe['Data'].values, (URM_all_dataframe['UserID'].values, URM_all_dataframe['ItemID'].values)))
-    URM_all = URM_all.tocsr()
-
-    URM_train_validation, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
-    URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_train_validation,
-                                                                            train_percentage=0.80)
+    URM_train_validation = sps.load_npz('../input_files/URM_train_plus_validation.npz')
+    URM_test = sps.load_npz('../input_files/URM_test.npz')
+    URM_validation = sps.load_npz('../input_files/URM_validation.npz')
+    URM_train = sps.load_npz('../input_files/URM_train.npz')
 
     evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[10])
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(20, 40),
-        "alpha": Real(0.0, 0.6362900288025657),
-        "beta": Real(0.0, 0.7133265785189087),
-        "min_rating": Real(0.0, 0.588031589774554),
+        "topK": Integer(10, 50),
+        "alpha": Real(0.0, 1.0),
+        "beta": Real(0.0, 1.0),
+        "min_rating": Real(0.0, 1.0),
+        "tail": Categorical([True]),
+        "tail_weight": Real(0.0, 0.2),
     }
 
     recommender_class = RP3betaRecommender
@@ -73,7 +72,7 @@ def __main__():
                                 hyperparameter_search_space=hyperparameters_range_dictionary,
                                 n_cases=n_cases,
                                 n_random_starts=n_random_starts,
-                                save_model="best",
+                                save_model="last",
                                 output_folder_path=output_folder_path,
                                 output_file_name_root=recommender_class.RECOMMENDER_NAME,
                                 metric_to_optimize=metric_to_optimize,
