@@ -35,6 +35,8 @@ def __main__():
         "alpha": Real(low=0.01, high=10, prior='uniform'),
         "epsilon": Real(low=0.0001, high=0.1, prior='log-uniform'),
         "reg": Real(low=1e-3, high=1, prior='log-uniform'),
+        "init_mean": Real(low=0, high=1, prior='uniform'),
+        "init_std": Real(low=0, high=1, prior='uniform'),
     }
 
     recommender_class = IALSRecommender

@@ -23,11 +23,11 @@ cutoff_real = 10
 cutoff_xgb = 20
 cutoff_list = [10]
 folder_path = "../result_experiments/"
-EASE80 = "EASE_R_Recommender_best_model100.zip"
-SLIM80 = "SLIMElasticNetRecommender_best_model100.zip"
-MultVAE80 = "Mult_VAE_Recommender_best_model100.zip"
-ALS80 = "ALSRecommender_best_model100.zip"
-IALS80 = "IALSRecommender_best_model100.zip"
+EASE80 = "EASE_R_Recommender_best_model80.zip"
+SLIM80 = "SLIMElasticNetRecommender_best_model80.zip"
+MultVAE80 = "Mult_VAE_Recommender_best_model80.zip"
+ALS80 = "ALSRecommender_best_model80.zip"
+IALS80 = "IALSRecommender_best_model80.zip"
 submission_file_path = '../output_files/XGBoostSubmission.csv'
 data_file_path = '../input_files/data_train.csv'
 users_file_path = '../input_files/data_target_users_test.csv'
@@ -225,6 +225,7 @@ def train_recommenders(URM_train):
         "Item": item_recommender,
         "P3": P3_recommender,
         "ALS": ALS,
+        "IALS": IALS,
         "MultVAE": MultVAE,
         "SLIM": SLIM_recommender,
         "SVDitem": pureSVDitem,
@@ -266,10 +267,6 @@ def __main__():
     max_leaves_choices = [1, 3, 5, 7, 9]
     grow_policy_choices = ['depthwise', 'lossguide']
 
-    # best params using 80% of the data
-    best_params = {'n_estimators': 50, 'learning_rate': 0.019465170738477183, 'reg_alpha': 3.5948331805557103,
-                   'reg_lambda': 5.4931538454823325, 'max_depth': 0, 'max_leaves': 0, 'grow_policy': 'depthwise'}
-
     n_users, n_items = URM_all.shape
 
     relevancies = []
@@ -280,7 +277,7 @@ def __main__():
         relevant_items = URM_hidden.indices[start_pos:end_pos]
         relevancies.append(relevant_items)
 
-    recommenders = train_recommenders(URM_all)
+    recommenders = train_recommenders(URM_train)
 
     all_recommender = recommenders["All"]
     evaluate_on_validation_set(recommenders, URM_hidden, cutoff_list)
