@@ -9,7 +9,7 @@ from Evaluation.Evaluator import EvaluatorHoldout
 from HyperparameterTuning.SearchAbstractClass import SearchInputRecommenderArgs
 from HyperparameterTuning.SearchBayesianSkopt import SearchBayesianSkopt
 from Recommenders.DataIO import DataIO
-from Recommenders.SLIM.SLIMElasticNetRecommender import SLIMElasticNetRecommender
+from Recommenders.SLIM.SLIMElasticNetRecommender import MultiThreadSLIM_SLIMElasticNetRecommender
 from challenge.utils.functions import read_data
 
 
@@ -27,13 +27,12 @@ def __main__():
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(low=200, high=500, prior='uniform'),
+        "topK": Integer(low=10, high=500, prior='uniform'),
         "l1_ratio": Real(low=1e-3, high=1e-2, prior='log-uniform'),
         "alpha": Real(low=1e-4, high=1e-2, prior='log-uniform'),
-        "positive_only": Categorical([True]),
     }
 
-    recommender_class = SLIMElasticNetRecommender
+    recommender_class = MultiThreadSLIM_SLIMElasticNetRecommender
 
     hyperparameterSearch = SearchBayesianSkopt(recommender_class,
                                                evaluator_validation=evaluator_validation,

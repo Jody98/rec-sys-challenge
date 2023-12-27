@@ -54,7 +54,7 @@ def __main__():
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     hybrid_recommender = ItemKNNSimilarityTripleHybridRecommender(URM_train, p3alpha_Wsparse, item_Wsparse, RP3_Wsparse)
-    hybrid_recommender.fit(topK=225, alpha=0.4976629488640914, beta=0.13017801200221196)
+    hybrid_recommender.fit(topK=75, alpha=0.4976629488640914, beta=0.13017801200221196)
 
     results, _ = evaluator.evaluateRecommender(hybrid_recommender)
     print("ItemKNNSimilarityTripleHybridRecommender")
@@ -81,7 +81,7 @@ def __main__():
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     recommender = DifferentLossScoresHybridRecommender(URM_train, multvae_recommender, recommender)
-    recommender.fit(norm=2, alpha=0.9252140905645002)
+    recommender.fit(norm=1, alpha=0.7226734921965403)
 
     results, _ = evaluator.evaluateRecommender(recommender)
     print("DifferentLossScoresHybridRecommender")

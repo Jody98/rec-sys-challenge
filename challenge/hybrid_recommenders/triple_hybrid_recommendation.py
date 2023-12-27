@@ -3,10 +3,8 @@ import scipy.sparse as sps
 from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
-from challenge.utils.functions import read_data
 from Recommenders.KNN.ItemKNNSimilarityTripleHybridRecommender import ItemKNNSimilarityTripleHybridRecommender
-from Recommenders.EASE_R import EASE_R_Recommender
-from Recommenders.SLIM import SLIMElasticNetRecommender
+from challenge.utils.functions import read_data
 
 
 def __main__():
@@ -49,29 +47,28 @@ def __main__():
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     hybrid_recommender = ItemKNNSimilarityTripleHybridRecommender(URM_train, p3alpha_Wsparse, item_Wsparse, RP3_Wsparse)
-    hybrid_recommender.fit(topK=225, alpha=0.4976629488640914, beta=0.13017801200221196)
+    hybrid_recommender.fit(topK=75, alpha=0.4976629488640914, beta=0.13017801200221196)
     hybrid_Wsparse = hybrid_recommender.W_sparse
 
     results, _ = evaluator.evaluateRecommender(hybrid_recommender)
     print("ItemKNNSimilarityTripleHybridRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
-    SLIM_recommender.fit(topK=216, l1_ratio=0.0032465600313226354, alpha=0.002589066655986645, positive_only=True)
-    SLIM_Wsparse = SLIM_recommender.W_sparse
-
-    EASE_R = EASE_R_Recommender.EASE_R_Recommender(URM_train)
-    EASE_R.fit(topK=59, l2_norm=29.792347118106623, normalize_matrix=False)
-    EASE_R_Wsparse = sps.csr_matrix(EASE_R.W_sparse)
-
-    hybrid_recommender = ItemKNNSimilarityTripleHybridRecommender(URM_train, hybrid_Wsparse, SLIM_Wsparse, EASE_R_Wsparse)
-    hybrid_recommender.fit(topK=272, alpha=0.8620130600427436, beta=0.13981722618743644)
+    hybrid_recommender = ItemKNNSimilarityTripleHybridRecommender(URM_train, p3alpha_Wsparse, item_Wsparse, RP3_Wsparse)
+    hybrid_recommender.fit(topK=39, alpha=0.3323499617553153, beta=0.10509745501647702)
+    hybrid_Wsparse = hybrid_recommender.W_sparse
 
     results, _ = evaluator.evaluateRecommender(hybrid_recommender)
     print("ItemKNNSimilarityTripleHybridRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
+    hybrid_recommender = ItemKNNSimilarityTripleHybridRecommender(URM_train, p3alpha_Wsparse, item_Wsparse, RP3_Wsparse)
+    hybrid_recommender.fit(topK=139, alpha=0.3323499617553153, beta=0.10509745501647702)
+    hybrid_Wsparse = hybrid_recommender.W_sparse
 
+    results, _ = evaluator.evaluateRecommender(hybrid_recommender)
+    print("ItemKNNSimilarityTripleHybridRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
 
 
 if __name__ == '__main__':

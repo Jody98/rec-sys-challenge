@@ -103,17 +103,17 @@ def __main__():
     recommenders = {
         "MultVAE": MultVAE,
         "ALS": IALS,
-        "Hybrid": RP3_recommender,
+        "Hybrid": hybrid_recommender,
         "SLIM": SLIM_recommender,
-        "Item": item_recommender
+        "Item": EASE_R,
     }
 
     hyperparameters_range_dictionary = {
-        "MultVAE": Real(low=11.0, high=17.0, prior='uniform'),
-        "ALS": Real(low=-2.0, high=3.0, prior='uniform'),
-        "Hybrid": Real(low=0.0, high=5.0, prior='uniform'),
-        "SLIM": Real(low=0.0, high=3.0, prior='uniform'),
-        "Item": Real(low=0.0, high=3.0, prior='uniform'),
+        "MultVAE": Real(low=25.0, high=35.0, prior='uniform'),
+        "ALS": Real(low=-1.0, high=3.0, prior='uniform'),
+        "Hybrid": Real(low=5.0, high=10.0, prior='uniform'),
+        "SLIM": Real(low=0.0, high=5.0, prior='uniform'),
+        "Item": Real(low=-2.0, high=3.0, prior='uniform'),
     }
 
     recommender_class = HybridLinear
@@ -143,7 +143,7 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 200
+    n_cases = 150
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10

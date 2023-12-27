@@ -1,6 +1,7 @@
 import scipy.sparse as sps
 
 from Evaluation.Evaluator import EvaluatorHoldout
+from Recommenders.EASE_R import EASE_R_Recommender
 from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
 from Recommenders.Hybrid.HybridLinear import HybridLinear
 from Recommenders.KNN import ItemKNNCFRecommender
@@ -15,15 +16,16 @@ def __main__():
     cutoff_list = [10]
     folder_path = "../result_experiments/"
     SLIM80 = "SLIMElasticNetRecommender_best_model80.zip"
-    MultVAE80 = "Mult_VAE_Recommender_best_model80.zip"
+    MultVAE80 = "MultVAERecommender_best_model80.zip"
     IALS80 = "IALSRecommender_best_model80.zip"
+    EASE80 = "EASE_R_Recommender_best_model80.zip"
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
     URM_test = sps.load_npz('../input_files/URM_test.npz')
     URM_train = sps.load_npz('../input_files/URM_train_plus_validation.npz')
-    URM_all = sps.load_npz('../input_files/URM_all.npz')
+    URM_train = sps.load_npz('../input_files/URM_all.npz')
 
     evaluator_train = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
 
@@ -54,7 +56,7 @@ def __main__():
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     hybrid_recommender = ItemKNNSimilarityTripleHybridRecommender(URM_train, p3alpha_Wsparse, item_Wsparse, RP3_Wsparse)
-    hybrid_recommender.fit(topK=225, alpha=0.4976629488640914, beta=0.13017801200221196)
+    hybrid_recommender.fit(topK=75, alpha=0.4976629488640914, beta=0.13017801200221196)
 
     results, _ = evaluator_train.evaluateRecommender(hybrid_recommender)
     print("ItemKNNSimilarityTripleHybridRecommender")
@@ -62,7 +64,6 @@ def __main__():
 
     SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
     SLIM_recommender.load_model(folder_path, SLIM80)
-    SLIM_Wsparse = SLIM_recommender.W_sparse
 
     results, _ = evaluator_train.evaluateRecommender(SLIM_recommender)
     print("SLIMElasticNetRecommender")
@@ -80,48 +81,39 @@ def __main__():
     results, _ = evaluator_train.evaluateRecommender(IALS)
     print("IALSRecommender MAP: {}".format(results.loc[10]["MAP"]))
 
+    EASE_R = EASE_R_Recommender.EASE_R_Recommender(URM_train)
+    EASE_R.load_model(folder_path, EASE80)
+    EASE_R_Wsparse = sps.csr_matrix(EASE_R.W_sparse)
+
+    results, _ = evaluator_train.evaluateRecommender(EASE_R)
+    print("EASE_R_Recommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
     recommenders = {
         "MultVAE": MultVAE,
         "ALS": IALS,
         "Hybrid": RP3_recommender,
         "SLIM": SLIM_recommender,
-        "Item": item_recommender
+        "Item": item_recommender,
+        "P3": P3_recommender
     }
 
     all_recommender = HybridLinear(URM_train, recommenders)
-    all_recommender.fit(MultVAE=14.180249222221073, ALS=-0.38442274063330273,
-                        Hybrid=2.060407131177933, SLIM=2.945116702486108, Item=0.9737256690221096)
+    all_recommender.fit(MultVAE=15.180249222221073, ALS=-0.38442274063330273, P3=1.060407131177933,
+                        Hybrid=4.060407131177933, SLIM=5.945116702486108, Item=0.9737256690221096)
 
     results, _ = evaluator_train.evaluateRecommender(all_recommender)
     print("BEST\n")
     print("MAP: {}".format(results.loc[10]["MAP"]))
     print("RECALL: {}".format(results.loc[10]["RECALL"]))
 
-    all_recommender = HybridLinear(URM_train, recommenders)
-    all_recommender.fit(MultVAE=14.180249222221073, ALS=0.38442274063330273,
-                        Hybrid=2.060407131177933, SLIM=2.945116702486108, Item=0.9737256690221096)
-
-    results, _ = evaluator_train.evaluateRecommender(all_recommender)
-    print("BEST\n")
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-    print("RECALL: {}".format(results.loc[10]["RECALL"]))
-
-    all_recommender = HybridLinear(URM_train, recommenders)
-    all_recommender.fit(MultVAE=15.180249222221073, ALS=-0.38442274063330273,
-                        Hybrid=3.060407131177933, SLIM=3.945116702486108, Item=0.9737256690221096)
-
-    results, _ = evaluator_train.evaluateRecommender(all_recommender)
-    print("BEST\n")
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-    print("RECALL: {}".format(results.loc[10]["RECALL"]))
-
-    '''recommended_items = all_recommender.recommend(users_list, cutoff=10)
+    recommended_items = all_recommender.recommend(users_list, cutoff=10)
     recommendations = []
     for i in zip(users_list, recommended_items):
         recommendation = {"user_id": i[0], "item_list": i[1]}
         recommendations.append(recommendation)
 
-    generate_submission_csv("../output_files/LinearHybridBIGSubmission.csv", recommendations)'''
+    generate_submission_csv("../output_files/LinearHybridBIGSubmission.csv", recommendations)
 
 
 if __name__ == '__main__':

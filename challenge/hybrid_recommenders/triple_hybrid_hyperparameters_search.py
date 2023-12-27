@@ -43,20 +43,8 @@ def __main__():
                         implicit=True, normalize_similarity=True)
     RP3_Wsparse = RP3_recommender.W_sparse
 
-    hybrid_recommender = ItemKNNSimilarityTripleHybridRecommender(URM_train, p3alpha_Wsparse, item_Wsparse, RP3_Wsparse)
-    hybrid_recommender.fit(topK=225, alpha=0.4976629488640914, beta=0.13017801200221196)
-    hybrid_Wsparse = hybrid_recommender.W_sparse
-
-    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
-    SLIM_recommender.fit(topK=216, l1_ratio=0.0032465600313226354, alpha=0.002589066655986645, positive_only=True)
-    SLIM_Wsparse = SLIM_recommender.W_sparse
-
-    EASE_R = EASE_R_Recommender.EASE_R_Recommender(URM_train)
-    EASE_R.fit(topK=59, l2_norm=29.792347118106623, normalize_matrix=False)
-    EASE_R_Wsparse = sps.csr_matrix(EASE_R.W_sparse)
-
     hyperparameters_range_dictionary = {
-        "topK": Integer(10, 300),
+        "topK": Integer(1, 75),
         "alpha": Real(0, 1, prior='uniform'),
         "beta": Real(0, 1, prior='uniform'),
     }
@@ -68,7 +56,7 @@ def __main__():
                                                evaluator_test=evaluator_test)
 
     recommender_input_args = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, hybrid_Wsparse, SLIM_Wsparse, EASE_R_Wsparse],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, p3alpha_Wsparse, item_Wsparse, RP3_Wsparse],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},
@@ -76,7 +64,7 @@ def __main__():
     )
 
     recommender_input_args_last_test = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, hybrid_Wsparse, SLIM_Wsparse, EASE_R_Wsparse],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, p3alpha_Wsparse, item_Wsparse, RP3_Wsparse],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},
@@ -88,7 +76,7 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 50
+    n_cases = 150
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10
