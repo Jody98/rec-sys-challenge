@@ -9,8 +9,7 @@ from HyperparameterTuning.SearchAbstractClass import SearchInputRecommenderArgs
 from HyperparameterTuning.SearchBayesianSkopt import SearchBayesianSkopt
 from Recommenders.DataIO import DataIO
 from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
-from Recommenders.Hybrid.HybridLinear import HybridLinear
-from Recommenders.MatrixFactorization import IALSRecommender
+from Recommenders.Neural.MultVAERecommender import MultVAERecommender_PyTorch_OptimizerMask
 from Recommenders.SLIM import SLIMElasticNetRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
 from Recommenders.Hybrid.HybridDifferentLoss import DifferentLossScoresHybridRecommender
@@ -22,23 +21,19 @@ from Data_manager.split_functions.split_train_validation_random_holdout import \
 
 def __main__():
     cutoff_list = [10]
-    data_file_path = '../input_files/data_train.csv'
-    users_file_path = '../input_files/data_target_users_test.csv'
-    URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
+    folder_path = "../result_experiments/"
+    SLIM80 = "SLIMElasticNetRecommender_best_model64.zip"
+    MultVAE64 = "MultVAERecommender_best_model64.zip"
 
-    URM_all = sps.coo_matrix(
-        (URM_all_dataframe['Data'].values, (URM_all_dataframe['UserID'].values, URM_all_dataframe['ItemID'].values)))
-    URM_all = URM_all.tocsr()
+    URM_train_validation = sps.load_npz('../input_files/URM_train_plus_validation.npz')
+    URM_train = sps.load_npz('../input_files/URM_train.npz')
+    URM_test = sps.load_npz('../input_files/URM_test.npz')
 
-    URM_train_validation, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.8)
-    URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_train_validation, train_percentage=0.8)
-
-    evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[10])
-    evaluator = EvaluatorHoldout(URM_test, cutoff_list=[10])
+    evaluator_validation = EvaluatorHoldout(URM_train_validation, cutoff_list=cutoff_list)
+    evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
 
     SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
-    SLIM_recommender.fit(topK=216, l1_ratio=0.0032465600313226354, alpha=0.002589066655986645, positive_only=True)
-    SLIM_Wsparse = SLIM_recommender.W_sparse
+    SLIM_recommender.load_model(folder_path, SLIM80)
 
     results, _ = evaluator.evaluateRecommender(SLIM_recommender)
     print("SLIM MAP: {}".format(results.loc[10]["MAP"]))
@@ -77,6 +72,20 @@ def __main__():
     print("ItemKNNSimilarityTripleHybridRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
+    recommender = DifferentLossScoresHybridRecommender(URM_train, hybrid_recommender, SLIM_recommender)
+    recommender.fit(norm=1, alpha=0.4932241483167159)
+
+    results, _ = evaluator.evaluateRecommender(recommender)
+    print("DifferentLossScoresHybridRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    multvae_recommender = MultVAERecommender_PyTorch_OptimizerMask(URM_train)
+    multvae_recommender.load_model(folder_path, MultVAE64)
+
+    results, _ = evaluator.evaluateRecommender(multvae_recommender)
+    print("MultVAERecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
     hyperparameters_range_dictionary = {
         "norm": Categorical([1, 2, np.inf]),
         "alpha": Real(low=0, high=1, prior="uniform"),
@@ -89,7 +98,7 @@ def __main__():
                                                evaluator_test=evaluator)
 
     recommender_input_args = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, item_recommender, SLIM_recommender],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, multvae_recommender, recommender],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},
@@ -97,7 +106,7 @@ def __main__():
     )
 
     recommender_input_args_last_test = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, item_recommender, SLIM_recommender],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, multvae_recommender, recommender],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},

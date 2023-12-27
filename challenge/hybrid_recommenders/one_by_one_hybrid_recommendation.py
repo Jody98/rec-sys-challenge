@@ -6,14 +6,16 @@ from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
 from Recommenders.Hybrid.HybridDifferentLoss import DifferentLossScoresHybridRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
 from Recommenders.KNN.ItemKNNSimilarityTripleHybridRecommender import ItemKNNSimilarityTripleHybridRecommender
-from Recommenders.EASE_R import EASE_R_Recommender
+from Recommenders.SLIM import SLIMElasticNetRecommender
+from Recommenders.Neural.MultVAERecommender import MultVAERecommender_PyTorch_OptimizerMask
 from challenge.utils.functions import read_data, generate_submission_csv
 
 
 def __main__():
     cutoff_list = [10]
     folder_path = "../result_experiments/"
-    filename80 = "EASE_R_Recommender_best_model80.zip"
+    SLIM80 = "SLIMElasticNetRecommender_best_model80.zip"
+    MultVAE80 = "MultVAERecommender_best_model80.zip"
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
@@ -58,28 +60,32 @@ def __main__():
     print("ItemKNNSimilarityTripleHybridRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    EASE_R = EASE_R_Recommender.EASE_R_Recommender(URM_train)
-    EASE_R.load_model(folder_path, filename80)
+    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
+    SLIM_recommender.load_model(folder_path, SLIM80)
 
-    evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
-    results, _ = evaluator.evaluateRecommender(EASE_R)
+    results, _ = evaluator.evaluateRecommender(SLIM_recommender)
+    print("SLIM MAP: {}".format(results.loc[10]["MAP"]))
 
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
-    recommender = DifferentLossScoresHybridRecommender(URM_train, hybrid_recommender, EASE_R)
-    recommender.fit(norm=1, alpha=0.70918052775199)
+    recommender = DifferentLossScoresHybridRecommender(URM_train, hybrid_recommender, SLIM_recommender)
+    recommender.fit(norm=1, alpha=0.44712918644140526)
 
     results, _ = evaluator.evaluateRecommender(recommender)
     print("DifferentLossScoresHybridRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    recommended_items = recommender.recommend(users_list, cutoff=10)
-    recommendations = []
-    for i in zip(users_list, recommended_items):
-        recommendation = {"user_id": i[0], "item_list": i[1]}
-        recommendations.append(recommendation)
+    multvae_recommender = MultVAERecommender_PyTorch_OptimizerMask(URM_train)
+    multvae_recommender.load_model(folder_path, MultVAE80)
 
-    generate_submission_csv("../output_files/OneByOneSubmission.csv", recommendations)
+    results, _ = evaluator.evaluateRecommender(multvae_recommender)
+    print("MultVAERecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    recommender = DifferentLossScoresHybridRecommender(URM_train, multvae_recommender, recommender)
+    recommender.fit(norm=2, alpha=0.9252140905645002)
+
+    results, _ = evaluator.evaluateRecommender(recommender)
+    print("DifferentLossScoresHybridRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
 
 
 if __name__ == '__main__':
