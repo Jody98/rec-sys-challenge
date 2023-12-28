@@ -27,9 +27,9 @@ def __main__():
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(low=10, high=500, prior='uniform'),
-        "l1_ratio": Real(low=1e-3, high=1e-2, prior='log-uniform'),
-        "alpha": Real(low=1e-4, high=1e-2, prior='log-uniform'),
+        "topK": Integer(low=300, high=400, prior='uniform'),
+        "l1_ratio": Real(low=1e-2, high=1e-1, prior='log-uniform'),
+        "alpha": Real(low=1e-3, high=1e-2, prior='log-uniform'),
     }
 
     recommender_class = MultiThreadSLIM_SLIMElasticNetRecommender
@@ -59,7 +59,7 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 100
+    n_cases = 1000
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10

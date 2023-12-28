@@ -15,10 +15,11 @@ from challenge.utils.functions import read_data, generate_submission_csv
 def __main__():
     cutoff_list = [10]
     folder_path = "../result_experiments/"
-    SLIM80 = "SLIMElasticNetRecommender_best_model80.zip"
-    MultVAE80 = "MultVAERecommender_best_model80.zip"
-    IALS80 = "IALSRecommender_best_model80.zip"
-    EASE80 = "EASE_R_Recommender_best_model80.zip"
+    SLIM80 = "SLIMElasticNetRecommender_best_model100.zip"
+    MultVAE80Best = "MultVAERecommender_best_model100.zip"
+    MultVAE80 = "Mult_VAE_Recommender_best_model100.zip"
+    IALS80 = "IALSRecommender_best_model100.zip"
+    EASE80 = "EASE_R_Recommender_best_model100.zip"
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
@@ -75,6 +76,12 @@ def __main__():
     results, _ = evaluator_train.evaluateRecommender(MultVAE)
     print("MultVAE MAP: {}".format(results.loc[10]["MAP"]))
 
+    MultVAEBest = MultVAERecommender_PyTorch_OptimizerMask(URM_train)
+    MultVAEBest.load_model(folder_path, MultVAE80Best)
+
+    results, _ = evaluator_train.evaluateRecommender(MultVAEBest)
+    print("MultVAE MAP: {}".format(results.loc[10]["MAP"]))
+
     IALS = IALSRecommender.IALSRecommender(URM_train)
     IALS.load_model(folder_path, IALS80)
 
@@ -114,6 +121,22 @@ def __main__():
         recommendations.append(recommendation)
 
     generate_submission_csv("../output_files/LinearHybridBIGSubmission.csv", recommendations)
+
+    all_recommender = HybridLinear(URM_train, recommenders)
+    all_recommender.fit(MultVAE=24.064552469359455, ALS=-0.9864760541829147, P3=3.037541814942154,
+                        Hybrid=9.735222755831965, SLIM=9.071681040796111, Item=2.966590102582196)
+
+    results, _ = evaluator_train.evaluateRecommender(all_recommender)
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+    print("RECALL: {}".format(results.loc[10]["RECALL"]))
+
+    recommended_items = all_recommender.recommend(users_list, cutoff=10)
+    recommendations = []
+    for i in zip(users_list, recommended_items):
+        recommendation = {"user_id": i[0], "item_list": i[1]}
+        recommendations.append(recommendation)
+
+    generate_submission_csv("../output_files/LinearHybridBIG2Submission.csv", recommendations)
 
 
 if __name__ == '__main__':
