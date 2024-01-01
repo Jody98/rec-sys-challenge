@@ -27,9 +27,9 @@ def __main__():
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(low=300, high=400, prior='uniform'),
-        "l1_ratio": Real(low=1e-2, high=1e-1, prior='log-uniform'),
-        "alpha": Real(low=1e-3, high=1e-2, prior='log-uniform'),
+        "topK": Integer(low=300, high=600, prior='uniform'),
+        "l1_ratio": Real(low=1e-2, high=1e-1, prior='uniform'),
+        "alpha": Real(low=1e-3, high=1e-2, prior='uniform'),
     }
 
     recommender_class = MultiThreadSLIM_SLIMElasticNetRecommender

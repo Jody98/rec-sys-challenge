@@ -5,28 +5,27 @@ from Recommenders.EASE_R import EASE_R_Recommender
 from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
 from Recommenders.Hybrid.HybridLinear import HybridLinear
 from Recommenders.KNN import ItemKNNCFRecommender
-from Recommenders.KNN.ItemKNNSimilarityTripleHybridRecommender import ItemKNNSimilarityTripleHybridRecommender
-from Recommenders.MatrixFactorization import IALSRecommender
+from Recommenders.MatrixFactorization import IALSRecommender, ALSRecommender
 from Recommenders.Neural.MultVAERecommender import MultVAERecommender_PyTorch_OptimizerMask
 from Recommenders.SLIM import SLIMElasticNetRecommender
-from challenge.utils.functions import read_data, generate_submission_csv
+from challenge.utils.functions import read_data
 
 
 def __main__():
     cutoff_list = [10]
     folder_path = "../result_experiments/"
-    SLIM80 = "SLIMElasticNetRecommender_best_model100.zip"
-    MultVAE80Best = "MultVAERecommender_best_model100.zip"
-    MultVAE80 = "Mult_VAE_Recommender_best_model100.zip"
-    IALS80 = "IALSRecommender_best_model100.zip"
-    EASE80 = "EASE_R_Recommender_best_model100.zip"
+    SLIM80 = "SLIM_ElasticNetRecommender_best_model80.zip"
+    MultVAE80 = "MultVAERecommender_best_model80.zip"
+    IALS80 = "IALSRecommender_best_model80.zip"
+    ALS80 = "ALSRecommender_best_model80.zip"
+    EASE80 = "EASE_R_Recommender_best_model80.zip"
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
     URM_test = sps.load_npz('../input_files/URM_test.npz')
     URM_train = sps.load_npz('../input_files/URM_train_plus_validation.npz')
-    URM_train = sps.load_npz('../input_files/URM_all.npz')
+    URM_all = sps.load_npz('../input_files/URM_all.npz')
 
     evaluator_train = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
 
@@ -56,13 +55,6 @@ def __main__():
     print("RP3betaRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    hybrid_recommender = ItemKNNSimilarityTripleHybridRecommender(URM_train, p3alpha_Wsparse, item_Wsparse, RP3_Wsparse)
-    hybrid_recommender.fit(topK=75, alpha=0.4976629488640914, beta=0.13017801200221196)
-
-    results, _ = evaluator_train.evaluateRecommender(hybrid_recommender)
-    print("ItemKNNSimilarityTripleHybridRecommender")
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
     SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
     SLIM_recommender.load_model(folder_path, SLIM80)
 
@@ -76,43 +68,46 @@ def __main__():
     results, _ = evaluator_train.evaluateRecommender(MultVAE)
     print("MultVAE MAP: {}".format(results.loc[10]["MAP"]))
 
-    MultVAEBest = MultVAERecommender_PyTorch_OptimizerMask(URM_train)
-    MultVAEBest.load_model(folder_path, MultVAE80Best)
-
-    results, _ = evaluator_train.evaluateRecommender(MultVAEBest)
-    print("MultVAE MAP: {}".format(results.loc[10]["MAP"]))
-
     IALS = IALSRecommender.IALSRecommender(URM_train)
     IALS.load_model(folder_path, IALS80)
 
     results, _ = evaluator_train.evaluateRecommender(IALS)
     print("IALSRecommender MAP: {}".format(results.loc[10]["MAP"]))
 
+    ALS = ALSRecommender.ALS(URM_train)
+    ALS.load_model(folder_path, ALS80)
+
+    results, _ = evaluator_train.evaluateRecommender(ALS)
+    print("ALSRecommender MAP: {}".format(results.loc[10]["MAP"]))
+
     EASE_R = EASE_R_Recommender.EASE_R_Recommender(URM_train)
     EASE_R.load_model(folder_path, EASE80)
-    EASE_R_Wsparse = sps.csr_matrix(EASE_R.W_sparse)
 
     results, _ = evaluator_train.evaluateRecommender(EASE_R)
-    print("EASE_R_Recommender")
-    print("MAP: {}".format(results.loc[10]["MAP"]))
+    print("EASE_R_Recommender MAP: {}".format(results.loc[10]["MAP"]))
 
     recommenders = {
         "MultVAE": MultVAE,
-        "ALS": IALS,
-        "Hybrid": RP3_recommender,
+        "IALS": IALS,
+        "RP3": RP3_recommender,
         "SLIM": SLIM_recommender,
         "Item": item_recommender,
-        "P3": P3_recommender
+        "P3": P3_recommender,
+        "EASE": EASE_R
     }
 
+    # {'alpha': 5.9212989736820605, 'beta': 7.446622411115129, 'gamma': -1.0, 'epsilon': -1.0, 'zeta': 5.52823074507587, 'eta': 30.0, 'theta': 8.21290206009289
+
     all_recommender = HybridLinear(URM_train, recommenders)
-    all_recommender.fit(MultVAE=15.180249222221073, ALS=-0.38442274063330273, P3=1.060407131177933,
-                        Hybrid=4.060407131177933, SLIM=5.945116702486108, Item=0.9737256690221096)
+    all_recommender.fit(alpha=5.9212989736820605, beta=7.446622411115129, gamma=-1.0, epsilon=-1.0,
+                        zeta=5.52823074507587, eta=30.0, theta=8.21290206009289)
 
     results, _ = evaluator_train.evaluateRecommender(all_recommender)
-    print("BEST\n")
     print("MAP: {}".format(results.loc[10]["MAP"]))
-    print("RECALL: {}".format(results.loc[10]["RECALL"]))
+
+    '''all_recommender = HybridLinear(URM_train, recommenders)
+    all_recommender.fit(MultVAE=16.180249222221073, ALS=-0.38442274063330273, P3=0,
+                        Hybrid=2.060407131177933, SLIM=2.945116702486108, Item=0.9747256690221096)
 
     recommended_items = all_recommender.recommend(users_list, cutoff=10)
     recommendations = []
@@ -122,21 +117,16 @@ def __main__():
 
     generate_submission_csv("../output_files/LinearHybridBIGSubmission.csv", recommendations)
 
+    results, _ = evaluator_train.evaluateRecommender(all_recommender)
+    print("BEST\n")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
     all_recommender = HybridLinear(URM_train, recommenders)
-    all_recommender.fit(MultVAE=24.064552469359455, ALS=-0.9864760541829147, P3=3.037541814942154,
-                        Hybrid=9.735222755831965, SLIM=9.071681040796111, Item=2.966590102582196)
+    all_recommender.fit(MultVAE=22.49712994749978, ALS=2.6648191600842233, P3=0,
+                        Hybrid=9.474672746313598, SLIM=11.510342917203092, Item=2.5405802065405516)
 
     results, _ = evaluator_train.evaluateRecommender(all_recommender)
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-    print("RECALL: {}".format(results.loc[10]["RECALL"]))
-
-    recommended_items = all_recommender.recommend(users_list, cutoff=10)
-    recommendations = []
-    for i in zip(users_list, recommended_items):
-        recommendation = {"user_id": i[0], "item_list": i[1]}
-        recommendations.append(recommendation)
-
-    generate_submission_csv("../output_files/LinearHybridBIG2Submission.csv", recommendations)
+    print("MAP: {}".format(results.loc[10]["MAP"]))'''
 
 
 if __name__ == '__main__':

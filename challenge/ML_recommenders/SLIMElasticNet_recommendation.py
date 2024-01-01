@@ -16,30 +16,8 @@ def __main__():
     URM_all = sps.load_npz('../input_files/URM_all.npz')
     URM_train_validation = sps.load_npz('../input_files/URM_train_plus_validation.npz')
 
-    recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
-    recommender.fit(topK=354, l1_ratio=0.057502286412598407, alpha=0.0013725960492895822, positive_only=True)
-
-    recommender.save_model("../result_experiments/", "SLIM_ElasticNetRecommender_best_model64.zip")
-
-    evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
-    results, _ = evaluator.evaluateRecommender(recommender)
-
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
     recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train_validation)
-    recommender.fit(topK=354, l1_ratio=0.057502286412598407, alpha=0.0013725960492895822, positive_only=True)
-
-    recommender.save_model("../result_experiments/", "SLIM_ElasticNetRecommender_best_model80.zip")
-
-    evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
-    results, _ = evaluator.evaluateRecommender(recommender)
-
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
-    recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_all)
-    recommender.fit(topK=354, l1_ratio=0.057502286412598407, alpha=0.0013725960492895822, positive_only=True)
-
-    recommender.save_model("../result_experiments/", "SLIM_ElasticNetRecommender_best_model100.zip")
+    recommender.fit(topK=354, l1_ratio=0.05656717667595227, alpha=0.001337477108476206, positive_only=True)
 
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
     results, _ = evaluator.evaluateRecommender(recommender)

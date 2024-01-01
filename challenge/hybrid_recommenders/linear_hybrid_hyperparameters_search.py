@@ -17,6 +17,7 @@ from Recommenders.KNN.ItemKNNSimilarityTripleHybridRecommender import ItemKNNSim
 from Recommenders.MatrixFactorization import IALSRecommender
 from Recommenders.Neural.MultVAERecommender import MultVAERecommender_PyTorch_OptimizerMask
 from Recommenders.SLIM import SLIMElasticNetRecommender
+from Recommenders.MatrixFactorization import ALSRecommender
 from challenge.utils.functions import read_data
 
 
@@ -26,6 +27,7 @@ def __main__():
     SLIM64 = "SLIM_ElasticNetRecommender_best_model64.zip"
     MultVAE64 = "MultVAERecommender_best_model64.zip"
     IALS64 = "IALSRecommender_best_model64.zip"
+    ALS64 = "ALSRecommender_best_model64.zip"
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
@@ -91,6 +93,13 @@ def __main__():
     IALS.load_model(folder_path, IALS64)
 
     results, _ = evaluator.evaluateRecommender(IALS)
+    print("IALSRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    ALS = ALSRecommender.ALS(URM_train)
+    ALS.load_model(folder_path, ALS64)
+
+    results, _ = evaluator.evaluateRecommender(ALS)
     print("ALSRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
@@ -102,18 +111,24 @@ def __main__():
 
     recommenders = {
         "MultVAE": MultVAE,
-        "ALS": IALS,
-        "Hybrid": RP3_recommender,
+        "IALS": IALS,
+        "RP3": RP3_recommender,
         "SLIM": SLIM_recommender,
-        "Item": EASE_R,
+        "Item": item_recommender,
+        "P3": P3_recommender,
+        "EASE": EASE_R
     }
 
+    # {'alpha': 5.9212989736820605, 'beta': 7.446622411115129, 'gamma': -1.0, 'epsilon': -1.0, 'zeta': 5.52823074507587, 'eta': 30.0, 'theta': 8.21290206009289
+
     hyperparameters_range_dictionary = {
-        "MultVAE": Real(low=10.0, high=35.0, prior='uniform'),
-        "ALS": Real(low=-1.0, high=3.0, prior='uniform'),
-        "Hybrid": Real(low=0.0, high=10.0, prior='uniform'),
-        "SLIM": Real(low=0.0, high=10.0, prior='uniform'),
-        "Item": Real(low=-2.0, high=5.0, prior='uniform'),
+        "alpha": Real(low=5, high=10, prior='uniform'),
+        "beta": Real(low=8, high=10, prior='uniform'),
+        "gamma": Real(low=-3, high=3, prior='uniform'),
+        "epsilon": Real(low=-3, high=3, prior='uniform'),
+        "zeta": Real(low=5, high=10, prior='uniform'),
+        "eta": Real(low=30, high=40, prior='uniform'),
+        "theta": Real(low=7, high=12, prior='uniform')
     }
 
     recommender_class = HybridLinear
@@ -143,7 +158,7 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 150
+    n_cases = 100
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10

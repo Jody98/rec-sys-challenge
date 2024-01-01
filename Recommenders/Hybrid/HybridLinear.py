@@ -9,14 +9,16 @@ class HybridLinear(BaseRecommender):
 
         self.recommenders = recommenders
 
-    def fit(self, MultVAE=0, ALS=0, Hybrid=0, SLIM=0, Item=0, P3=0):
+    def fit(self, alpha=0, beta=0, gamma=0, delta=0, epsilon=0, zeta=0, eta=0, theta=0):
         self.weights = {
-            "MultVAE": MultVAE,
-            "ALS": ALS,
-            "Hybrid": Hybrid,
-            "SLIM": SLIM,
-            "Item": Item,
-            "P3": P3
+            "RP3": alpha,
+            "SLIM": beta,
+            "IALS": gamma,
+            "ALS": delta,
+            "EASE": epsilon,
+            "Item": zeta,
+            "MultVAE": eta,
+            "P3": theta
         }
 
     def _compute_item_score(self, user_id_array, items_to_compute=None):
