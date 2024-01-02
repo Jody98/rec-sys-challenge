@@ -5,10 +5,11 @@ from Recommenders.EASE_R import EASE_R_Recommender
 from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
 from Recommenders.Hybrid.HybridLinear import HybridLinear
 from Recommenders.KNN import ItemKNNCFRecommender
+from Recommenders.KNN.ItemKNNSimilarityTripleHybridRecommender import ItemKNNSimilarityTripleHybridRecommender
 from Recommenders.MatrixFactorization import IALSRecommender, ALSRecommender
 from Recommenders.Neural.MultVAERecommender import MultVAERecommender_PyTorch_OptimizerMask
 from Recommenders.SLIM import SLIMElasticNetRecommender
-from challenge.utils.functions import read_data
+from challenge.utils.functions import read_data, generate_submission_csv
 
 
 def __main__():
@@ -86,44 +87,42 @@ def __main__():
     results, _ = evaluator_train.evaluateRecommender(EASE_R)
     print("EASE_R_Recommender MAP: {}".format(results.loc[10]["MAP"]))
 
-    recommenders = {
-        "MultVAE": MultVAE,
-        "IALS": IALS,
-        "RP3": RP3_recommender,
+    '''recommenders = {
         "SLIM": SLIM_recommender,
-        "Item": item_recommender,
-        "P3": P3_recommender,
-        "EASE": EASE_R
+        "MultVAE": MultVAE
     }
 
-    # {'alpha': 5.9212989736820605, 'beta': 7.446622411115129, 'gamma': -1.0, 'epsilon': -1.0, 'zeta': 5.52823074507587, 'eta': 30.0, 'theta': 8.21290206009289
+    # {'beta': 0.2346835055620778, 'eta': 1.2977086687973751}
+
+    # MAP: 0.0503281
 
     all_recommender = HybridLinear(URM_train, recommenders)
-    all_recommender.fit(alpha=5.9212989736820605, beta=7.446622411115129, gamma=-1.0, epsilon=-1.0,
-                        zeta=5.52823074507587, eta=30.0, theta=8.21290206009289)
+    all_recommender.fit(beta=0.2346835055620778, eta=1.2977086687973751)
 
     results, _ = evaluator_train.evaluateRecommender(all_recommender)
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    '''all_recommender = HybridLinear(URM_train, recommenders)
-    all_recommender.fit(MultVAE=16.180249222221073, ALS=-0.38442274063330273, P3=0,
-                        Hybrid=2.060407131177933, SLIM=2.945116702486108, Item=0.9747256690221096)
+    recommenders = {
+        "RP3": RP3_recommender,
+        "Item": item_recommender,
+        "P3": P3_recommender,
+    }
 
-    recommended_items = all_recommender.recommend(users_list, cutoff=10)
-    recommendations = []
-    for i in zip(users_list, recommended_items):
-        recommendation = {"user_id": i[0], "item_list": i[1]}
-        recommendations.append(recommendation)
+    # MAP: 0.05036790716033374
 
-    generate_submission_csv("../output_files/LinearHybridBIGSubmission.csv", recommendations)
+    hybrid_recommender = ItemKNNSimilarityTripleHybridRecommender(URM_train, p3alpha_Wsparse, item_Wsparse, RP3_Wsparse)
+    hybrid_recommender.fit(topK=225, alpha=0.4976629488640914, beta=0.13017801200221196)
 
-    results, _ = evaluator_train.evaluateRecommender(all_recommender)
-    print("BEST\n")
+    results, _ = evaluator_train.evaluateRecommender(hybrid_recommender)
+    print("ItemKNNSimilarityTripleHybridRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
+    # {'alpha': 2.3983228441319024, 'zeta': 1.4612615181482025, 'theta': 2.1919076737894887}
+
+    # MAP: 0.05031405174699656
+
     all_recommender = HybridLinear(URM_train, recommenders)
-    all_recommender.fit(MultVAE=22.49712994749978, ALS=2.6648191600842233, P3=0,
-                        Hybrid=9.474672746313598, SLIM=11.510342917203092, Item=2.5405802065405516)
+    all_recommender.fit(alpha=2.3983228441319024, zeta=1.4612615181482025, theta=2.1919076737894887)
 
     results, _ = evaluator_train.evaluateRecommender(all_recommender)
     print("MAP: {}".format(results.loc[10]["MAP"]))'''

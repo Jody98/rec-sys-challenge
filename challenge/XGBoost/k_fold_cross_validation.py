@@ -209,15 +209,15 @@ def train_recommenders(URM_train):
 
     recommenders = {
         "MultVAE": MultVAE,
-        "ALS": IALS,
+        "IALS": IALS,
         "Hybrid": RP3_recommender,
         "SLIM": SLIM_recommender,
         "Item": item_recommender
     }
 
     all_recommender = HybridLinear(URM_train, recommenders)
-    all_recommender.fit(MultVAE=14.180249222221073, ALS=-0.38442274063330273,
-                        Hybrid=2.060407131177933, SLIM=2.945116702486108, Item=0.9737256690221096)
+    all_recommender.fit(eta=14.180249222221073, gamma=-0.38442274063330273,
+                        alpha=2.060407131177933, beta=2.945116702486108, zeta=0.9737256690221096)
 
     return {
         "Top": topPop,

@@ -110,25 +110,13 @@ def __main__():
     print("MultVAE MAP: {}".format(results.loc[10]["MAP"]))
 
     recommenders = {
-        "MultVAE": MultVAE,
-        "IALS": IALS,
-        "RP3": RP3_recommender,
         "SLIM": SLIM_recommender,
-        "Item": item_recommender,
-        "P3": P3_recommender,
-        "EASE": EASE_R
+        "MultVAE": MultVAE
     }
 
-    # {'alpha': 5.9212989736820605, 'beta': 7.446622411115129, 'gamma': -1.0, 'epsilon': -1.0, 'zeta': 5.52823074507587, 'eta': 30.0, 'theta': 8.21290206009289
-
     hyperparameters_range_dictionary = {
-        "alpha": Real(low=5, high=10, prior='uniform'),
-        "beta": Real(low=8, high=10, prior='uniform'),
-        "gamma": Real(low=-3, high=3, prior='uniform'),
-        "epsilon": Real(low=-3, high=3, prior='uniform'),
-        "zeta": Real(low=5, high=10, prior='uniform'),
-        "eta": Real(low=30, high=40, prior='uniform'),
-        "theta": Real(low=7, high=12, prior='uniform')
+        "beta": Real(low=0, high=10, prior='uniform'),
+        "eta": Real(low=0, high=10, prior='uniform'),
     }
 
     recommender_class = HybridLinear
@@ -158,7 +146,7 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 100
+    n_cases = 1000
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10
