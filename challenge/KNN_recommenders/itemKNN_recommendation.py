@@ -24,8 +24,7 @@ def __main__():
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
-    recommender.fit(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.029873869886469468,
-                    tversky_beta=0.9937782758482816)
+    recommender.fit(topK=11, shrink=25, similarity='asymmetric', asymmetric_alpha=0.02080568072559298)
 
     results, _ = evaluator_test.evaluateRecommender(recommender)
     print("MAP: {}".format(results.loc[10]["MAP"]))

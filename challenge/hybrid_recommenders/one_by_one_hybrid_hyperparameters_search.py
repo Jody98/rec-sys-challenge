@@ -22,8 +22,8 @@ from Data_manager.split_functions.split_train_validation_random_holdout import \
 def __main__():
     cutoff_list = [10]
     folder_path = "../result_experiments/"
-    SLIM80 = "SLIMElasticNetRecommender_best_model64.zip"
-    MultVAE64 = "MultVAERecommender_best_model64.zip"
+    SLIM64 = "SLIMElasticNetRecommender_best_model64.zip"
+    MultVAE64 = "Mult_VAE_Recommender_best_model64.zip"
 
     URM_train_validation = sps.load_npz('../input_files/URM_train_plus_validation.npz')
     URM_train = sps.load_npz('../input_files/URM_train.npz')
@@ -33,7 +33,7 @@ def __main__():
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
 
     SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
-    SLIM_recommender.load_model(folder_path, SLIM80)
+    SLIM_recommender.load_model(folder_path, SLIM64)
 
     results, _ = evaluator.evaluateRecommender(SLIM_recommender)
     print("SLIM MAP: {}".format(results.loc[10]["MAP"]))
@@ -65,20 +65,6 @@ def __main__():
     print("RP3betaRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    hybrid_recommender = ItemKNNSimilarityTripleHybridRecommender(URM_train, p3alpha_Wsparse, item_Wsparse, RP3_Wsparse)
-    hybrid_recommender.fit(topK=225, alpha=0.4976629488640914, beta=0.13017801200221196)
-
-    results, _ = evaluator.evaluateRecommender(hybrid_recommender)
-    print("ItemKNNSimilarityTripleHybridRecommender")
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
-    recommender = DifferentLossScoresHybridRecommender(URM_train, hybrid_recommender, SLIM_recommender)
-    recommender.fit(norm=1, alpha=0.4932241483167159)
-
-    results, _ = evaluator.evaluateRecommender(recommender)
-    print("DifferentLossScoresHybridRecommender")
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
     multvae_recommender = MultVAERecommender_PyTorch_OptimizerMask(URM_train)
     multvae_recommender.load_model(folder_path, MultVAE64)
 
@@ -98,7 +84,7 @@ def __main__():
                                                evaluator_test=evaluator)
 
     recommender_input_args = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, multvae_recommender, recommender],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, SLIM_recommender, RP3_recommender],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},
@@ -106,7 +92,7 @@ def __main__():
     )
 
     recommender_input_args_last_test = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, multvae_recommender, recommender],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, SLIM_recommender, RP3_recommender],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},
@@ -118,7 +104,7 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 100
+    n_cases = 1000
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10

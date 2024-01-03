@@ -15,7 +15,7 @@ from challenge.utils.functions import read_data, generate_submission_csv
 def __main__():
     cutoff_list = [10]
     folder_path = "../result_experiments/"
-    SLIM80 = "SLIM_ElasticNetRecommender_best_model80.zip"
+    SLIM80 = "SLIMElasticNetRecommender_best_model80.zip"
     MultVAE80 = "MultVAERecommender_best_model80.zip"
     IALS80 = "IALSRecommender_best_model80.zip"
     ALS80 = "ALSRecommender_best_model80.zip"
@@ -87,7 +87,7 @@ def __main__():
     results, _ = evaluator_train.evaluateRecommender(EASE_R)
     print("EASE_R_Recommender MAP: {}".format(results.loc[10]["MAP"]))
 
-    '''recommenders = {
+    recommenders = {
         "SLIM": SLIM_recommender,
         "MultVAE": MultVAE
     }
@@ -97,12 +97,12 @@ def __main__():
     # MAP: 0.0503281
 
     all_recommender = HybridLinear(URM_train, recommenders)
-    all_recommender.fit(beta=0.2346835055620778, eta=1.2977086687973751)
+    all_recommender.fit(beta=0.4202215628168671, eta=1.2474496525666514)
 
     results, _ = evaluator_train.evaluateRecommender(all_recommender)
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    recommenders = {
+    '''recommenders = {
         "RP3": RP3_recommender,
         "Item": item_recommender,
         "P3": P3_recommender,
