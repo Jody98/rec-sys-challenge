@@ -1,5 +1,6 @@
 import numpy as np
 import scipy.sparse as sps
+from tqdm import tqdm
 
 from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.GraphBased import RP3betaRecommender, P3alphaRecommender
@@ -9,14 +10,14 @@ from Recommenders.Neural.MultVAERecommender import MultVAERecommender_PyTorch_Op
 from Recommenders.SLIM import SLIMElasticNetRecommender
 from Recommenders.EASE_R import EASE_R_Recommender
 from Recommenders.MatrixFactorization import IALSRecommender
-from challenge.utils.functions import read_data
+from challenge.utils.functions import read_data, generate_submission_csv
 
 
 def __main__():
     cutoff_list = [10]
     folder_path = "../result_experiments/"
-    SLIM80 = "SLIMElasticNetRecommender_best_model80.zip"
-    MultVAE80 = "Mult_VAE_Recommender_best_model80.zip"
+    SLIM80 = "SLIMElasticNetRecommender_best_model100.zip"
+    MultVAE80 = "Mult_VAE_Recommender_best_model100.zip"
     EASE80 = "EASE_R_Recommender_best_model80.zip"
     IALS80 = "IALSRecommender_best_model80.zip"
     data_file_path = '../input_files/data_train.csv'
@@ -25,7 +26,7 @@ def __main__():
 
     URM_train = sps.load_npz('../input_files/URM_train_plus_validation.npz')
     URM_test = sps.load_npz('../input_files/URM_test.npz')
-    URM_all = sps.load_npz('../input_files/URM_all.npz')
+    URM_train = sps.load_npz('../input_files/URM_all.npz')
 
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
 
@@ -95,17 +96,19 @@ def __main__():
     results, _ = evaluator.evaluateRecommender(SLIMRP3Item)
     print("SLIMRP3Item MAP: {}".format(results.loc[10]["MAP"]))
 
-    SLIMRP3ItemEASE = DifferentLossScoresHybridRecommender(URM_train, SLIMRP3Item, ease)
-    SLIMRP3ItemEASE.fit(norm=np.inf, alpha=0.9936820574807692)
-
-    results, _ = evaluator.evaluateRecommender(SLIMRP3ItemEASE)
-    print("SLIMRP3ItemEASE MAP: {}".format(results.loc[10]["MAP"]))
-
     SLIMRP3ItemMult = DifferentLossScoresHybridRecommender(URM_train, SLIMRP3Item, multvae)
     SLIMRP3ItemMult.fit(norm=2, alpha=0.2759969848752059)
 
     results, _ = evaluator.evaluateRecommender(SLIMRP3ItemMult)
     print("SLIMRP3ItemMult MAP: {}".format(results.loc[10]["MAP"]))
+
+    recommended_items = SLIMRP3ItemMult.recommend(users_list, cutoff=10)
+    recommendations = []
+    for i in tqdm(zip(users_list, recommended_items)):
+        recommendation = {"user_id": i[0], "item_list": i[1]}
+        recommendations.append(recommendation)
+
+    generate_submission_csv("../output_files/OneByOneSubmission.csv", recommendations)
 
 
 if __name__ == '__main__':

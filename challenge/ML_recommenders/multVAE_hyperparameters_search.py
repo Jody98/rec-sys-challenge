@@ -37,6 +37,18 @@ def __main__():
         "l2_reg": Real(low=1e-6, high=1e-3, prior='log-uniform'),
     }
 
+    hyperparameters_range_dictionary = {
+        "batch_size": Integer(920, 970),
+        "learning_rate": Real(0.0054, 0.0059),
+        "l2_reg": Real(0.01, 0.02),
+        "total_anneal_steps": Integer(1430, 1480),
+        "anneal_cap": Real(0.49, 0.53),
+        "dropout": Real(0.0022, 0.0028),
+        "encoding_size": Integer(2920, 2980),
+        "next_layer_size_multiplier": Integer(18, 23),
+        "max_n_hidden_layers": Integer(2, 10)
+    }
+
     recommender_class = MultVAERecommender
 
     hyperparameterSearch = SearchBayesianSkopt(recommender_class,

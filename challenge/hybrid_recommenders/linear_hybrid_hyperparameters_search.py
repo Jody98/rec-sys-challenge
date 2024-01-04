@@ -111,12 +111,16 @@ def __main__():
 
     recommenders = {
         "SLIM": SLIM_recommender,
-        "MultVAE": MultVAE
+        "MultVAE": MultVAE,
+        "RP3": RP3_recommender,
+        "Item": item_recommender,
     }
 
     hyperparameters_range_dictionary = {
-        "beta": Real(low=0, high=10, prior='uniform'),
-        "eta": Real(low=0, high=10, prior='uniform'),
+        "alpha": Real(low=0, high=30, prior='uniform'),
+        "beta": Real(low=0, high=30, prior='uniform'),
+        "zeta": Real(low=0, high=30, prior='uniform'),
+        "eta": Real(low=0, high=30, prior='uniform'),
     }
 
     recommender_class = HybridLinear

@@ -97,14 +97,8 @@ def __main__():
     results, _ = evaluator.evaluateRecommender(SLIMRP3Item)
     print("SLIMRP3Item MAP: {}".format(results.loc[10]["MAP"]))
 
-    SLIMRP3ItemEASE = DifferentLossScoresHybridRecommender(URM_train, SLIMRP3Item, ease)
-    SLIMRP3ItemEASE.fit(norm=np.inf, alpha=0.9936820574807692)
-
-    results, _ = evaluator.evaluateRecommender(SLIMRP3ItemEASE)
-    print("SLIMRP3ItemEASE MAP: {}".format(results.loc[10]["MAP"]))
-
     SLIMRP3ItemMult = DifferentLossScoresHybridRecommender(URM_train, SLIMRP3Item, multvae)
-    SLIMRP3ItemMult.fit(norm=2, alpha=0.2759969848752059)
+    SLIMRP3ItemMult.fit(norm=2, alpha=0.3009969848752059)
 
     results, _ = evaluator.evaluateRecommender(SLIMRP3ItemMult)
     print("SLIMRP3ItemMult MAP: {}".format(results.loc[10]["MAP"]))
@@ -121,31 +115,19 @@ def __main__():
                                                evaluator_test=evaluator)
 
     recommender_input_args = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, SLIMRP3ItemMult, p3alpha],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, SLIMRP3ItemMult, ease],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},
-        EARLYSTOPPING_KEYWORD_ARGS={
-            "validation_every_n": 1,
-            "stop_on_validation": True,
-            "evaluator_object": evaluator_validation,
-            "lower_validations_allowed": 5,
-            "validation_metric": "MAP",
-        },
+        EARLYSTOPPING_KEYWORD_ARGS={},
     )
 
     recommender_input_args_last_test = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, SLIMRP3ItemMult, p3alpha],
+        CONSTRUCTOR_POSITIONAL_ARGS=[URM_train_validation, SLIMRP3ItemMult, ease],
         CONSTRUCTOR_KEYWORD_ARGS={},
         FIT_POSITIONAL_ARGS=[],
         FIT_KEYWORD_ARGS={},
-        EARLYSTOPPING_KEYWORD_ARGS={
-            "validation_every_n": 1,
-            "stop_on_validation": True,
-            "evaluator_object": evaluator_validation,
-            "lower_validations_allowed": 5,
-            "validation_metric": "MAP",
-        },
+        EARLYSTOPPING_KEYWORD_ARGS={},
     )
 
     output_folder_path = "../result_experiments/"

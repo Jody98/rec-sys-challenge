@@ -3915,3 +3915,549 @@ SearchBayesianSkopt: Config 144 Exception. Config: {'norm': 2.0, 'alpha': 0.9716
     recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
 TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'validation_every_n'
 
+SearchBayesianSkopt: Config 0 Exception. Config: {'norm': 2.0, 'alpha': 0.9892177292438238} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 1 Exception. Config: {'norm': 2.0, 'alpha': 0.9023103961523092} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 2 Exception. Config: {'norm': inf, 'alpha': 0.9510591721282777} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 3 Exception. Config: {'norm': 2.0, 'alpha': 0.9311662112318182} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 4 Exception. Config: {'norm': 2.0, 'alpha': 0.9497654152923012} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 5 Exception. Config: {'norm': 2.0, 'alpha': 0.9929601345284634} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 6 Exception. Config: {'norm': 2.0, 'alpha': 0.995209201647731} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 7 Exception. Config: {'norm': 1.0, 'alpha': 0.9794860313313647} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 8 Exception. Config: {'norm': 2.0, 'alpha': 0.9999958053023486} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 9 Exception. Config: {'norm': inf, 'alpha': 0.9417009676801715} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 10 Exception. Config: {'norm': 2.0, 'alpha': 0.9114435329683098} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 11 Exception. Config: {'norm': 1.0, 'alpha': 0.9532164847367864} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 12 Exception. Config: {'norm': inf, 'alpha': 0.9652536830858647} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 13 Exception. Config: {'norm': 2.0, 'alpha': 0.99848338009487} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 14 Exception. Config: {'norm': inf, 'alpha': 0.9359646490992583} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 15 Exception. Config: {'norm': 1.0, 'alpha': 0.9273370190201139} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 16 Exception. Config: {'norm': inf, 'alpha': 0.9011478411017438} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 17 Exception. Config: {'norm': 2.0, 'alpha': 0.9958602217333292} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 18 Exception. Config: {'norm': 2.0, 'alpha': 0.9388697271861106} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 19 Exception. Config: {'norm': 1.0, 'alpha': 0.9450783915683} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 20 Exception. Config: {'norm': inf, 'alpha': 0.9467816714558609} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 21 Exception. Config: {'norm': 2.0, 'alpha': 0.980743024325723} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 22 Exception. Config: {'norm': inf, 'alpha': 0.9960140613080064} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 23 Exception. Config: {'norm': 1.0, 'alpha': 0.9115905223802355} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 24 Exception. Config: {'norm': 2.0, 'alpha': 0.91667284154908} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 25 Exception. Config: {'norm': inf, 'alpha': 0.9591410486064984} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 26 Exception. Config: {'norm': 2.0, 'alpha': 0.9101250111104027} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 27 Exception. Config: {'norm': inf, 'alpha': 0.9282352458382316} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 28 Exception. Config: {'norm': 2.0, 'alpha': 0.9321046363451578} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 29 Exception. Config: {'norm': 2.0, 'alpha': 0.92127739941215} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 30 Exception. Config: {'norm': 2.0, 'alpha': 0.9798063670421755} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 31 Exception. Config: {'norm': 2.0, 'alpha': 0.9598791667283647} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 32 Exception. Config: {'norm': 1.0, 'alpha': 0.9233270748735763} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 33 Exception. Config: {'norm': 1.0, 'alpha': 0.9971957457155275} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 34 Exception. Config: {'norm': inf, 'alpha': 0.9046024671316156} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 35 Exception. Config: {'norm': inf, 'alpha': 0.9629486363041725} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 36 Exception. Config: {'norm': 2.0, 'alpha': 0.9590479636524222} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 37 Exception. Config: {'norm': inf, 'alpha': 0.9232413091127969} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 38 Exception. Config: {'norm': 2.0, 'alpha': 0.9564255908451473} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 39 Exception. Config: {'norm': inf, 'alpha': 0.9216258116817564} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 40 Exception. Config: {'norm': 2.0, 'alpha': 0.9443859988171867} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 41 Exception. Config: {'norm': 2.0, 'alpha': 0.9144469970838833} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 42 Exception. Config: {'norm': inf, 'alpha': 0.957788802757487} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: Config 43 Exception. Config: {'norm': 2.0, 'alpha': 0.973717558519803} - Exception: Traceback (most recent call last):
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 468, in _objective_function
+    result_df, recommender_instance = self._evaluate_on_validation(current_fit_hyperparameters_dict, was_already_evaluated_flag, was_already_evaluated_index)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 326, in _evaluate_on_validation
+    recommender_instance, train_time = self._fit_model(current_fit_hyperparameters)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jodyrobertobattistini/PycharmProjects/rec-sys-challenge/HyperparameterTuning/SearchAbstractClass.py", line 297, in _fit_model
+    recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
+TypeError: DifferentLossScoresHybridRecommender.fit() got an unexpected keyword argument 'stop_on_validation'
+
+SearchBayesianSkopt: New best config found. Config 0: {'norm': 2.0, 'alpha': 0.9191961982554611} - results: PRECISION: 0.0563493, PRECISION_RECALL_MIN_DEN: 0.0608723, RECALL: 0.0231940, MAP: 0.0262565, MAP_MIN_DEN: 0.0286166, MRR: 0.1716478, NDCG: 0.0675285, F1: 0.0328618, HIT_RATE: 0.3616867, ARHR_ALL_HITS: 0.2110824, NOVELTY: 0.0051481, AVERAGE_POPULARITY: 0.1866529, DIVERSITY_MEAN_INTER_LIST: 0.9822264, DIVERSITY_HERFINDAHL: 0.9982147, COVERAGE_ITEM: 0.4469304, COVERAGE_ITEM_HIT: 0.0765617, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3444146, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0880520, SHANNON_ENTROPY: 10.7925937, RATIO_DIVERSITY_HERFINDAHL: 0.9985754, RATIO_DIVERSITY_GINI: 0.2571133, RATIO_SHANNON_ENTROPY: 0.8321002, RATIO_AVERAGE_POPULARITY: 1.6404787, RATIO_NOVELTY: 0.3770878, 
+SearchBayesianSkopt: Config evaluated with evaluator_test. Config: {'norm': 2.0, 'alpha': 0.9191961982554611} - results:
+CUTOFF: 10 - PRECISION: 0.0815774, PRECISION_RECALL_MIN_DEN: 0.1426701, RECALL: 0.1209281, MAP: 0.0393256, MAP_MIN_DEN: 0.0683759, MRR: 0.2333643, NDCG: 0.1276401, F1: 0.0974295, HIT_RATE: 0.4795938, ARHR_ALL_HITS: 0.3005788, NOVELTY: 0.0050948, AVERAGE_POPULARITY: 0.1962594, DIVERSITY_MEAN_INTER_LIST: 0.9795162, DIVERSITY_HERFINDAHL: 0.9979423, COVERAGE_ITEM: 0.3594953, COVERAGE_ITEM_HIT: 0.0846608, ITEMS_IN_GT: 0.7993109, COVERAGE_USER: 0.8089060, COVERAGE_USER_HIT: 0.3879463, USERS_IN_GT: 0.8089060, DIVERSITY_GINI: 0.0711259, SHANNON_ENTROPY: 10.5304250, RATIO_DIVERSITY_HERFINDAHL: 0.9983029, RATIO_DIVERSITY_GINI: 0.2076888, RATIO_SHANNON_ENTROPY: 0.8118872, RATIO_AVERAGE_POPULARITY: 1.7249095, RATIO_NOVELTY: 0.3731821, 
+
+SearchBayesianSkopt: New best config found. Config 1: {'norm': 1.0, 'alpha': 0.905549068262658} - results: PRECISION: 0.0563573, PRECISION_RECALL_MIN_DEN: 0.0608882, RECALL: 0.0231743, MAP: 0.0262631, MAP_MIN_DEN: 0.0286219, MRR: 0.1715859, NDCG: 0.0675391, F1: 0.0328433, HIT_RATE: 0.3618479, ARHR_ALL_HITS: 0.2110827, NOVELTY: 0.0051282, AVERAGE_POPULARITY: 0.1910854, DIVERSITY_MEAN_INTER_LIST: 0.9814720, DIVERSITY_HERFINDAHL: 0.9981393, COVERAGE_ITEM: 0.4393234, COVERAGE_ITEM_HIT: 0.0757562, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3445681, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0849861, SHANNON_ENTROPY: 10.7359107, RATIO_DIVERSITY_HERFINDAHL: 0.9984999, RATIO_DIVERSITY_GINI: 0.2481610, RATIO_SHANNON_ENTROPY: 0.8277299, RATIO_AVERAGE_POPULARITY: 1.6794356, RATIO_NOVELTY: 0.3756273, 
+SearchBayesianSkopt: Config evaluated with evaluator_test. Config: {'norm': 1.0, 'alpha': 0.905549068262658} - results:
+CUTOFF: 10 - PRECISION: 0.0822039, PRECISION_RECALL_MIN_DEN: 0.1435924, RECALL: 0.1217281, MAP: 0.0394848, MAP_MIN_DEN: 0.0685889, MRR: 0.2333722, NDCG: 0.1281405, F1: 0.0981359, HIT_RATE: 0.4819666, ARHR_ALL_HITS: 0.3011423, NOVELTY: 0.0050725, AVERAGE_POPULARITY: 0.2013020, DIVERSITY_MEAN_INTER_LIST: 0.9786399, DIVERSITY_HERFINDAHL: 0.9978547, COVERAGE_ITEM: 0.3500089, COVERAGE_ITEM_HIT: 0.0843028, ITEMS_IN_GT: 0.7993109, COVERAGE_USER: 0.8089060, COVERAGE_USER_HIT: 0.3898656, USERS_IN_GT: 0.8089060, DIVERSITY_GINI: 0.0681146, SHANNON_ENTROPY: 10.4701404, RATIO_DIVERSITY_HERFINDAHL: 0.9982152, RATIO_DIVERSITY_GINI: 0.1988959, RATIO_SHANNON_ENTROPY: 0.8072393, RATIO_AVERAGE_POPULARITY: 1.7692287, RATIO_NOVELTY: 0.3715474, 
+
+SearchBayesianSkopt: Config 2 is suboptimal. Config: {'norm': 2.0, 'alpha': 0.9205829474005437} - results: PRECISION: 0.0563331, PRECISION_RECALL_MIN_DEN: 0.0608561, RECALL: 0.0231935, MAP: 0.0262598, MAP_MIN_DEN: 0.0286154, MRR: 0.1715880, NDCG: 0.0675157, F1: 0.0328585, HIT_RATE: 0.3613642, ARHR_ALL_HITS: 0.2110702, NOVELTY: 0.0051475, AVERAGE_POPULARITY: 0.1867793, DIVERSITY_MEAN_INTER_LIST: 0.9822037, DIVERSITY_HERFINDAHL: 0.9982124, COVERAGE_ITEM: 0.4467514, COVERAGE_ITEM_HIT: 0.0764722, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3441075, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0879607, SHANNON_ENTROPY: 10.7908586, RATIO_DIVERSITY_HERFINDAHL: 0.9985731, RATIO_DIVERSITY_GINI: 0.2568467, RATIO_SHANNON_ENTROPY: 0.8319664, RATIO_AVERAGE_POPULARITY: 1.6415895, RATIO_NOVELTY: 0.3770466, 
+SearchBayesianSkopt: Config 3 is suboptimal. Config: {'norm': 1.0, 'alpha': 0.9463431365420498} - results: PRECISION: 0.0567040, PRECISION_RECALL_MIN_DEN: 0.0612608, RECALL: 0.0233421, MAP: 0.0262522, MAP_MIN_DEN: 0.0286073, MRR: 0.1712991, NDCG: 0.0676660, F1: 0.0330707, HIT_RATE: 0.3634605, ARHR_ALL_HITS: 0.2108446, NOVELTY: 0.0051147, AVERAGE_POPULARITY: 0.1939666, DIVERSITY_MEAN_INTER_LIST: 0.9809499, DIVERSITY_HERFINDAHL: 0.9980871, COVERAGE_ITEM: 0.4350277, COVERAGE_ITEM_HIT: 0.0756667, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3461036, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0830014, SHANNON_ENTROPY: 10.6971914, RATIO_DIVERSITY_HERFINDAHL: 0.9984477, RATIO_DIVERSITY_GINI: 0.2423657, RATIO_SHANNON_ENTROPY: 0.8247447, RATIO_AVERAGE_POPULARITY: 1.7047581, RATIO_NOVELTY: 0.3746441, 
+SearchBayesianSkopt: New best config found. Config 4: {'norm': inf, 'alpha': 0.9325731160817216} - results: PRECISION: 0.0564299, PRECISION_RECALL_MIN_DEN: 0.0609534, RECALL: 0.0232127, MAP: 0.0262720, MAP_MIN_DEN: 0.0286292, MRR: 0.1715639, NDCG: 0.0675648, F1: 0.0328942, HIT_RATE: 0.3619286, ARHR_ALL_HITS: 0.2110643, NOVELTY: 0.0051266, AVERAGE_POPULARITY: 0.1913950, DIVERSITY_MEAN_INTER_LIST: 0.9814126, DIVERSITY_HERFINDAHL: 0.9981334, COVERAGE_ITEM: 0.4381600, COVERAGE_ITEM_HIT: 0.0759800, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3446449, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0847056, SHANNON_ENTROPY: 10.7317244, RATIO_DIVERSITY_HERFINDAHL: 0.9984940, RATIO_DIVERSITY_GINI: 0.2473419, RATIO_SHANNON_ENTROPY: 0.8274072, RATIO_AVERAGE_POPULARITY: 1.6821567, RATIO_NOVELTY: 0.3755132, 
+SearchBayesianSkopt: New best config found. Config 0: {'norm': 1.0, 'alpha': 0.9067923466091675} - results: PRECISION: 0.0563331, PRECISION_RECALL_MIN_DEN: 0.0608649, RECALL: 0.0231614, MAP: 0.0262268, MAP_MIN_DEN: 0.0285871, MRR: 0.1713220, NDCG: 0.0674748, F1: 0.0328263, HIT_RATE: 0.3615254, ARHR_ALL_HITS: 0.2107773, NOVELTY: 0.0051334, AVERAGE_POPULARITY: 0.1900691, DIVERSITY_MEAN_INTER_LIST: 0.9816815, DIVERSITY_HERFINDAHL: 0.9981602, COVERAGE_ITEM: 0.4426347, COVERAGE_ITEM_HIT: 0.0759352, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3442610, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0859344, SHANNON_ENTROPY: 10.7518892, RATIO_DIVERSITY_HERFINDAHL: 0.9985209, RATIO_DIVERSITY_GINI: 0.2509301, RATIO_SHANNON_ENTROPY: 0.8289619, RATIO_AVERAGE_POPULARITY: 1.6705036, RATIO_NOVELTY: 0.3760092, 
+SearchBayesianSkopt: Config evaluated with evaluator_test. Config: {'norm': 1.0, 'alpha': 0.9067923466091675} - results:
+CUTOFF: 10 - PRECISION: 0.0821374, PRECISION_RECALL_MIN_DEN: 0.1435013, RECALL: 0.1216307, MAP: 0.0394498, MAP_MIN_DEN: 0.0685267, MRR: 0.2331698, NDCG: 0.1280321, F1: 0.0980569, HIT_RATE: 0.4815869, ARHR_ALL_HITS: 0.3008737, NOVELTY: 0.0050765, AVERAGE_POPULARITY: 0.2005774, DIVERSITY_MEAN_INTER_LIST: 0.9788020, DIVERSITY_HERFINDAHL: 0.9978709, COVERAGE_ITEM: 0.3528280, COVERAGE_ITEM_HIT: 0.0844371, ITEMS_IN_GT: 0.7993109, COVERAGE_USER: 0.8089060, COVERAGE_USER_HIT: 0.3895585, USERS_IN_GT: 0.8089060, DIVERSITY_GINI: 0.0687801, SHANNON_ENTROPY: 10.4826371, RATIO_DIVERSITY_HERFINDAHL: 0.9982315, RATIO_DIVERSITY_GINI: 0.2008392, RATIO_SHANNON_ENTROPY: 0.8082028, RATIO_AVERAGE_POPULARITY: 1.7628601, RATIO_NOVELTY: 0.3718400, 
+
+SearchBayesianSkopt: New best config found. Config 1: {'norm': 2.0, 'alpha': 0.9121875934724614} - results: PRECISION: 0.0563493, PRECISION_RECALL_MIN_DEN: 0.0608723, RECALL: 0.0232000, MAP: 0.0262578, MAP_MIN_DEN: 0.0286074, MRR: 0.1715635, NDCG: 0.0675105, F1: 0.0328677, HIT_RATE: 0.3615254, ARHR_ALL_HITS: 0.2110417, NOVELTY: 0.0051535, AVERAGE_POPULARITY: 0.1856254, DIVERSITY_MEAN_INTER_LIST: 0.9824144, DIVERSITY_HERFINDAHL: 0.9982335, COVERAGE_ITEM: 0.4500626, COVERAGE_ITEM_HIT: 0.0766512, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3442610, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0890535, SHANNON_ENTROPY: 10.8087954, RATIO_DIVERSITY_HERFINDAHL: 0.9985942, RATIO_DIVERSITY_GINI: 0.2600378, RATIO_SHANNON_ENTROPY: 0.8333493, RATIO_AVERAGE_POPULARITY: 1.6314479, RATIO_NOVELTY: 0.3774854, 
+SearchBayesianSkopt: Config evaluated with evaluator_test. Config: {'norm': 2.0, 'alpha': 0.9121875934724614} - results:
+CUTOFF: 10 - PRECISION: 0.0815015, PRECISION_RECALL_MIN_DEN: 0.1425638, RECALL: 0.1207995, MAP: 0.0393114, MAP_MIN_DEN: 0.0683576, MRR: 0.2332562, NDCG: 0.1275671, F1: 0.0973336, HIT_RATE: 0.4791192, ARHR_ALL_HITS: 0.3004587, NOVELTY: 0.0050991, AVERAGE_POPULARITY: 0.1954478, DIVERSITY_MEAN_INTER_LIST: 0.9796844, DIVERSITY_HERFINDAHL: 0.9979591, COVERAGE_ITEM: 0.3616878, COVERAGE_ITEM_HIT: 0.0848398, ITEMS_IN_GT: 0.7993109, COVERAGE_USER: 0.8089060, COVERAGE_USER_HIT: 0.3875624, USERS_IN_GT: 0.8089060, DIVERSITY_GINI: 0.0718130, SHANNON_ENTROPY: 10.5436590, RATIO_DIVERSITY_HERFINDAHL: 0.9983197, RATIO_DIVERSITY_GINI: 0.2096953, RATIO_SHANNON_ENTROPY: 0.8129075, RATIO_AVERAGE_POPULARITY: 1.7177764, RATIO_NOVELTY: 0.3734965, 
+
+SearchBayesianSkopt: Config 2 is suboptimal. Config: {'norm': 1.0, 'alpha': 0.9704538214541968} - results: PRECISION: 0.0567605, PRECISION_RECALL_MIN_DEN: 0.0613144, RECALL: 0.0233938, MAP: 0.0262281, MAP_MIN_DEN: 0.0285793, MRR: 0.1711175, NDCG: 0.0676586, F1: 0.0331322, HIT_RATE: 0.3641861, ARHR_ALL_HITS: 0.2106612, NOVELTY: 0.0051131, AVERAGE_POPULARITY: 0.1946313, DIVERSITY_MEAN_INTER_LIST: 0.9808634, DIVERSITY_HERFINDAHL: 0.9980784, COVERAGE_ITEM: 0.4370861, COVERAGE_ITEM_HIT: 0.0755772, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3467946, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0830181, SHANNON_ENTROPY: 10.6931146, RATIO_DIVERSITY_HERFINDAHL: 0.9984391, RATIO_DIVERSITY_GINI: 0.2424143, RATIO_SHANNON_ENTROPY: 0.8244304, RATIO_AVERAGE_POPULARITY: 1.7105998, RATIO_NOVELTY: 0.3745256, 
+SearchBayesianSkopt: Config 3 is suboptimal. Config: {'norm': 1.0, 'alpha': 0.9147977803839619} - results: PRECISION: 0.0564057, PRECISION_RECALL_MIN_DEN: 0.0609346, RECALL: 0.0231773, MAP: 0.0262378, MAP_MIN_DEN: 0.0285972, MRR: 0.1713064, NDCG: 0.0675119, F1: 0.0328545, HIT_RATE: 0.3617673, ARHR_ALL_HITS: 0.2107989, NOVELTY: 0.0051309, AVERAGE_POPULARITY: 0.1906291, DIVERSITY_MEAN_INTER_LIST: 0.9815789, DIVERSITY_HERFINDAHL: 0.9981500, COVERAGE_ITEM: 0.4420530, COVERAGE_ITEM_HIT: 0.0758010, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3444914, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0855631, SHANNON_ENTROPY: 10.7446655, RATIO_DIVERSITY_HERFINDAHL: 0.9985106, RATIO_DIVERSITY_GINI: 0.2498458, RATIO_SHANNON_ENTROPY: 0.8284049, RATIO_AVERAGE_POPULARITY: 1.6754246, RATIO_NOVELTY: 0.3758259, 
+SearchBayesianSkopt: Config 4 is suboptimal. Config: {'norm': 2.0, 'alpha': 0.9154068540398287} - results: PRECISION: 0.0563331, PRECISION_RECALL_MIN_DEN: 0.0608527, RECALL: 0.0231831, MAP: 0.0262455, MAP_MIN_DEN: 0.0285950, MRR: 0.1714661, NDCG: 0.0674866, F1: 0.0328481, HIT_RATE: 0.3613642, ARHR_ALL_HITS: 0.2109434, NOVELTY: 0.0051523, AVERAGE_POPULARITY: 0.1859379, DIVERSITY_MEAN_INTER_LIST: 0.9823660, DIVERSITY_HERFINDAHL: 0.9982287, COVERAGE_ITEM: 0.4495704, COVERAGE_ITEM_HIT: 0.0765169, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3441075, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0888870, SHANNON_ENTROPY: 10.8055782, RATIO_DIVERSITY_HERFINDAHL: 0.9985894, RATIO_DIVERSITY_GINI: 0.2595516, RATIO_SHANNON_ENTROPY: 0.8331012, RATIO_AVERAGE_POPULARITY: 1.6341939, RATIO_NOVELTY: 0.3773948, 
+SearchBayesianSkopt: New best config found. Config 5: {'norm': 2.0, 'alpha': 0.9220932597899877} - results: PRECISION: 0.0563976, PRECISION_RECALL_MIN_DEN: 0.0609172, RECALL: 0.0231973, MAP: 0.0262811, MAP_MIN_DEN: 0.0286350, MRR: 0.1715139, NDCG: 0.0675489, F1: 0.0328733, HIT_RATE: 0.3611223, ARHR_ALL_HITS: 0.2110948, NOVELTY: 0.0051488, AVERAGE_POPULARITY: 0.1866931, DIVERSITY_MEAN_INTER_LIST: 0.9822331, DIVERSITY_HERFINDAHL: 0.9982154, COVERAGE_ITEM: 0.4484518, COVERAGE_ITEM_HIT: 0.0765617, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3438772, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0883597, SHANNON_ENTROPY: 10.7953535, RATIO_DIVERSITY_HERFINDAHL: 0.9985761, RATIO_DIVERSITY_GINI: 0.2580119, RATIO_SHANNON_ENTROPY: 0.8323129, RATIO_AVERAGE_POPULARITY: 1.6408317, RATIO_NOVELTY: 0.3771365, 
+SearchBayesianSkopt: Config evaluated with evaluator_test. Config: {'norm': 2.0, 'alpha': 0.9220932597899877} - results:
+CUTOFF: 10 - PRECISION: 0.0815395, PRECISION_RECALL_MIN_DEN: 0.1425828, RECALL: 0.1208285, MAP: 0.0393559, MAP_MIN_DEN: 0.0684350, MRR: 0.2334397, NDCG: 0.1276644, F1: 0.0973701, HIT_RATE: 0.4794039, ARHR_ALL_HITS: 0.3007688, NOVELTY: 0.0050940, AVERAGE_POPULARITY: 0.1966432, DIVERSITY_MEAN_INTER_LIST: 0.9794778, DIVERSITY_HERFINDAHL: 0.9979385, COVERAGE_ITEM: 0.3598085, COVERAGE_ITEM_HIT: 0.0844371, ITEMS_IN_GT: 0.7993109, COVERAGE_USER: 0.8089060, COVERAGE_USER_HIT: 0.3877927, USERS_IN_GT: 0.8089060, DIVERSITY_GINI: 0.0711342, SHANNON_ENTROPY: 10.5297129, RATIO_DIVERSITY_HERFINDAHL: 0.9982991, RATIO_DIVERSITY_GINI: 0.2077132, RATIO_SHANNON_ENTROPY: 0.8118323, RATIO_AVERAGE_POPULARITY: 1.7282826, RATIO_NOVELTY: 0.3731236, 
+
+SearchBayesianSkopt: Config 6 is suboptimal. Config: {'norm': 2.0, 'alpha': 0.9696659048286179} - results: PRECISION: 0.0566234, PRECISION_RECALL_MIN_DEN: 0.0611652, RECALL: 0.0232990, MAP: 0.0262429, MAP_MIN_DEN: 0.0285987, MRR: 0.1712778, NDCG: 0.0676167, F1: 0.0330138, HIT_RATE: 0.3629767, ARHR_ALL_HITS: 0.2108124, NOVELTY: 0.0051217, AVERAGE_POPULARITY: 0.1925615, DIVERSITY_MEAN_INTER_LIST: 0.9812308, DIVERSITY_HERFINDAHL: 0.9981152, COVERAGE_ITEM: 0.4387417, COVERAGE_ITEM_HIT: 0.0756667, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3456430, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0841272, SHANNON_ENTROPY: 10.7179020, RATIO_DIVERSITY_HERFINDAHL: 0.9984758, RATIO_DIVERSITY_GINI: 0.2456529, RATIO_SHANNON_ENTROPY: 0.8263415, RATIO_AVERAGE_POPULARITY: 1.6924082, RATIO_NOVELTY: 0.3751513, 
+SearchBayesianSkopt: Config 7 is suboptimal. Config: {'norm': 2.0, 'alpha': 0.9139915891238574} - results: PRECISION: 0.0563735, PRECISION_RECALL_MIN_DEN: 0.0608930, RECALL: 0.0231994, MAP: 0.0262515, MAP_MIN_DEN: 0.0286007, MRR: 0.1714821, NDCG: 0.0675093, F1: 0.0328713, HIT_RATE: 0.3616867, ARHR_ALL_HITS: 0.2109700, NOVELTY: 0.0051528, AVERAGE_POPULARITY: 0.1857920, DIVERSITY_MEAN_INTER_LIST: 0.9823884, DIVERSITY_HERFINDAHL: 0.9982309, COVERAGE_ITEM: 0.4497494, COVERAGE_ITEM_HIT: 0.0766064, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3444146, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0889497, SHANNON_ENTROPY: 10.8069204, RATIO_DIVERSITY_HERFINDAHL: 0.9985916, RATIO_DIVERSITY_GINI: 0.2597346, RATIO_SHANNON_ENTROPY: 0.8332047, RATIO_AVERAGE_POPULARITY: 1.6329120, RATIO_NOVELTY: 0.3774323, 
+SearchBayesianSkopt: Config 8 is suboptimal. Config: {'norm': inf, 'alpha': 0.9574520344440268} - results: PRECISION: 0.0565831, PRECISION_RECALL_MIN_DEN: 0.0611309, RECALL: 0.0232793, MAP: 0.0261808, MAP_MIN_DEN: 0.0285383, MRR: 0.1708570, NDCG: 0.0675180, F1: 0.0329871, HIT_RATE: 0.3630573, ARHR_ALL_HITS: 0.2103147, NOVELTY: 0.0051210, AVERAGE_POPULARITY: 0.1927220, DIVERSITY_MEAN_INTER_LIST: 0.9812042, DIVERSITY_HERFINDAHL: 0.9981125, COVERAGE_ITEM: 0.4385180, COVERAGE_ITEM_HIT: 0.0757562, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3457198, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0840343, SHANNON_ENTROPY: 10.7157667, RATIO_DIVERSITY_HERFINDAHL: 0.9984731, RATIO_DIVERSITY_GINI: 0.2453817, RATIO_SHANNON_ENTROPY: 0.8261769, RATIO_AVERAGE_POPULARITY: 1.6938192, RATIO_NOVELTY: 0.3751005, 
+SearchBayesianSkopt: Config 9 is suboptimal. Config: {'norm': 2.0, 'alpha': 0.9974361810360911} - results: PRECISION: 0.0568411, PRECISION_RECALL_MIN_DEN: 0.0614004, RECALL: 0.0234480, MAP: 0.0261655, MAP_MIN_DEN: 0.0285184, MRR: 0.1707838, NDCG: 0.0676337, F1: 0.0332003, HIT_RATE: 0.3654761, ARHR_ALL_HITS: 0.2102443, NOVELTY: 0.0051058, AVERAGE_POPULARITY: 0.1964673, DIVERSITY_MEAN_INTER_LIST: 0.9805056, DIVERSITY_HERFINDAHL: 0.9980426, COVERAGE_ITEM: 0.4371308, COVERAGE_ITEM_HIT: 0.0758457, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3480230, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0821561, SHANNON_ENTROPY: 10.6716900, RATIO_DIVERSITY_HERFINDAHL: 0.9984033, RATIO_DIVERSITY_GINI: 0.2398972, RATIO_SHANNON_ENTROPY: 0.8227786, RATIO_AVERAGE_POPULARITY: 1.7267366, RATIO_NOVELTY: 0.3739907, 
+SearchBayesianSkopt: Config 10 is suboptimal. Config: {'norm': 2.0, 'alpha': 0.9262893924425087} - results: PRECISION: 0.0564380, PRECISION_RECALL_MIN_DEN: 0.0609454, RECALL: 0.0231798, MAP: 0.0262747, MAP_MIN_DEN: 0.0286286, MRR: 0.1714045, NDCG: 0.0675463, F1: 0.0328626, HIT_RATE: 0.3615254, ARHR_ALL_HITS: 0.2109792, NOVELTY: 0.0051464, AVERAGE_POPULARITY: 0.1872122, DIVERSITY_MEAN_INTER_LIST: 0.9821493, DIVERSITY_HERFINDAHL: 0.9982070, COVERAGE_ITEM: 0.4477358, COVERAGE_ITEM_HIT: 0.0764722, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3442610, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0880343, SHANNON_ENTROPY: 10.7890199, RATIO_DIVERSITY_HERFINDAHL: 0.9985677, RATIO_DIVERSITY_GINI: 0.2570617, RATIO_SHANNON_ENTROPY: 0.8318246, RATIO_AVERAGE_POPULARITY: 1.6453943, RATIO_NOVELTY: 0.3769626, 
+SearchBayesianSkopt: Config 11 is suboptimal. Config: {'norm': 2.0, 'alpha': 0.9584828209144901} - results: PRECISION: 0.0563815, PRECISION_RECALL_MIN_DEN: 0.0609258, RECALL: 0.0232011, MAP: 0.0262186, MAP_MIN_DEN: 0.0285729, MRR: 0.1712984, NDCG: 0.0674857, F1: 0.0328743, HIT_RATE: 0.3620898, ARHR_ALL_HITS: 0.2107138, NOVELTY: 0.0051282, AVERAGE_POPULARITY: 0.1912021, DIVERSITY_MEAN_INTER_LIST: 0.9814740, DIVERSITY_HERFINDAHL: 0.9981395, COVERAGE_ITEM: 0.4409791, COVERAGE_ITEM_HIT: 0.0759352, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3447985, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0851571, SHANNON_ENTROPY: 10.7371217, RATIO_DIVERSITY_HERFINDAHL: 0.9985001, RATIO_DIVERSITY_GINI: 0.2486602, RATIO_SHANNON_ENTROPY: 0.8278233, RATIO_AVERAGE_POPULARITY: 1.6804612, RATIO_NOVELTY: 0.3756333, 
+SearchBayesianSkopt: Config 12 is suboptimal. Config: {'norm': 2.0, 'alpha': 0.9327374647699905} - results: PRECISION: 0.0563493, PRECISION_RECALL_MIN_DEN: 0.0608573, RECALL: 0.0231603, MAP: 0.0262671, MAP_MIN_DEN: 0.0286211, MRR: 0.1714434, NDCG: 0.0675042, F1: 0.0328279, HIT_RATE: 0.3609611, ARHR_ALL_HITS: 0.2109672, NOVELTY: 0.0051427, AVERAGE_POPULARITY: 0.1879889, DIVERSITY_MEAN_INTER_LIST: 0.9820159, DIVERSITY_HERFINDAHL: 0.9981937, COVERAGE_ITEM: 0.4464382, COVERAGE_ITEM_HIT: 0.0761142, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3437236, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0874740, SHANNON_ENTROPY: 10.7787960, RATIO_DIVERSITY_HERFINDAHL: 0.9985543, RATIO_DIVERSITY_GINI: 0.2554257, RATIO_SHANNON_ENTROPY: 0.8310364, RATIO_AVERAGE_POPULARITY: 1.6522204, RATIO_NOVELTY: 0.3766890, 
+SearchBayesianSkopt: New best config found. Config 13: {'norm': 2.0, 'alpha': 0.9225713655626324} - results: PRECISION: 0.0564299, PRECISION_RECALL_MIN_DEN: 0.0609494, RECALL: 0.0232021, MAP: 0.0262848, MAP_MIN_DEN: 0.0286391, MRR: 0.1714436, NDCG: 0.0675590, F1: 0.0328835, HIT_RATE: 0.3611223, ARHR_ALL_HITS: 0.2110617, NOVELTY: 0.0051486, AVERAGE_POPULARITY: 0.1867221, DIVERSITY_MEAN_INTER_LIST: 0.9822299, DIVERSITY_HERFINDAHL: 0.9982151, COVERAGE_ITEM: 0.4484965, COVERAGE_ITEM_HIT: 0.0765617, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3438772, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0883519, SHANNON_ENTROPY: 10.7950561, RATIO_DIVERSITY_HERFINDAHL: 0.9985757, RATIO_DIVERSITY_GINI: 0.2579891, RATIO_SHANNON_ENTROPY: 0.8322900, RATIO_AVERAGE_POPULARITY: 1.6410866, RATIO_NOVELTY: 0.3771281, 
+SearchBayesianSkopt: Config evaluated with evaluator_test. Config: {'norm': 2.0, 'alpha': 0.9225713655626324} - results:
+CUTOFF: 10 - PRECISION: 0.0815585, PRECISION_RECALL_MIN_DEN: 0.1426028, RECALL: 0.1208416, MAP: 0.0393672, MAP_MIN_DEN: 0.0684901, MRR: 0.2335268, NDCG: 0.1277187, F1: 0.0973879, HIT_RATE: 0.4794989, ARHR_ALL_HITS: 0.3008670, NOVELTY: 0.0050937, AVERAGE_POPULARITY: 0.1967158, DIVERSITY_MEAN_INTER_LIST: 0.9794646, DIVERSITY_HERFINDAHL: 0.9979372, COVERAGE_ITEM: 0.3597637, COVERAGE_ITEM_HIT: 0.0844371, ITEMS_IN_GT: 0.7993109, COVERAGE_USER: 0.8089060, COVERAGE_USER_HIT: 0.3878695, USERS_IN_GT: 0.8089060, DIVERSITY_GINI: 0.0711092, SHANNON_ENTROPY: 10.5290573, RATIO_DIVERSITY_HERFINDAHL: 0.9982977, RATIO_DIVERSITY_GINI: 0.2076403, RATIO_SHANNON_ENTROPY: 0.8117817, RATIO_AVERAGE_POPULARITY: 1.7289201, RATIO_NOVELTY: 0.3731039, 
+
+SearchBayesianSkopt: Config 14 is suboptimal. Config: {'norm': inf, 'alpha': 0.9628920119273298} - results: PRECISION: 0.0566718, PRECISION_RECALL_MIN_DEN: 0.0612240, RECALL: 0.0233271, MAP: 0.0262044, MAP_MIN_DEN: 0.0285658, MRR: 0.1709180, NDCG: 0.0675892, F1: 0.0330502, HIT_RATE: 0.3636217, ARHR_ALL_HITS: 0.2104506, NOVELTY: 0.0051190, AVERAGE_POPULARITY: 0.1931716, DIVERSITY_MEAN_INTER_LIST: 0.9811278, DIVERSITY_HERFINDAHL: 0.9981049, COVERAGE_ITEM: 0.4373546, COVERAGE_ITEM_HIT: 0.0756220, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3462572, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0836910, SHANNON_ENTROPY: 10.7096712, RATIO_DIVERSITY_HERFINDAHL: 0.9984655, RATIO_DIVERSITY_GINI: 0.2443793, RATIO_SHANNON_ENTROPY: 0.8257069, RATIO_AVERAGE_POPULARITY: 1.6977706, RATIO_NOVELTY: 0.3749557, 
+SearchBayesianSkopt: Config 15 is suboptimal. Config: {'norm': 2.0, 'alpha': 0.9574097291899463} - results: PRECISION: 0.0563815, PRECISION_RECALL_MIN_DEN: 0.0609258, RECALL: 0.0232010, MAP: 0.0262251, MAP_MIN_DEN: 0.0285794, MRR: 0.1714466, NDCG: 0.0675045, F1: 0.0328742, HIT_RATE: 0.3623317, ARHR_ALL_HITS: 0.2108293, NOVELTY: 0.0051291, AVERAGE_POPULARITY: 0.1910172, DIVERSITY_MEAN_INTER_LIST: 0.9815086, DIVERSITY_HERFINDAHL: 0.9981429, COVERAGE_ITEM: 0.4408896, COVERAGE_ITEM_HIT: 0.0758905, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3450288, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0852518, SHANNON_ENTROPY: 10.7393908, RATIO_DIVERSITY_HERFINDAHL: 0.9985036, RATIO_DIVERSITY_GINI: 0.2489368, RATIO_SHANNON_ENTROPY: 0.8279983, RATIO_AVERAGE_POPULARITY: 1.6788360, RATIO_NOVELTY: 0.3756943, 
+SearchBayesianSkopt: Config 16 is suboptimal. Config: {'norm': 2.0, 'alpha': 0.9080101112846171} - results: PRECISION: 0.0563412, PRECISION_RECALL_MIN_DEN: 0.0608696, RECALL: 0.0232096, MAP: 0.0262401, MAP_MIN_DEN: 0.0286006, MRR: 0.1714994, NDCG: 0.0674993, F1: 0.0328760, HIT_RATE: 0.3616867, ARHR_ALL_HITS: 0.2109425, NOVELTY: 0.0051555, AVERAGE_POPULARITY: 0.1851653, DIVERSITY_MEAN_INTER_LIST: 0.9824906, DIVERSITY_HERFINDAHL: 0.9982411, COVERAGE_ITEM: 0.4510023, COVERAGE_ITEM_HIT: 0.0768301, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3444146, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0893632, SHANNON_ENTROPY: 10.8142796, RATIO_DIVERSITY_HERFINDAHL: 0.9986018, RATIO_DIVERSITY_GINI: 0.2609421, RATIO_SHANNON_ENTROPY: 0.8337721, RATIO_AVERAGE_POPULARITY: 1.6274040, RATIO_NOVELTY: 0.3776292, 
+SearchBayesianSkopt: Config 17 is suboptimal. Config: {'norm': 1.0, 'alpha': 0.9276620912864988} - results: PRECISION: 0.0565025, PRECISION_RECALL_MIN_DEN: 0.0610422, RECALL: 0.0232615, MAP: 0.0262586, MAP_MIN_DEN: 0.0286222, MRR: 0.1714945, NDCG: 0.0675972, F1: 0.0329555, HIT_RATE: 0.3626542, ARHR_ALL_HITS: 0.2110026, NOVELTY: 0.0051265, AVERAGE_POPULARITY: 0.1915281, DIVERSITY_MEAN_INTER_LIST: 0.9814215, DIVERSITY_HERFINDAHL: 0.9981342, COVERAGE_ITEM: 0.4405763, COVERAGE_ITEM_HIT: 0.0756667, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3453359, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0849263, SHANNON_ENTROPY: 10.7328425, RATIO_DIVERSITY_HERFINDAHL: 0.9984949, RATIO_DIVERSITY_GINI: 0.2479864, RATIO_SHANNON_ENTROPY: 0.8274934, RATIO_AVERAGE_POPULARITY: 1.6833261, RATIO_NOVELTY: 0.3755093, 
+SearchBayesianSkopt: New best config found. Config 0: {'norm': 1.0, 'alpha': 0.9707678750194624} - results: PRECISION: 0.0565428, PRECISION_RECALL_MIN_DEN: 0.0610923, RECALL: 0.0233591, MAP: 0.0260623, MAP_MIN_DEN: 0.0284076, MRR: 0.1702042, NDCG: 0.0673566, F1: 0.0330602, HIT_RATE: 0.3634605, ARHR_ALL_HITS: 0.2094837, NOVELTY: 0.0051066, AVERAGE_POPULARITY: 0.1952891, DIVERSITY_MEAN_INTER_LIST: 0.9807719, DIVERSITY_HERFINDAHL: 0.9980693, COVERAGE_ITEM: 0.4364149, COVERAGE_ITEM_HIT: 0.0750850, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3461036, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0818543, SHANNON_ENTROPY: 10.6728403, RATIO_DIVERSITY_HERFINDAHL: 0.9984299, RATIO_DIVERSITY_GINI: 0.2390159, RATIO_SHANNON_ENTROPY: 0.8228673, RATIO_AVERAGE_POPULARITY: 1.7163810, RATIO_NOVELTY: 0.3740454, 
+SearchBayesianSkopt: Config evaluated with evaluator_test. Config: {'norm': 1.0, 'alpha': 0.9707678750194624} - results:
+CUTOFF: 10 - PRECISION: 0.0817863, PRECISION_RECALL_MIN_DEN: 0.1435628, RECALL: 0.1217412, MAP: 0.0394548, MAP_MIN_DEN: 0.0686818, MRR: 0.2336348, NDCG: 0.1280959, F1: 0.0978419, HIT_RATE: 0.4804480, ARHR_ALL_HITS: 0.3012498, NOVELTY: 0.0050472, AVERAGE_POPULARITY: 0.2059028, DIVERSITY_MEAN_INTER_LIST: 0.9778511, DIVERSITY_HERFINDAHL: 0.9977758, COVERAGE_ITEM: 0.3408806, COVERAGE_ITEM_HIT: 0.0819313, ITEMS_IN_GT: 0.7993109, COVERAGE_USER: 0.8089060, COVERAGE_USER_HIT: 0.3886372, USERS_IN_GT: 0.8089060, DIVERSITY_GINI: 0.0646345, SHANNON_ENTROPY: 10.3991557, RATIO_DIVERSITY_HERFINDAHL: 0.9981363, RATIO_DIVERSITY_GINI: 0.1887340, RATIO_SHANNON_ENTROPY: 0.8017664, RATIO_AVERAGE_POPULARITY: 1.8096645, RATIO_NOVELTY: 0.3697007, 
+
+SearchBayesianSkopt: New best config found. Config 1: {'norm': 2.0, 'alpha': 0.9889382341432961} - results: PRECISION: 0.0566798, PRECISION_RECALL_MIN_DEN: 0.0612302, RECALL: 0.0233987, MAP: 0.0260974, MAP_MIN_DEN: 0.0284593, MRR: 0.1704207, NDCG: 0.0674803, F1: 0.0331233, HIT_RATE: 0.3642667, ARHR_ALL_HITS: 0.2097599, NOVELTY: 0.0051059, AVERAGE_POPULARITY: 0.1956800, DIVERSITY_MEAN_INTER_LIST: 0.9806907, DIVERSITY_HERFINDAHL: 0.9980612, COVERAGE_ITEM: 0.4363254, COVERAGE_ITEM_HIT: 0.0752193, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3468714, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0818644, SHANNON_ENTROPY: 10.6713292, RATIO_DIVERSITY_HERFINDAHL: 0.9984218, RATIO_DIVERSITY_GINI: 0.2390454, RATIO_SHANNON_ENTROPY: 0.8227508, RATIO_AVERAGE_POPULARITY: 1.7198171, RATIO_NOVELTY: 0.3739982, 
+SearchBayesianSkopt: Config evaluated with evaluator_test. Config: {'norm': 2.0, 'alpha': 0.9889382341432961} - results:
+CUTOFF: 10 - PRECISION: 0.0819286, PRECISION_RECALL_MIN_DEN: 0.1437033, RECALL: 0.1218290, MAP: 0.0394912, MAP_MIN_DEN: 0.0686832, MRR: 0.2337386, NDCG: 0.1281744, F1: 0.0979721, HIT_RATE: 0.4810175, ARHR_ALL_HITS: 0.3014101, NOVELTY: 0.0050470, AVERAGE_POPULARITY: 0.2062972, DIVERSITY_MEAN_INTER_LIST: 0.9777571, DIVERSITY_HERFINDAHL: 0.9977664, COVERAGE_ITEM: 0.3414176, COVERAGE_ITEM_HIT: 0.0823340, ITEMS_IN_GT: 0.7993109, COVERAGE_USER: 0.8089060, COVERAGE_USER_HIT: 0.3890979, USERS_IN_GT: 0.8089060, DIVERSITY_GINI: 0.0647303, SHANNON_ENTROPY: 10.3991164, RATIO_DIVERSITY_HERFINDAHL: 0.9981269, RATIO_DIVERSITY_GINI: 0.1890137, RATIO_SHANNON_ENTROPY: 0.8017634, RATIO_AVERAGE_POPULARITY: 1.8131309, RATIO_NOVELTY: 0.3696824, 
+
+SearchBayesianSkopt: Config 2 is suboptimal. Config: {'norm': 2.0, 'alpha': 0.920356536870203} - results: PRECISION: 0.0563170, PRECISION_RECALL_MIN_DEN: 0.0607584, RECALL: 0.0231164, MAP: 0.0259571, MAP_MIN_DEN: 0.0282724, MRR: 0.1697206, NDCG: 0.0670536, F1: 0.0327784, HIT_RATE: 0.3622511, ARHR_ALL_HITS: 0.2086996, NOVELTY: 0.0051137, AVERAGE_POPULARITY: 0.1902150, DIVERSITY_MEAN_INTER_LIST: 0.9817613, DIVERSITY_HERFINDAHL: 0.9981682, COVERAGE_ITEM: 0.4345355, COVERAGE_ITEM_HIT: 0.0737426, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3449520, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0815005, SHANNON_ENTROPY: 10.6892674, RATIO_DIVERSITY_HERFINDAHL: 0.9985289, RATIO_DIVERSITY_GINI: 0.2379831, RATIO_SHANNON_ENTROPY: 0.8241338, RATIO_AVERAGE_POPULARITY: 1.6717856, RATIO_NOVELTY: 0.3745652, 
+SearchBayesianSkopt: Config 3 is suboptimal. Config: {'norm': 2.0, 'alpha': 0.9728954810567494} - results: PRECISION: 0.0563735, PRECISION_RECALL_MIN_DEN: 0.0609218, RECALL: 0.0233282, MAP: 0.0260336, MAP_MIN_DEN: 0.0283757, MRR: 0.1700663, NDCG: 0.0672338, F1: 0.0330004, HIT_RATE: 0.3630573, ARHR_ALL_HITS: 0.2092610, NOVELTY: 0.0051088, AVERAGE_POPULARITY: 0.1941164, DIVERSITY_MEAN_INTER_LIST: 0.9810113, DIVERSITY_HERFINDAHL: 0.9980932, COVERAGE_ITEM: 0.4356989, COVERAGE_ITEM_HIT: 0.0745928, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3457198, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0818485, SHANNON_ENTROPY: 10.6783246, RATIO_DIVERSITY_HERFINDAHL: 0.9984539, RATIO_DIVERSITY_GINI: 0.2389990, RATIO_SHANNON_ENTROPY: 0.8232901, RATIO_AVERAGE_POPULARITY: 1.7060745, RATIO_NOVELTY: 0.3742107, 
+SearchBayesianSkopt: Config 4 is suboptimal. Config: {'norm': 2.0, 'alpha': 0.9240762075779513} - results: PRECISION: 0.0562848, PRECISION_RECALL_MIN_DEN: 0.0607262, RECALL: 0.0231058, MAP: 0.0259706, MAP_MIN_DEN: 0.0282864, MRR: 0.1698546, NDCG: 0.0670640, F1: 0.0327622, HIT_RATE: 0.3621704, ARHR_ALL_HITS: 0.2088508, NOVELTY: 0.0051132, AVERAGE_POPULARITY: 0.1905425, DIVERSITY_MEAN_INTER_LIST: 0.9816981, DIVERSITY_HERFINDAHL: 0.9981619, COVERAGE_ITEM: 0.4346698, COVERAGE_ITEM_HIT: 0.0736531, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3448752, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0814886, SHANNON_ENTROPY: 10.6877703, RATIO_DIVERSITY_HERFINDAHL: 0.9985225, RATIO_DIVERSITY_GINI: 0.2379483, RATIO_SHANNON_ENTROPY: 0.8240184, RATIO_AVERAGE_POPULARITY: 1.6746642, RATIO_NOVELTY: 0.3745290, 
+SearchBayesianSkopt: Config 5 is suboptimal. Config: {'norm': inf, 'alpha': 0.9528085324622372} - results: PRECISION: 0.0564057, PRECISION_RECALL_MIN_DEN: 0.0609541, RECALL: 0.0233243, MAP: 0.0260556, MAP_MIN_DEN: 0.0283979, MRR: 0.1702129, NDCG: 0.0672783, F1: 0.0330019, HIT_RATE: 0.3629767, ARHR_ALL_HITS: 0.2094301, NOVELTY: 0.0051086, AVERAGE_POPULARITY: 0.1940791, DIVERSITY_MEAN_INTER_LIST: 0.9810186, DIVERSITY_HERFINDAHL: 0.9980940, COVERAGE_ITEM: 0.4356095, COVERAGE_ITEM_HIT: 0.0745481, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3456430, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0818033, SHANNON_ENTROPY: 10.6775524, RATIO_DIVERSITY_HERFINDAHL: 0.9984546, RATIO_DIVERSITY_GINI: 0.2388671, RATIO_SHANNON_ENTROPY: 0.8232306, RATIO_AVERAGE_POPULARITY: 1.7057469, RATIO_NOVELTY: 0.3741962, 
+SearchBayesianSkopt: Config 6 is suboptimal. Config: {'norm': 2.0, 'alpha': 0.9499908185505797} - results: PRECISION: 0.0563573, PRECISION_RECALL_MIN_DEN: 0.0608640, RECALL: 0.0232412, MAP: 0.0260422, MAP_MIN_DEN: 0.0283759, MRR: 0.1701811, NDCG: 0.0672187, F1: 0.0329105, HIT_RATE: 0.3621704, ARHR_ALL_HITS: 0.2093484, NOVELTY: 0.0051109, AVERAGE_POPULARITY: 0.1922875, DIVERSITY_MEAN_INTER_LIST: 0.9813718, DIVERSITY_HERFINDAHL: 0.9981293, COVERAGE_ITEM: 0.4344013, COVERAGE_ITEM_HIT: 0.0741006, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3448752, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0815916, SHANNON_ENTROPY: 10.6825534, RATIO_DIVERSITY_HERFINDAHL: 0.9984899, RATIO_DIVERSITY_GINI: 0.2382488, RATIO_SHANNON_ENTROPY: 0.8236161, RATIO_AVERAGE_POPULARITY: 1.6900003, RATIO_NOVELTY: 0.3743601, 
+SearchBayesianSkopt: Config 7 is suboptimal. Config: {'norm': 1.0, 'alpha': 0.9178510314569737} - results: PRECISION: 0.0563654, PRECISION_RECALL_MIN_DEN: 0.0608842, RECALL: 0.0232581, MAP: 0.0260629, MAP_MIN_DEN: 0.0284054, MRR: 0.1704110, NDCG: 0.0672702, F1: 0.0329288, HIT_RATE: 0.3622511, ARHR_ALL_HITS: 0.2095708, NOVELTY: 0.0051105, AVERAGE_POPULARITY: 0.1926935, DIVERSITY_MEAN_INTER_LIST: 0.9812970, DIVERSITY_HERFINDAHL: 0.9981218, COVERAGE_ITEM: 0.4352067, COVERAGE_ITEM_HIT: 0.0742348, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3449520, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0816959, SHANNON_ENTROPY: 10.6818402, RATIO_DIVERSITY_HERFINDAHL: 0.9984824, RATIO_DIVERSITY_GINI: 0.2385535, RATIO_SHANNON_ENTROPY: 0.8235612, RATIO_AVERAGE_POPULARITY: 1.6935686, RATIO_NOVELTY: 0.3743306, 
+SearchBayesianSkopt: Config 8 is suboptimal. Config: {'norm': inf, 'alpha': 0.9270868425622036} - results: PRECISION: 0.0563412, PRECISION_RECALL_MIN_DEN: 0.0608634, RECALL: 0.0232640, MAP: 0.0260397, MAP_MIN_DEN: 0.0283808, MRR: 0.1703153, NDCG: 0.0672337, F1: 0.0329306, HIT_RATE: 0.3625736, ARHR_ALL_HITS: 0.2094089, NOVELTY: 0.0051101, AVERAGE_POPULARITY: 0.1927750, DIVERSITY_MEAN_INTER_LIST: 0.9812828, DIVERSITY_HERFINDAHL: 0.9981204, COVERAGE_ITEM: 0.4348935, COVERAGE_ITEM_HIT: 0.0743243, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3452591, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0816476, SHANNON_ENTROPY: 10.6810406, RATIO_DIVERSITY_HERFINDAHL: 0.9984810, RATIO_DIVERSITY_GINI: 0.2384126, RATIO_SHANNON_ENTROPY: 0.8234995, RATIO_AVERAGE_POPULARITY: 1.6942850, RATIO_NOVELTY: 0.3743049, 
+SearchBayesianSkopt: New best config found. Config 9: {'norm': 1.0, 'alpha': 0.9765400233773597} - results: PRECISION: 0.0566395, PRECISION_RECALL_MIN_DEN: 0.0611899, RECALL: 0.0233886, MAP: 0.0261010, MAP_MIN_DEN: 0.0284629, MRR: 0.1704437, NDCG: 0.0674669, F1: 0.0331064, HIT_RATE: 0.3638636, ARHR_ALL_HITS: 0.2097887, NOVELTY: 0.0051061, AVERAGE_POPULARITY: 0.1956150, DIVERSITY_MEAN_INTER_LIST: 0.9807018, DIVERSITY_HERFINDAHL: 0.9980623, COVERAGE_ITEM: 0.4363701, COVERAGE_ITEM_HIT: 0.0752193, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3464875, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0818654, SHANNON_ENTROPY: 10.6714448, RATIO_DIVERSITY_HERFINDAHL: 0.9984229, RATIO_DIVERSITY_GINI: 0.2390484, RATIO_SHANNON_ENTROPY: 0.8227597, RATIO_AVERAGE_POPULARITY: 1.7192459, RATIO_NOVELTY: 0.3740095, 
+SearchBayesianSkopt: Config evaluated with evaluator_test. Config: {'norm': 1.0, 'alpha': 0.9765400233773597} - results:
+CUTOFF: 10 - PRECISION: 0.0818812, PRECISION_RECALL_MIN_DEN: 0.1436453, RECALL: 0.1217911, MAP: 0.0394929, MAP_MIN_DEN: 0.0686748, MRR: 0.2337422, NDCG: 0.1281470, F1: 0.0979259, HIT_RATE: 0.4806378, ARHR_ALL_HITS: 0.3014313, NOVELTY: 0.0050470, AVERAGE_POPULARITY: 0.2062311, DIVERSITY_MEAN_INTER_LIST: 0.9777710, DIVERSITY_HERFINDAHL: 0.9977678, COVERAGE_ITEM: 0.3413281, COVERAGE_ITEM_HIT: 0.0822445, ITEMS_IN_GT: 0.7993109, COVERAGE_USER: 0.8089060, COVERAGE_USER_HIT: 0.3887908, USERS_IN_GT: 0.8089060, DIVERSITY_GINI: 0.0647045, SHANNON_ENTROPY: 10.3990277, RATIO_DIVERSITY_HERFINDAHL: 0.9981283, RATIO_DIVERSITY_GINI: 0.1889384, RATIO_SHANNON_ENTROPY: 0.8017565, RATIO_AVERAGE_POPULARITY: 1.8125498, RATIO_NOVELTY: 0.3696811, 
+
+SearchBayesianSkopt: Config 10 is suboptimal. Config: {'norm': 2.0, 'alpha': 0.9029866026080329} - results: PRECISION: 0.0560590, PRECISION_RECALL_MIN_DEN: 0.0604977, RECALL: 0.0230139, MAP: 0.0258561, MAP_MIN_DEN: 0.0281663, MRR: 0.1692409, NDCG: 0.0668124, F1: 0.0326315, HIT_RATE: 0.3612029, ARHR_ALL_HITS: 0.2080275, NOVELTY: 0.0051148, AVERAGE_POPULARITY: 0.1891079, DIVERSITY_MEAN_INTER_LIST: 0.9819649, DIVERSITY_HERFINDAHL: 0.9981886, COVERAGE_ITEM: 0.4347593, COVERAGE_ITEM_HIT: 0.0733399, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3439539, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0813795, SHANNON_ENTROPY: 10.6914941, RATIO_DIVERSITY_HERFINDAHL: 0.9985492, RATIO_DIVERSITY_GINI: 0.2376297, RATIO_SHANNON_ENTROPY: 0.8243055, RATIO_AVERAGE_POPULARITY: 1.6620549, RATIO_NOVELTY: 0.3746492, 
+SearchBayesianSkopt: New best config found. Config 11: {'norm': 2.0, 'alpha': 0.9923426602103872} - results: PRECISION: 0.0567121, PRECISION_RECALL_MIN_DEN: 0.0612679, RECALL: 0.0234201, MAP: 0.0261278, MAP_MIN_DEN: 0.0284886, MRR: 0.1707059, NDCG: 0.0675463, F1: 0.0331503, HIT_RATE: 0.3645892, ARHR_ALL_HITS: 0.2100613, NOVELTY: 0.0051053, AVERAGE_POPULARITY: 0.1960581, DIVERSITY_MEAN_INTER_LIST: 0.9806053, DIVERSITY_HERFINDAHL: 0.9980526, COVERAGE_ITEM: 0.4367729, COVERAGE_ITEM_HIT: 0.0754430, ITEMS_IN_GT: 0.9882316, COVERAGE_USER: 0.9522457, COVERAGE_USER_HIT: 0.3471785, USERS_IN_GT: 0.9522457, DIVERSITY_GINI: 0.0819104, SHANNON_ENTROPY: 10.6697975, RATIO_DIVERSITY_HERFINDAHL: 0.9984132, RATIO_DIVERSITY_GINI: 0.2391799, RATIO_SHANNON_ENTROPY: 0.8226327, RATIO_AVERAGE_POPULARITY: 1.7231403, RATIO_NOVELTY: 0.3739546, 

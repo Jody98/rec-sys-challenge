@@ -6,6 +6,8 @@ Created on 24/06/2023
 
 import copy
 import math
+import random
+
 import numpy as np
 import scipy.sparse as sps
 import torch
@@ -18,6 +20,16 @@ from Recommenders.BaseRecommender import BaseRecommender
 from Recommenders.DataIO import DataIO
 from Recommenders.Incremental_Training_Early_Stopping import Incremental_Training_Early_Stopping
 from Recommenders.Neural.architecture_utils import generate_autoencoder_architecture
+
+seed = 12345
+np.random.seed(seed)
+torch.manual_seed(seed)
+random.seed(seed)
+if torch.cuda.is_available():
+    torch.cuda.manual_seed_all(seed)
+
+torch.backends.cudnn.deterministic = True
+torch.backends.cudnn.benchmark = False
 
 
 def from_sparse_to_tensor(A_tilde):
@@ -151,7 +163,7 @@ class MultVAERecommender_PyTorch(BaseRecommender, Incremental_Training_Early_Sto
 
     RECOMMENDER_NAME = "MultVAERecommender_PyTorch"
 
-    def __init__(self, URM_train, use_gpu=False, verbose=False):
+    def __init__(self, URM_train, use_gpu=True, verbose=False):
         super(MultVAERecommender_PyTorch, self).__init__(URM_train, verbose=verbose)
 
         if use_gpu:
