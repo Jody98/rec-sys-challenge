@@ -1,3 +1,4 @@
+import numpy as np
 import scipy.sparse as sps
 
 from Evaluation.Evaluator import EvaluatorHoldout
@@ -6,6 +7,8 @@ from Recommenders.Hybrid.HybridDifferentLoss import DifferentLossScoresHybridRec
 from Recommenders.KNN import ItemKNNCFRecommender
 from Recommenders.Neural.MultVAERecommender import MultVAERecommender_PyTorch_OptimizerMask
 from Recommenders.SLIM import SLIMElasticNetRecommender
+from Recommenders.EASE_R import EASE_R_Recommender
+from Recommenders.MatrixFactorization import IALSRecommender
 from challenge.utils.functions import read_data
 
 
@@ -14,6 +17,8 @@ def __main__():
     folder_path = "../result_experiments/"
     SLIM80 = "SLIMElasticNetRecommender_best_model80.zip"
     MultVAE80 = "Mult_VAE_Recommender_best_model80.zip"
+    EASE80 = "EASE_R_Recommender_best_model80.zip"
+    IALS80 = "IALSRecommender_best_model80.zip"
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
@@ -23,6 +28,13 @@ def __main__():
     URM_all = sps.load_npz('../input_files/URM_all.npz')
 
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
+
+    ials = IALSRecommender.IALSRecommender(URM_train)
+    ials.load_model(folder_path, IALS80)
+
+    results, _ = evaluator.evaluateRecommender(ials)
+    print("IALSRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
 
     multvae = MultVAERecommender_PyTorch_OptimizerMask(URM_train)
     multvae.load_model(folder_path, MultVAE80)
@@ -38,6 +50,13 @@ def __main__():
 
     results, _ = evaluator.evaluateRecommender(p3alpha)
     print("P3alphaRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    ease = EASE_R_Recommender.EASE_R_Recommender(URM_train)
+    ease.load_model(folder_path, EASE80)
+
+    results, _ = evaluator.evaluateRecommender(ease)
+    print("EASE_R_Recommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     item = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
@@ -65,11 +84,28 @@ def __main__():
     print("SLIM MAP: {}".format(results.loc[10]["MAP"]))
 
     SLIMRP3 = DifferentLossScoresHybridRecommender(URM_train, slim, rp3beta)
-    SLIMRP3.fit(norm=2, alpha=0.5489413475116747)
+    SLIMRP3.fit(norm=np.inf, alpha=0.6787901569849559)
 
     results, _ = evaluator.evaluateRecommender(SLIMRP3)
-    print("DifferentLossScoresHybridRecommender")
-    print("MAP: {}".format(results.loc[10]["MAP"]))
+    print("SLIMRP3 MAP: {}".format(results.loc[10]["MAP"]))
+
+    SLIMRP3Item = DifferentLossScoresHybridRecommender(URM_train, SLIMRP3, item)
+    SLIMRP3Item.fit(norm=2, alpha=0.8828064753046293)
+
+    results, _ = evaluator.evaluateRecommender(SLIMRP3Item)
+    print("SLIMRP3Item MAP: {}".format(results.loc[10]["MAP"]))
+
+    SLIMRP3ItemEASE = DifferentLossScoresHybridRecommender(URM_train, SLIMRP3Item, ease)
+    SLIMRP3ItemEASE.fit(norm=np.inf, alpha=0.9936820574807692)
+
+    results, _ = evaluator.evaluateRecommender(SLIMRP3ItemEASE)
+    print("SLIMRP3ItemEASE MAP: {}".format(results.loc[10]["MAP"]))
+
+    SLIMRP3ItemMult = DifferentLossScoresHybridRecommender(URM_train, SLIMRP3Item, multvae)
+    SLIMRP3ItemMult.fit(norm=2, alpha=0.2759969848752059)
+
+    results, _ = evaluator.evaluateRecommender(SLIMRP3ItemMult)
+    print("SLIMRP3ItemMult MAP: {}".format(results.loc[10]["MAP"]))
 
 
 if __name__ == '__main__':
