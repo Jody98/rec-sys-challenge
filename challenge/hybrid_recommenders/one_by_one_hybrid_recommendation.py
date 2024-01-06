@@ -16,17 +16,17 @@ from challenge.utils.functions import read_data, generate_submission_csv
 def __main__():
     cutoff_list = [10]
     folder_path = "../result_experiments/"
-    SLIM80 = "SLIMElasticNetRecommender_best_model100.zip"
-    MultVAE80 = "Mult_VAE_Recommender_best_model100.zip"
+    SLIM80 = "new_SLIMElasticNetRecommender_best_model100.zip"
+    MultVAE80 = "new_MultVAERecommender_best_model100.zip"
     EASE80 = "EASE_R_Recommender_best_model80.zip"
-    IALS80 = "IALSRecommender_best_model80.zip"
+    IALS80 = "new_IALSRecommender_best_model80.zip"
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
-    URM_train = sps.load_npz('../input_files/URM_train_plus_validation.npz')
-    URM_test = sps.load_npz('../input_files/URM_test.npz')
-    URM_train = sps.load_npz('../input_files/URM_all.npz')
+    URM_train = sps.load_npz('../input_files/new_URM_train_plus_validation.npz')
+    URM_test = sps.load_npz('../input_files/new_URM_test.npz')
+    URM_all = sps.load_npz('../input_files/new_URM_all.npz')
 
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
 

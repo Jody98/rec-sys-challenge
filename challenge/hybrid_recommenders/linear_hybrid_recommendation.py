@@ -1,31 +1,38 @@
 import scipy.sparse as sps
+from tqdm import tqdm
 
 from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.GraphBased import RP3betaRecommender
 from Recommenders.Hybrid.HybridLinear import HybridLinear
 from Recommenders.KNN import ItemKNNCFRecommender
+from Recommenders.MatrixFactorization import IALSRecommender
 from Recommenders.Neural.MultVAERecommender import MultVAERecommender_PyTorch_OptimizerMask
 from Recommenders.SLIM import SLIMElasticNetRecommender
-from challenge.utils.functions import read_data
+from challenge.utils.functions import read_data, generate_submission_csv
 
 
 def __main__():
     cutoff_list = [10]
     folder_path = "../result_experiments/"
-    SLIM80 = "SLIMElasticNetRecommender_best_model80.zip"
-    MultVAE80 = "Mult_VAE_Recommender_best_model80.zip"
-    IALS80 = "IALSRecommender_best_model80.zip"
-    ALS80 = "ALSRecommender_best_model80.zip"
-    EASE80 = "EASE_R_Recommender_best_model80.zip"
+    SLIM80 = "new_SLIMElasticNetRecommender_best_model100.zip"
+    MultVAE80 = "new_MultVAERecommender_best_model100.zip"
+    IALS80 = "IALSRecommender_best_model100.zip"
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
-    URM_test = sps.load_npz('../input_files/URM_test.npz')
-    URM_train = sps.load_npz('../input_files/URM_train_plus_validation.npz')
-    URM_all = sps.load_npz('../input_files/URM_all.npz')
+    URM_test = sps.load_npz('../input_files/new_URM_test.npz')
+    URM_train = sps.load_npz('../input_files/new_URM_train_plus_validation.npz')
+    URM_train = sps.load_npz('../input_files/new_URM_all.npz')
 
     evaluator_train = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
+
+    ials_recommender = IALSRecommender.IALSRecommender(URM_train)
+    ials_recommender.load_model(folder_path, IALS80)
+
+    results, _ = evaluator_train.evaluateRecommender(ials_recommender)
+    print("IALSRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
 
     item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
     item_recommender.fit(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.03642489209084876,
@@ -63,16 +70,25 @@ def __main__():
         "MultVAE": MultVAE,
         "RP3": RP3_recommender,
         "Item": item_recommender,
+        "IALS": ials_recommender
     }
 
-    best_parameters = {'alpha': 2.935720499719112, 'beta': 2.6855852601225654, 'zeta': 1.5226190915145363,
-                       'eta': 16.704877196385084}
+    best_parameters = {'alpha': 9.18777016398942, 'beta': 9.740873140271901, 'gamma': 3.694637505823077,
+                       'zeta': 7.607920311377546, 'eta': 13.881749401885845}
 
     all_recommender = HybridLinear(URM_train, recommenders)
     all_recommender.fit(**best_parameters)
 
     results, _ = evaluator_train.evaluateRecommender(all_recommender)
     print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    recommended_items = all_recommender.recommend(users_list, cutoff=10)
+    recommendations = []
+    for i in tqdm(zip(users_list, recommended_items)):
+        recommendation = {"user_id": i[0], "item_list": i[1]}
+        recommendations.append(recommendation)
+
+    generate_submission_csv("../output_files/NewHybridSubmission.csv", recommendations)
 
 
 if __name__ == '__main__':

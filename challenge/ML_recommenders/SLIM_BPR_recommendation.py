@@ -20,14 +20,6 @@ def __main__():
     recommender.fit(topK=10, epochs=15, lambda_i=0.25210476921792674, lambda_j=0.0001,
                     learning_rate=0.05149809958563418)
 
-    recommended_items = recommender.recommend(users_list, cutoff=10)
-    recommendations = []
-    for i in zip(users_list, recommended_items):
-        recommendation = {"user_id": i[0], "item_list": i[1]}
-        recommendations.append(recommendation)
-
-    generate_submission_csv("../output_files/SLIMBPRSubmission.csv", recommendations)
-
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
     results, _ = evaluator.evaluateRecommender(recommender)
 
