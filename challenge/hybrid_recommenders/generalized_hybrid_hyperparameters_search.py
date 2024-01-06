@@ -13,12 +13,18 @@ from Recommenders.EASE_R import EASE_R_Recommender
 from Recommenders.SLIM import SLIMElasticNetRecommender
 from Recommenders.KNN import ItemKNNCFRecommender
 from Recommenders.MatrixFactorization import IALSRecommender
-from Recommenders.Hybrid.HybridDifferentLoss import DifferentLossScoresHybridRecommender
+from Recommenders.Neural.MultVAERecommender import MultVAERecommender_PyTorch_OptimizerMask
 from Recommenders.KNN.ItemKNNSimilarityTripleHybridRecommender import ItemKNNSimilarityTripleHybridRecommender
 from challenge.utils.functions import read_data
 
 
 def __main__():
+    folder_path = "../result_experiments/"
+    EASE64 = "EASE_R_Recommender_best_model64.zip"
+    SLIM64 = "SLIMElasticNetRecommender_best_model64.zip"
+    MultVAE64 = "Mult_VAE_Recommender_best_model64.zip"
+    IALS64 = "IALSRecommender_best_model64.zip"
+    ALS64 = "ALSRecommender_best_model64.zip"
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
@@ -31,22 +37,29 @@ def __main__():
     evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[10])
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
-    p3alpha = P3alphaRecommender.P3alphaRecommender(URM_train)
-    p3alpha.fit(topK=40, alpha=0.3119217553589628, min_rating=0.01, implicit=True,
-                normalize_similarity=True)
-    p3alpha_Wsparse = p3alpha.W_sparse
-
-    results, _ = evaluator.evaluateRecommender(p3alpha)
-    print("P3alphaRecommender")
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
     item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
-    item_recommender.fit(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.036424892090848766,
+    item_recommender.fit(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.03642489209084876,
                          tversky_beta=0.9961018325655608)
     item_Wsparse = item_recommender.W_sparse
 
     results, _ = evaluator.evaluateRecommender(item_recommender)
     print("ItemKNNCFRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    EASE_R = EASE_R_Recommender.EASE_R_Recommender(URM_train)
+    EASE_R.load_model(folder_path, EASE64)
+    EASE_R_Wsparse = sps.csr_matrix(EASE_R.W_sparse)
+
+    results, _ = evaluator.evaluateRecommender(EASE_R)
+    print("EASE_R_Recommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    P3_recommender = P3alphaRecommender.P3alphaRecommender(URM_train)
+    P3_recommender.fit(topK=40, alpha=0.3119217553589628, min_rating=0.01, implicit=True, normalize_similarity=True)
+    p3alpha_Wsparse = P3_recommender.W_sparse
+
+    results, _ = evaluator.evaluateRecommender(P3_recommender)
+    print("P3alphaRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
     RP3_recommender = RP3betaRecommender.RP3betaRecommender(URM_train)
@@ -58,6 +71,14 @@ def __main__():
     print("RP3betaRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
+    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
+    SLIM_recommender.load_model(folder_path, SLIM64)
+    SLIM_Wsparse = SLIM_recommender.W_sparse
+
+    results, _ = evaluator.evaluateRecommender(SLIM_recommender)
+    print("SLIMElasticNetRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
     hybrid_recommender = ItemKNNSimilarityTripleHybridRecommender(URM_train, p3alpha_Wsparse, item_Wsparse, RP3_Wsparse)
     hybrid_recommender.fit(topK=225, alpha=0.4976629488640914, beta=0.13017801200221196)
 
@@ -65,20 +86,27 @@ def __main__():
     print("ItemKNNSimilarityTripleHybridRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
-    SLIM_recommender.fit(topK=216, l1_ratio=0.0032465600313226354, alpha=0.002589066655986645, positive_only=True)
-    SLIM_Wsparse = SLIM_recommender.W_sparse
+    IALS = IALSRecommender.IALSRecommender(URM_train)
+    IALS.load_model(folder_path, IALS64)
 
-    results, _ = evaluator.evaluateRecommender(SLIM_recommender)
-    print("SLIMElasticNetRecommender")
+    results, _ = evaluator.evaluateRecommender(IALS)
+    print("IALSRecommender")
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    recommenders = [item_recommender, item_recommender, hybrid_recommender, RP3_recommender, SLIM_recommender]
+    MultVAE = MultVAERecommender_PyTorch_OptimizerMask(URM_train)
+    MultVAE.load_model(folder_path, MultVAE64)
+
+    results, _ = evaluator.evaluateRecommender(MultVAE)
+    print("MultVAE MAP: {}".format(results.loc[10]["MAP"]))
+
+    recommenders = [item_recommender, MultVAE, IALS, RP3_recommender, SLIM_recommender]
 
     hyperparameters_range_dictionary = {
-        "gamma": Real(0, 2),
-        "delta": Real(0, 2),
-        "epsilon": Real(0, 2),
+        "alpha": Real(0, 5),
+        "beta": Real(0, 5),
+        "gamma": Real(0, 5),
+        "delta": Real(0, 5),
+        "epsilon": Real(0, 5),
     }
 
     recommender_class = GeneralizedLinearHybridRecommender
@@ -108,7 +136,7 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 100
+    n_cases = 1000
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10

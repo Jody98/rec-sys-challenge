@@ -24,8 +24,8 @@ from challenge.utils.functions import read_data
 def __main__():
     folder_path = "../result_experiments/"
     EASE64 = "EASE_R_Recommender_best_model64.zip"
-    SLIM64 = "SLIM_ElasticNetRecommender_best_model64.zip"
-    MultVAE64 = "MultVAERecommender_best_model64.zip"
+    SLIM64 = "SLIMElasticNetRecommender_best_model64.zip"
+    MultVAE64 = "Mult_VAE_Recommender_best_model64.zip"
     IALS64 = "IALSRecommender_best_model64.zip"
     ALS64 = "ALSRecommender_best_model64.zip"
     data_file_path = '../input_files/data_train.csv'
@@ -117,10 +117,10 @@ def __main__():
     }
 
     hyperparameters_range_dictionary = {
-        "alpha": Real(low=0, high=30, prior='uniform'),
-        "beta": Real(low=0, high=30, prior='uniform'),
-        "zeta": Real(low=0, high=30, prior='uniform'),
-        "eta": Real(low=0, high=30, prior='uniform'),
+        "alpha": Real(low=0, high=10, prior='uniform'),
+        "beta": Real(low=0, high=10, prior='uniform'),
+        "zeta": Real(low=0, high=10, prior='uniform'),
+        "eta": Real(low=10, high=20, prior='uniform'),
     }
 
     recommender_class = HybridLinear

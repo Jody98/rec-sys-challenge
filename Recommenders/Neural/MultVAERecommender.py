@@ -163,7 +163,7 @@ class MultVAERecommender_PyTorch(BaseRecommender, Incremental_Training_Early_Sto
 
     RECOMMENDER_NAME = "MultVAERecommender_PyTorch"
 
-    def __init__(self, URM_train, use_gpu=True, verbose=False):
+    def __init__(self, URM_train, use_gpu=False, verbose=False):
         super(MultVAERecommender_PyTorch, self).__init__(URM_train, verbose=verbose)
 
         if use_gpu:

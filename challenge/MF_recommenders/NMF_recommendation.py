@@ -17,7 +17,9 @@ def __main__():
         (URM_all_dataframe['Data'].values, (URM_all_dataframe['UserID'].values, URM_all_dataframe['ItemID'].values)))
     URM_all = URM_all.tocsr()
 
-    URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
+    URM_train_validation, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
+    URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_train_validation,
+                                                                            train_percentage=0.80)
 
     recommender = NMFRecommender.NMFRecommender(URM_train)
     recommender.fit(num_factors=121,
