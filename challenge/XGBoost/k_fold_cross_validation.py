@@ -1,3 +1,5 @@
+import time
+
 import numpy as np
 import pandas as pd
 import scipy.sparse as sps
@@ -6,7 +8,6 @@ from hyperopt import hp, STATUS_OK, Trials, fmin, tpe
 from sklearn.model_selection import GroupKFold, train_test_split
 from tqdm import tqdm
 from xgboost import plot_importance
-import time
 
 from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.EASE_R import EASE_R_Recommender
@@ -14,7 +15,7 @@ from Recommenders.GraphBased import P3alphaRecommender, RP3betaRecommender
 from Recommenders.Hybrid.HybridLinear import HybridLinear
 from Recommenders.KNN import ItemKNNCFRecommender, UserKNNCFRecommender
 from Recommenders.KNN.ItemKNNSimilarityTripleHybridRecommender import ItemKNNSimilarityTripleHybridRecommender
-from Recommenders.MatrixFactorization import IALSRecommender, PureSVDRecommender, ALSRecommender
+from Recommenders.MatrixFactorization import IALSRecommender, PureSVDRecommender
 from Recommenders.Neural.MultVAERecommender import MultVAERecommender_PyTorch_OptimizerMask
 from Recommenders.NonPersonalizedRecommender import TopPop
 from Recommenders.SLIM import SLIMElasticNetRecommender
@@ -138,22 +139,7 @@ def avg_precision(recommended_list, relevant_list):
 
 
 def mean_average_precision(recommendations, relevancies, k):
-    cumulative_map = 0.0
-    n_users = 0
-
-    for recommended_items, relevant_items in zip(recommendations, relevancies):
-        is_relevant = np.in1d(recommended_items[:k], relevant_items, assume_unique=True)
-
-        if len(is_relevant) > 0:
-            p_at_k = is_relevant * np.cumsum(is_relevant, dtype=np.float64) / (1 + np.arange(is_relevant.shape[0]))
-            a_p = np.sum(p_at_k) / is_relevant.shape[0]
-        else:
-            a_p = 0.0
-
-        cumulative_map += a_p
-        n_users += 1
-
-    return cumulative_map / n_users if n_users > 0 else 0
+    return np.mean([avg_precision(rec[:k], rel) for rec, rel in zip(recommendations, relevancies)])
 
 
 def evaluate_model(model, X_val, y_val, groups_val, cutoff):
@@ -276,18 +262,18 @@ def __main__():
     URM_all = sps.load_npz('../input_files/URM_all.npz')
 
     space = {
-        'n_estimators': hp.choice('n_estimators', [5, 10, 20, 50, 100, 150, 200]),
+        'n_estimators': hp.choice('n_estimators', [5, 10, 20, 50, 100, 150, 200, 500]),
         'learning_rate': hp.loguniform('learning_rate', np.log(0.001), np.log(0.01)),
         'reg_alpha': hp.uniform('reg_alpha', 0, 10),
         'reg_lambda': hp.uniform('reg_lambda', 0, 10),
-        'max_depth': hp.choice('max_depth', [1, 3, 5, 7, 9]),
-        'max_leaves': hp.choice('max_leaves', [1, 3, 5, 7, 9]),
-        'grow_policy': hp.choice('grow_policy', ['depthwise']),
+        'max_depth': hp.choice('max_depth', [0, 1, 3, 5, 7, 9, 11]),
+        'max_leaves': hp.choice('max_leaves', [0, 1, 3, 5, 7, 9, 11]),
+        'grow_policy': hp.choice('grow_policy', ['depthwise', 'lossguide']),
     }
 
-    n_estimators_choices = [5, 10, 20, 50, 100, 150, 200]
-    max_depth_choices = [1, 3, 5, 7, 9]
-    max_leaves_choices = [1, 3, 5, 7, 9]
+    n_estimators_choices = [5, 10, 20, 50, 100, 150, 200, 500]
+    max_depth_choices = [0, 1, 3, 5, 7, 9, 11]
+    max_leaves_choices = [0, 1, 3, 5, 7, 9, 11]
     grow_policy_choices = ['depthwise', 'lossguide']
 
     n_users, n_items = URM_all.shape
@@ -383,12 +369,26 @@ def __main__():
 
     groups = X.groupby("UserID").size().values
 
-    def obj(params):
-        score = cross_val_score_model(X, y, groups, params)
-        return {'loss': -score, 'status': STATUS_OK}
+    X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, shuffle=True)
+    groups_train = groups[:int(len(X_train) / 20)]
+    groups_val = groups[int(len(X_train) / 20):]
+
+    def evaluate(params):
+        model = xgb.XGBRanker(objective='rank:pairwise', **params, enable_categorical=True, booster='gbtree',
+                              early_stopping_rounds=10)
+        model.fit(X_train, y_train, group=groups_train, verbose=True, eval_set=[(X_val, y_val)],
+                  eval_group=[groups_val])
+
+        metric = evaluate_model(model, X_val, y_val, groups_val, cutoff=10)
+
+        with open('cross_val_results.txt', 'a') as file:
+            file.write(f"Parameters: {params}\n")
+            file.write(f"Average MAP score: {metric}\n\n")
+
+        return {'loss': -metric, 'status': STATUS_OK}
 
     trials = Trials()
-    best_indices = fmin(fn=obj, space=space, algo=tpe.suggest, max_evals=300, trials=trials)
+    best_indices = fmin(fn=evaluate, space=space, algo=tpe.suggest, max_evals=1000, trials=trials)
 
     best_params = {
         'n_estimators': n_estimators_choices[best_indices['n_estimators']],
@@ -404,13 +404,6 @@ def __main__():
 
     with open("best_hyperparameters.txt", "a") as file:
         file.write(str(best_params) + "\n")
-
-    X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, shuffle=True)
-    groups_train = groups[:10420]
-
-    # best params using 80% of the data
-    best_params = {'n_estimators': 5, 'learning_rate': 0.0026072070993311837, 'reg_alpha': 8.842925592959542,
-                   'reg_lambda': 7.780142430689461, 'max_depth': 7, 'max_leaves': 5, 'grow_policy': 'depthwise'}
 
     model_optimized = xgb.XGBRanker(
         objective='rank:pairwise',

@@ -8,3 +8,5 @@
 {'n_estimators': 100, 'learning_rate': 0.0026757244477811325, 'reg_alpha': 6.888153302117306, 'reg_lambda': 5.498580574996694, 'max_depth': 5, 'max_leaves': 9, 'grow_policy': 'depthwise'}
 {'n_estimators': 5, 'learning_rate': 0.0026072070993311837, 'reg_alpha': 8.842925592959542, 'reg_lambda': 7.780142430689461, 'max_depth': 7, 'max_leaves': 5, 'grow_policy': 'depthwise'}
 {'n_estimators': 100, 'learning_rate': 0.0014558482662043667, 'reg_alpha': 8.066707748414947, 'reg_lambda': 4.565229826855489, 'max_depth': 7, 'max_leaves': 5, 'grow_policy': 'depthwise'}
+{'n_estimators': 200, 'learning_rate': 0.007035302286936527, 'reg_alpha': 8.358501525080861, 'reg_lambda': 6.042842406081994, 'max_depth': 5, 'max_leaves': 3, 'grow_policy': 'depthwise'}
+{'n_estimators': 50, 'learning_rate': 0.00867996616860799, 'reg_alpha': 4.487836353544693, 'reg_lambda': 0.9982194881727008, 'max_depth': 9, 'max_leaves': 7, 'grow_policy': 'depthwise'}

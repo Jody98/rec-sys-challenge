@@ -82,3 +82,17 @@ P@K: 0.07922456813819578
 R@K: 0.114743834554255
 
 
+Hyperparameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0014558482662043667, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.066707748414947, 'reg_lambda': 4.565229826855489}
+Improvement: 0.0006433108262652726
+MAP: 0.057844247679150924
+P@K: 0.07955470249520154
+R@K: 0.11556587619979176
+
+
+Hyperparameters: {'n_estimators': 50, 'learning_rate': 0.00867996616860799, 'reg_alpha': 4.487836353544693, 'reg_lambda': 0.9982194881727008, 'max_depth': 9, 'max_leaves': 7, 'grow_policy': 'depthwise'}
+Improvement: 0.0044004568459721435
+MAP: 0.061601393698857795
+P@K: 0.08336276391554703
+R@K: 0.11909905152099487
+
+
