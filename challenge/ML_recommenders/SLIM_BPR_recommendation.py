@@ -1,10 +1,8 @@
 import scipy.sparse as sps
 
-from Data_manager.split_functions.split_train_validation_random_holdout import \
-    split_train_in_two_percentage_global_sample
 from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.SLIM import SLIM_BPR_Python
-from challenge.utils.functions import read_data, generate_submission_csv
+from challenge.utils.functions import read_data
 
 
 def __main__():
@@ -13,8 +11,8 @@ def __main__():
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
-    URM_train = sps.load_npz('../input_files/URM_train_plus_validation.npz')
-    URM_test = sps.load_npz('../input_files/URM_test.npz')
+    URM_train = sps.load_npz('../input_files/new_URM_train_plus_validation.npz')
+    URM_test = sps.load_npz('../input_files/new_URM_test.npz')
 
     recommender = SLIM_BPR_Python.SLIM_BPR_Python(URM_train)
     recommender.fit(topK=10, epochs=15, lambda_i=0.25210476921792674, lambda_j=0.0001,
@@ -23,6 +21,14 @@ def __main__():
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
     results, _ = evaluator.evaluateRecommender(recommender)
 
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    best_parameters = {'topK': 9, 'epochs': 114, 'lambda_i': 0.0025338350012924717, 'lambda_j': 1.5050017019467605e-05, 'learning_rate': 0.009006704930203509}
+
+    recommender = SLIM_BPR_Python.SLIM_BPR_Python(URM_train)
+    recommender.fit(**best_parameters)
+
+    results, _ = evaluator.evaluateRecommender(recommender)
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
 

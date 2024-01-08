@@ -1,0 +1,901 @@
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0034507259544654645, 'max_depth': 9, 'max_leaves': 7, 'n_estimators': 5, 'reg_alpha': 6.2672092713623435, 'reg_lambda': 6.6556452181088375}
+Average MAP score: 0.0024379550924656457
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.004843819914116505, 'max_depth': 3, 'max_leaves': 5, 'n_estimators': 5, 'reg_alpha': 2.0983078002819355, 'reg_lambda': 7.750181722241994}
+Average MAP score: 0.001789032081162598
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.005306347615186736, 'max_depth': 7, 'max_leaves': 1, 'n_estimators': 200, 'reg_alpha': 8.694257269603547, 'reg_lambda': 9.227943818620293}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.006745997541867044, 'max_depth': 3, 'max_leaves': 5, 'n_estimators': 20, 'reg_alpha': 0.3319428407171088, 'reg_lambda': 7.2501380520360375}
+Average MAP score: 0.0012107881668342315
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0017151533498632058, 'max_depth': 7, 'max_leaves': 1, 'n_estimators': 200, 'reg_alpha': 4.7286333169524655, 'reg_lambda': 9.763427336064822}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.002309259801969384, 'max_depth': 9, 'max_leaves': 5, 'n_estimators': 10, 'reg_alpha': 3.324983804033761, 'reg_lambda': 7.188655200930247}
+Average MAP score: 0.0018110989245346237
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0035472214060505553, 'max_depth': 3, 'max_leaves': 5, 'n_estimators': 200, 'reg_alpha': 6.716874761698679, 'reg_lambda': 4.920754556592271}
+Average MAP score: 0.002664387776863781
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.005722060299232057, 'max_depth': 9, 'max_leaves': 3, 'n_estimators': 150, 'reg_alpha': 8.270969157288576, 'reg_lambda': 3.317777625937446}
+Average MAP score: 0.001922727965146389
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001003074947560835, 'max_depth': 7, 'max_leaves': 3, 'n_estimators': 10, 'reg_alpha': 9.817262756582828, 'reg_lambda': 9.4587605173796}
+Average MAP score: 0.0013137830180056658
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0045251134045962895, 'max_depth': 3, 'max_leaves': 7, 'n_estimators': 150, 'reg_alpha': 0.5721785914748989, 'reg_lambda': 3.4099619110794888}
+Average MAP score: 0.0013999573469822978
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0023781767850576674, 'max_depth': 5, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 4.031589116532425, 'reg_lambda': 6.4553823102622445}
+Average MAP score: 0.002001492855619532
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0013911838710093183, 'max_depth': 9, 'max_leaves': 5, 'n_estimators': 10, 'reg_alpha': 8.488809411083642, 'reg_lambda': 3.797889000182378}
+Average MAP score: 0.0024108917527343593
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0020755955149459205, 'max_depth': 9, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 4.676988268118779, 'reg_lambda': 0.057375767373227804}
+Average MAP score: 0.0018532614325320641
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.008817196112610743, 'max_depth': 1, 'max_leaves': 5, 'n_estimators': 5, 'reg_alpha': 4.87063758958262, 'reg_lambda': 9.76111240223464}
+Average MAP score: 0.001244746062212472
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0017340609124546255, 'max_depth': 3, 'max_leaves': 3, 'n_estimators': 50, 'reg_alpha': 9.329251081716643, 'reg_lambda': 2.801938978865995}
+Average MAP score: 0.001515589677969715
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.005979575100504232, 'max_depth': 5, 'max_leaves': 1, 'n_estimators': 200, 'reg_alpha': 0.5483496268049981, 'reg_lambda': 6.33094668789173}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.006734188104569644, 'max_depth': 1, 'max_leaves': 1, 'n_estimators': 200, 'reg_alpha': 0.1545080061063997, 'reg_lambda': 7.781506340766696}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0017685335933255938, 'max_depth': 1, 'max_leaves': 5, 'n_estimators': 50, 'reg_alpha': 5.247396152667589, 'reg_lambda': 4.524515888905234}
+Average MAP score: 0.0012087865216464059
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.009533456179834103, 'max_depth': 9, 'max_leaves': 5, 'n_estimators': 10, 'reg_alpha': 5.75861718812212, 'reg_lambda': 8.045773505244103}
+Average MAP score: 0.002340404594339332
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0014734942975411982, 'max_depth': 1, 'max_leaves': 1, 'n_estimators': 10, 'reg_alpha': 4.917900524661551, 'reg_lambda': 7.957565710782431}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0034609877030994758, 'max_depth': 3, 'max_leaves': 7, 'n_estimators': 5, 'reg_alpha': 6.803252377716932, 'reg_lambda': 1.7439694241300217}
+Average MAP score: 0.0022316637723547483
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.003303833217894703, 'max_depth': 3, 'max_leaves': 9, 'n_estimators': 5, 'reg_alpha': 7.012802733488915, 'reg_lambda': 5.558577033074055}
+Average MAP score: 0.0023899338878225597
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0038780802854582546, 'max_depth': 9, 'max_leaves': 7, 'n_estimators': 20, 'reg_alpha': 6.865975033483018, 'reg_lambda': 5.080655531577689}
+Average MAP score: 0.0025749443987447785
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.00414026439497358, 'max_depth': 5, 'max_leaves': 7, 'n_estimators': 20, 'reg_alpha': 7.665386613264469, 'reg_lambda': 5.087798446630756}
+Average MAP score: 0.0026729732199981676
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.002582003220999877, 'max_depth': 5, 'max_leaves': 9, 'n_estimators': 20, 'reg_alpha': 7.870958959823998, 'reg_lambda': 1.6875945343363057}
+Average MAP score: 0.0024220637967279006
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0029124395271709048, 'max_depth': 5, 'max_leaves': 7, 'n_estimators': 20, 'reg_alpha': 7.517070032394226, 'reg_lambda': 5.608537779703402}
+Average MAP score: 0.0025385766078664307
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.00417841976376491, 'max_depth': 5, 'max_leaves': 7, 'n_estimators': 200, 'reg_alpha': 9.107377321022861, 'reg_lambda': 2.2321782414693825}
+Average MAP score: 0.0026029308716448794
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.007662357583459789, 'max_depth': 5, 'max_leaves': 9, 'n_estimators': 20, 'reg_alpha': 9.962447352016762, 'reg_lambda': 4.438187671167058}
+Average MAP score: 0.002727051153154796
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.00815524377484617, 'max_depth': 5, 'max_leaves': 9, 'n_estimators': 20, 'reg_alpha': 9.920450726212938, 'reg_lambda': 0.8152075736768314}
+Average MAP score: 0.00276418365170764
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.008259380925767995, 'max_depth': 5, 'max_leaves': 9, 'n_estimators': 20, 'reg_alpha': 9.492256448483921, 'reg_lambda': 0.2900290740610707}
+Average MAP score: 0.002727435030314105
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.009914483013430465, 'max_depth': 5, 'max_leaves': 9, 'n_estimators': 20, 'reg_alpha': 2.4283812813336088, 'reg_lambda': 0.2943072514076139}
+Average MAP score: 0.0013263534716509756
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.008306194922143826, 'max_depth': 5, 'max_leaves': 9, 'n_estimators': 20, 'reg_alpha': 9.56210968868786, 'reg_lambda': 0.6275688190544457}
+Average MAP score: 0.0028140358894677476
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.006840540539038475, 'max_depth': 5, 'max_leaves': 9, 'n_estimators': 20, 'reg_alpha': 1.4461820798564755, 'reg_lambda': 1.379876312705659}
+Average MAP score: 0.001352706943301952
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.005023459290918396, 'max_depth': 7, 'max_leaves': 9, 'n_estimators': 100, 'reg_alpha': 6.063887521946832, 'reg_lambda': 0.8636213248530975}
+Average MAP score: 0.0023657343935654844
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.007121157634228285, 'max_depth': 5, 'max_leaves': 9, 'n_estimators': 150, 'reg_alpha': 8.792245744707683, 'reg_lambda': 0.8217408167609503}
+Average MAP score: 0.0025336410443896015
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.009911981069154828, 'max_depth': 7, 'max_leaves': 9, 'n_estimators': 50, 'reg_alpha': 9.986800976313916, 'reg_lambda': 2.5124867669573914}
+Average MAP score: 0.002649913170642533
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.005706214953444006, 'max_depth': 5, 'max_leaves': 9, 'n_estimators': 20, 'reg_alpha': 8.145676262242603, 'reg_lambda': 0.9974944766752171}
+Average MAP score: 0.002623157541967519
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.008460203837525914, 'max_depth': 5, 'max_leaves': 9, 'n_estimators': 20, 'reg_alpha': 3.934273950524963, 'reg_lambda': 3.163261317008043}
+Average MAP score: 0.002019656947871917
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.006268781049323526, 'max_depth': 7, 'max_leaves': 3, 'n_estimators': 20, 'reg_alpha': 8.934282219437243, 'reg_lambda': 8.619941658366454}
+Average MAP score: 0.001512902537854552
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.004635152922056924, 'max_depth': 5, 'max_leaves': 9, 'n_estimators': 150, 'reg_alpha': 3.0112415425098202, 'reg_lambda': 3.839164840545834}
+Average MAP score: 0.0017078237821040107
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010945456776229913, 'max_depth': 5, 'max_leaves': 3, 'n_estimators': 100, 'reg_alpha': 7.346089949128681, 'reg_lambda': 2.0482960972252666}
+Average MAP score: 0.0016610060018889179
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.005327880048380517, 'max_depth': 1, 'max_leaves': 9, 'n_estimators': 50, 'reg_alpha': 6.393291995810621, 'reg_lambda': 0.010693021108291512}
+Average MAP score: 0.001261155287450872
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.007616426909914769, 'max_depth': 7, 'max_leaves': 1, 'n_estimators': 5, 'reg_alpha': 9.535338773155853, 'reg_lambda': 0.6126718926884823}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0029159938408358944, 'max_depth': 5, 'max_leaves': 9, 'n_estimators': 20, 'reg_alpha': 8.356447509332469, 'reg_lambda': 1.2608446212282978}
+Average MAP score: 0.002491658288395329
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.009035774984214956, 'max_depth': 3, 'max_leaves': 3, 'n_estimators': 150, 'reg_alpha': 1.186963766734216, 'reg_lambda': 7.070773863553469}
+Average MAP score: 0.0013154129726106684
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.006176592364461617, 'max_depth': 9, 'max_leaves': 9, 'n_estimators': 100, 'reg_alpha': 5.465378686568718, 'reg_lambda': 2.7834713885935636}
+Average MAP score: 0.0022398653383298266
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.00802537844723939, 'max_depth': 5, 'max_leaves': 1, 'n_estimators': 20, 'reg_alpha': 9.979141568571027, 'reg_lambda': 3.9151335850643085}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0020177203223462887, 'max_depth': 1, 'max_leaves': 9, 'n_estimators': 200, 'reg_alpha': 8.630648542242584, 'reg_lambda': 1.7140616677885747}
+Average MAP score: 0.0017486213935350194
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0053302964066658815, 'max_depth': 9, 'max_leaves': 3, 'n_estimators': 10, 'reg_alpha': 4.138195961663159, 'reg_lambda': 3.1101794769490914}
+Average MAP score: 0.0012721292995765154
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.003941180709856949, 'max_depth': 3, 'max_leaves': 9, 'n_estimators': 50, 'reg_alpha': 8.037487508341872, 'reg_lambda': 5.932048271212695}
+Average MAP score: 0.0027197940468573828
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001166004523233662, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 5, 'reg_alpha': 6.298725340624852, 'reg_lambda': 0.4290646243521792}
+Average MAP score: 0.0019277945343204434
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.007406772538461789, 'max_depth': 5, 'max_leaves': 1, 'n_estimators': 10, 'reg_alpha': 9.28278560794914, 'reg_lambda': 4.2858134308525875}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.009275797023659584, 'max_depth': 1, 'max_leaves': 9, 'n_estimators': 20, 'reg_alpha': 7.230223561978336, 'reg_lambda': 1.3214738770995234}
+Average MAP score: 0.0013228193644700354
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.004381088209625892, 'max_depth': 5, 'max_leaves': 5, 'n_estimators': 150, 'reg_alpha': 4.380290632207458, 'reg_lambda': 3.514810058499611}
+Average MAP score: 0.0019291624775309968
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.004798372800465351, 'max_depth': 3, 'max_leaves': 7, 'n_estimators': 200, 'reg_alpha': 9.596224323267682, 'reg_lambda': 2.237017517470223}
+Average MAP score: 0.002533467385674675
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.00369506320376485, 'max_depth': 9, 'max_leaves': 3, 'n_estimators': 100, 'reg_alpha': 3.496303678014727, 'reg_lambda': 2.5711445485887534}
+Average MAP score: 0.0013463150839350445
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.003058788389657668, 'max_depth': 5, 'max_leaves': 1, 'n_estimators': 20, 'reg_alpha': 7.749038041080251, 'reg_lambda': 8.573623852282225}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.002528040159756771, 'max_depth': 1, 'max_leaves': 9, 'n_estimators': 5, 'reg_alpha': 6.602229811535166, 'reg_lambda': 1.9416793279043154}
+Average MAP score: 0.0012671419431496199
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.006521835914945667, 'max_depth': 5, 'max_leaves': 7, 'n_estimators': 20, 'reg_alpha': 8.46779651203072, 'reg_lambda': 0.16445472374060843}
+Average MAP score: 0.002777969716357428
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.006460340747918535, 'max_depth': 3, 'max_leaves': 7, 'n_estimators': 50, 'reg_alpha': 5.923661302829835, 'reg_lambda': 0.14089552879425637}
+Average MAP score: 0.0022879535691435852
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0020660672183857457, 'max_depth': 9, 'max_leaves': 7, 'n_estimators': 20, 'reg_alpha': 5.203397394574642, 'reg_lambda': 6.876523286215879}
+Average MAP score: 0.0020648660999908574
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.009981414387161465, 'max_depth': 5, 'max_leaves': 7, 'n_estimators': 10, 'reg_alpha': 5.618494364800842, 'reg_lambda': 4.66533683001125}
+Average MAP score: 0.002225476038143981
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0015376898744775098, 'max_depth': 7, 'max_leaves': 7, 'n_estimators': 20, 'reg_alpha': 7.1224295495660455, 'reg_lambda': 6.314103420386685}
+Average MAP score: 0.00246479298053194
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.005754240451245281, 'max_depth': 5, 'max_leaves': 7, 'n_estimators': 200, 'reg_alpha': 8.490667554227613, 'reg_lambda': 7.465738042760145}
+Average MAP score: 0.0026263230052097574
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0032519177331041334, 'max_depth': 5, 'max_leaves': 7, 'n_estimators': 150, 'reg_alpha': 8.871725472577406, 'reg_lambda': 4.145163930509723}
+Average MAP score: 0.0028003534107180895
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0032351462150976024, 'max_depth': 5, 'max_leaves': 7, 'n_estimators': 150, 'reg_alpha': 9.183652148685894, 'reg_lambda': 5.431726748761549}
+Average MAP score: 0.002776735825488221
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.002569233535972819, 'max_depth': 5, 'max_leaves': 7, 'n_estimators': 150, 'reg_alpha': 9.718425512127913, 'reg_lambda': 0.0005726682886524614}
+Average MAP score: 0.0027644578496785746
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0023663634018202886, 'max_depth': 5, 'max_leaves': 7, 'n_estimators': 150, 'reg_alpha': 8.804579203677326, 'reg_lambda': 9.410013275510245}
+Average MAP score: 0.0028609328824299994
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0019116125570110727, 'max_depth': 5, 'max_leaves': 7, 'n_estimators': 150, 'reg_alpha': 8.880726347095363, 'reg_lambda': 8.562820572284096}
+Average MAP score: 0.0028864607135240493
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001888095249965425, 'max_depth': 5, 'max_leaves': 7, 'n_estimators': 150, 'reg_alpha': 7.999177178570993, 'reg_lambda': 9.383353601216221}
+Average MAP score: 0.0029156018645461975
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001895496397103333, 'max_depth': 5, 'max_leaves': 7, 'n_estimators': 150, 'reg_alpha': 7.668145140946654, 'reg_lambda': 9.906568627488557}
+Average MAP score: 0.0029236175852298645
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0018822663218539296, 'max_depth': 5, 'max_leaves': 7, 'n_estimators': 150, 'reg_alpha': 7.488728940627883, 'reg_lambda': 9.95725237204455}
+Average MAP score: 0.002855092465649083
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0012938604999770625, 'max_depth': 5, 'max_leaves': 7, 'n_estimators': 150, 'reg_alpha': 7.926007048201152, 'reg_lambda': 8.48505390686948}
+Average MAP score: 0.0029279773329677307
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001284399322193159, 'max_depth': 1, 'max_leaves': 7, 'n_estimators': 150, 'reg_alpha': 7.928210356726173, 'reg_lambda': 9.189706455756301}
+Average MAP score: 0.0012828016939341307
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0016250635796850803, 'max_depth': 5, 'max_leaves': 7, 'n_estimators': 150, 'reg_alpha': 6.461252279934529, 'reg_lambda': 8.94570704198278}
+Average MAP score: 0.0027180056667580623
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0022347868582476833, 'max_depth': 7, 'max_leaves': 7, 'n_estimators': 150, 'reg_alpha': 6.76126578295711, 'reg_lambda': 9.684963918577543}
+Average MAP score: 0.0027921640313194975
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001364725109653012, 'max_depth': 5, 'max_leaves': 7, 'n_estimators': 150, 'reg_alpha': 6.152256049957104, 'reg_lambda': 8.041770785958345}
+Average MAP score: 0.002622194802425125
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010961023113684148, 'max_depth': 3, 'max_leaves': 5, 'n_estimators': 150, 'reg_alpha': 4.677192882819328, 'reg_lambda': 8.317479625846854}
+Average MAP score: 0.002108402644487095
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0012868720162786294, 'max_depth': 9, 'max_leaves': 7, 'n_estimators': 150, 'reg_alpha': 8.209077178754661, 'reg_lambda': 7.502522291368617}
+Average MAP score: 0.0029258111689973447
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0012224045928995759, 'max_depth': 9, 'max_leaves': 7, 'n_estimators': 150, 'reg_alpha': 7.4740858783585935, 'reg_lambda': 7.524579465373144}
+Average MAP score: 0.002894589160040212
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001026965346720852, 'max_depth': 9, 'max_leaves': 7, 'n_estimators': 150, 'reg_alpha': 7.002516008615751, 'reg_lambda': 9.022049546281009}
+Average MAP score: 0.0027309112512567376
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0016701038539526562, 'max_depth': 9, 'max_leaves': 1, 'n_estimators': 150, 'reg_alpha': 8.181228786837304, 'reg_lambda': 6.568167054699015}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0014545144787251251, 'max_depth': 9, 'max_leaves': 7, 'n_estimators': 100, 'reg_alpha': 5.0817466154647235, 'reg_lambda': 7.7671119430376265}
+Average MAP score: 0.0021786582579288883
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0013160607224780294, 'max_depth': 9, 'max_leaves': 3, 'n_estimators': 5, 'reg_alpha': 5.420540712818889, 'reg_lambda': 9.979419243325992}
+Average MAP score: 0.00133800079212747
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0015524252249442222, 'max_depth': 9, 'max_leaves': 7, 'n_estimators': 150, 'reg_alpha': 5.870142967552554, 'reg_lambda': 5.9742260337365405}
+Average MAP score: 0.00238384059957956
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001755724427827194, 'max_depth': 9, 'max_leaves': 5, 'n_estimators': 10, 'reg_alpha': 7.717427317221174, 'reg_lambda': 8.299709486450084}
+Average MAP score: 0.0024077201962038777
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010125535144633446, 'max_depth': 9, 'max_leaves': 7, 'n_estimators': 50, 'reg_alpha': 9.370435457756644, 'reg_lambda': 6.891518219061465}
+Average MAP score: 0.0029231666818998825
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0021957034049924166, 'max_depth': 1, 'max_leaves': 1, 'n_estimators': 200, 'reg_alpha': 2.354022325900891, 'reg_lambda': 9.664109541669308}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0011942274519106163, 'max_depth': 3, 'max_leaves': 3, 'n_estimators': 150, 'reg_alpha': 6.579022143694578, 'reg_lambda': 8.950714127417356}
+Average MAP score: 0.0016503061877342086
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0014616734434276981, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 9.0863778304916, 'reg_lambda': 7.453083894524237}
+Average MAP score: 0.002925826402217952
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001085447798950578, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 9.084763040638663, 'reg_lambda': 6.290540818522475}
+Average MAP score: 0.0029550559059196247
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001049672756997367, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 9.824596902807516, 'reg_lambda': 5.335858522412396}
+Average MAP score: 0.0028898394418547923
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0014604588210850858, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 9.120736506134664, 'reg_lambda': 5.994384650156182}
+Average MAP score: 0.0029043079547877966
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0011432599304277255, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.549897239363855, 'reg_lambda': 6.30784583872793}
+Average MAP score: 0.0029907321085823916
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001123577995960549, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.670087961697568, 'reg_lambda': 4.936079587004339}
+Average MAP score: 0.002983529841879165
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0011072825101370912, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.627633598106735, 'reg_lambda': 4.837396731682759}
+Average MAP score: 0.0029692441275934504
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0011452354465439278, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.615912240034062, 'reg_lambda': 5.014556644902697}
+Average MAP score: 0.0029796270907595235
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0011701499034610051, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 6.926306622711593, 'reg_lambda': 3.601519888681325}
+Average MAP score: 0.00257608384364622
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.002714067775695443, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 2.9900773591636147, 'reg_lambda': 5.159987592481824}
+Average MAP score: 0.0016863571276239209
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0015925311702119343, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 1.2668559552897465, 'reg_lambda': 4.122230234370735}
+Average MAP score: 0.0013181732321847473
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0012330144605278448, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 7.281638552899176, 'reg_lambda': 4.893888452950653}
+Average MAP score: 0.0028722785851384657
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0013593646806647941, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.429551934981859, 'reg_lambda': 5.5834019111959226}
+Average MAP score: 0.002968037656521337
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010034444786367746, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 9.769703110040867, 'reg_lambda': 3.332038432151103}
+Average MAP score: 0.0028801328336836934
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001143643333953489, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 1.7343592491200601, 'reg_lambda': 4.598822038796978}
+Average MAP score: 0.00132276757151997
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0018200742303987015, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.67201887231678, 'reg_lambda': 5.814609954533455}
+Average MAP score: 0.002914422813271177
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001659305907847881, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 4.42168109857412, 'reg_lambda': 4.401308371671841}
+Average MAP score: 0.002000563629162475
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0019884409494780224, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 9.576477856167065, 'reg_lambda': 2.9775800004276487}
+Average MAP score: 0.0028290527983426206
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0027974884865797117, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 5, 'reg_alpha': 9.429739905457991, 'reg_lambda': 6.13517118299637}
+Average MAP score: 0.0025587941382567065
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0013933488475745487, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 50, 'reg_alpha': 3.4741970408423697, 'reg_lambda': 4.007997640783878}
+Average MAP score: 0.0016137342716997214
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.002442642205039022, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 10, 'reg_alpha': 0.5046023452585757, 'reg_lambda': 6.869402211827535}
+Average MAP score: 0.0010680833561831635
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0034886022733442426, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 6.253757819025772, 'reg_lambda': 5.736785245864632}
+Average MAP score: 0.0026364835633549597
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0021809910571529384, 'max_depth': 7, 'max_leaves': 1, 'n_estimators': 200, 'reg_alpha': 7.101165878492003, 'reg_lambda': 3.665685320696945}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010432943063397302, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.329973282000754, 'reg_lambda': 5.314530769593595}
+Average MAP score: 0.0029914937696127663
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010549285265902143, 'max_depth': 1, 'max_leaves': 3, 'n_estimators': 100, 'reg_alpha': 3.874506098068543, 'reg_lambda': 7.186214895424174}
+Average MAP score: 0.001260265667367394
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0012476468753780372, 'max_depth': 3, 'max_leaves': 5, 'n_estimators': 5, 'reg_alpha': 5.674449606605254, 'reg_lambda': 5.331452746772522}
+Average MAP score: 0.0017987569691984256
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001416247232936259, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 50, 'reg_alpha': 7.454585736476396, 'reg_lambda': 4.72931199842613}
+Average MAP score: 0.002850156902172253
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001730286021752228, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.328400877649276, 'reg_lambda': 6.674512123093962}
+Average MAP score: 0.0029633884775919278
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001558383382591045, 'max_depth': 1, 'max_leaves': 1, 'n_estimators': 10, 'reg_alpha': 5.953019386144991, 'reg_lambda': 6.446817777216048}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0015189690224410174, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 200, 'reg_alpha': 6.756095385920311, 'reg_lambda': 2.6342861276422544}
+Average MAP score: 0.00259454346037839
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.003024092115833047, 'max_depth': 3, 'max_leaves': 3, 'n_estimators': 100, 'reg_alpha': 0.8646627102495499, 'reg_lambda': 5.246721060320551}
+Average MAP score: 0.001289656643207506
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0020994477779597565, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 9.961149902773332, 'reg_lambda': 2.260648592117128}
+Average MAP score: 0.0027664747280870075
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0038025888806455356, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 7.794794863440461, 'reg_lambda': 4.446262274721942}
+Average MAP score: 0.0027916674283276926
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0011166844072042288, 'max_depth': 1, 'max_leaves': 1, 'n_estimators': 5, 'reg_alpha': 4.940748380396254, 'reg_lambda': 3.8342472380659958}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010147882671969085, 'max_depth': 7, 'max_leaves': 3, 'n_estimators': 50, 'reg_alpha': 8.102107909167366, 'reg_lambda': 6.163566620411763}
+Average MAP score: 0.001487545318831306
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0013494779933999551, 'max_depth': 3, 'max_leaves': 5, 'n_estimators': 10, 'reg_alpha': 8.977384894155486, 'reg_lambda': 6.735403831643999}
+Average MAP score: 0.0028026505803857007
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001816454724983473, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 200, 'reg_alpha': 5.460056073537991, 'reg_lambda': 5.531017643308104}
+Average MAP score: 0.0022718916613350365
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0012032005965801173, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 9.23690243204838, 'reg_lambda': 6.9988237125979404}
+Average MAP score: 0.0029398501051092177
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.002316119296216732, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 6.455693017235804, 'reg_lambda': 7.810857618165292}
+Average MAP score: 0.002736236785181119
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.005067387529873023, 'max_depth': 1, 'max_leaves': 1, 'n_estimators': 100, 'reg_alpha': 7.281697401923651, 'reg_lambda': 3.108216467950509}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0016785477034029625, 'max_depth': 7, 'max_leaves': 3, 'n_estimators': 5, 'reg_alpha': 7.616866800260315, 'reg_lambda': 7.353487890564082}
+Average MAP score: 0.0015192395576272722
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.004159317076196559, 'max_depth': 3, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 9.682363400122757, 'reg_lambda': 4.164810744150784}
+Average MAP score: 0.0027090272065320013
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0012368399001577873, 'max_depth': 7, 'max_leaves': 9, 'n_estimators': 10, 'reg_alpha': 7.901448071653439, 'reg_lambda': 5.727859790432054}
+Average MAP score: 0.0025704201322243507
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010799281948943873, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 50, 'reg_alpha': 3.0416800758827813, 'reg_lambda': 1.5120967193679253}
+Average MAP score: 0.0014702738933065219
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0019977069183171113, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 200, 'reg_alpha': 8.273907101973704, 'reg_lambda': 5.0938073811933124}
+Average MAP score: 0.002851936142339209
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0013101235113684943, 'max_depth': 1, 'max_leaves': 1, 'n_estimators': 100, 'reg_alpha': 8.799930284980267, 'reg_lambda': 6.491593626726675}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0015181566390381563, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 9.326941027756956, 'reg_lambda': 7.154156091048461}
+Average MAP score: 0.0028896414099868943
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010167225034493394, 'max_depth': 3, 'max_leaves': 3, 'n_estimators': 100, 'reg_alpha': 6.654546736963317, 'reg_lambda': 3.3264847628247587}
+Average MAP score: 0.001610687627578221
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0011640600968145767, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 5, 'reg_alpha': 0.028927348489384386, 'reg_lambda': 8.16213182859473}
+Average MAP score: 0.0011047162051000818
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.002726401449111593, 'max_depth': 7, 'max_leaves': 9, 'n_estimators': 100, 'reg_alpha': 6.034363171133944, 'reg_lambda': 4.808800886368774}
+Average MAP score: 0.002404298814855433
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001414520817953061, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 50, 'reg_alpha': 6.92530947131266, 'reg_lambda': 3.6359657867761017}
+Average MAP score: 0.0026558602199677024
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0016036937631813825, 'max_depth': 1, 'max_leaves': 5, 'n_estimators': 10, 'reg_alpha': 9.992735395777396, 'reg_lambda': 8.789908179884556}
+Average MAP score: 0.0011876306248667086
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0024663704068890284, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.586837320869918, 'reg_lambda': 4.28011554114204}
+Average MAP score: 0.0029170307406391808
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.004383436878168316, 'max_depth': 3, 'max_leaves': 1, 'n_estimators': 20, 'reg_alpha': 4.351366178918145, 'reg_lambda': 2.777760872006189}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.002138525939455293, 'max_depth': 9, 'max_leaves': 3, 'n_estimators': 200, 'reg_alpha': 9.479866863693752, 'reg_lambda': 6.179180007832575}
+Average MAP score: 0.0017931877037443238
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0017597615836591179, 'max_depth': 7, 'max_leaves': 9, 'n_estimators': 100, 'reg_alpha': 5.252297904933108, 'reg_lambda': 5.8457784814995915}
+Average MAP score: 0.0021929348322822385
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0011212792043654614, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.410714936594307, 'reg_lambda': 4.937130162612071}
+Average MAP score: 0.00297639155470249
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0012835656687720347, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.984807475646797, 'reg_lambda': 5.1149686625680415}
+Average MAP score: 0.002961935228345972
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010629193777154768, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.087214337585525, 'reg_lambda': 4.561767292657535}
+Average MAP score: 0.0030040215702403757
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010344989388796474, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.054501588597704, 'reg_lambda': 4.580332170797028}
+Average MAP score: 0.0029780215093074937
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001206950141501756, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 7.44534235872242, 'reg_lambda': 5.503015812903592}
+Average MAP score: 0.0028366663620022505
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010037384251684904, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 7.133308514267032, 'reg_lambda': 3.928164828605642}
+Average MAP score: 0.0027435791975139344
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010572268829754335, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 7.741286441607706, 'reg_lambda': 5.9985148032588755}
+Average MAP score: 0.0029601803613319884
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001473680067660936, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.184899574752595, 'reg_lambda': 3.4423332932604858}
+Average MAP score: 0.0029866099990860017
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0014723993603206265, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 6.265717882604122, 'reg_lambda': 2.9972330031537533}
+Average MAP score: 0.0023283977698564996
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0013962658420903942, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.143743913572147, 'reg_lambda': 1.8917867564066277}
+Average MAP score: 0.0028473935959540523
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0013409618966485398, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 7.587487827646545, 'reg_lambda': 3.405545703904726}
+Average MAP score: 0.0027679675837065433
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0019544685872274936, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 5, 'reg_alpha': 7.318561595151891, 'reg_lambda': 2.570078858142695}
+Average MAP score: 0.002136657222069887
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0012796531534738696, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 50, 'reg_alpha': 8.831153100410827, 'reg_lambda': 4.268721227753672}
+Average MAP score: 0.002890908813941439
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0018160700396655362, 'max_depth': 1, 'max_leaves': 5, 'n_estimators': 20, 'reg_alpha': 6.7995579024332695, 'reg_lambda': 2.310541341293002}
+Average MAP score: 0.00120325076927764
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0011761226421430208, 'max_depth': 9, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 5.727592941289728, 'reg_lambda': 1.0284685878307065}
+Average MAP score: 0.0020796301374036473
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001644923562235996, 'max_depth': 7, 'max_leaves': 1, 'n_estimators': 100, 'reg_alpha': 9.25376296916234, 'reg_lambda': 3.7847708683356367}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0015002031766189411, 'max_depth': 3, 'max_leaves': 3, 'n_estimators': 10, 'reg_alpha': 8.351236750903091, 'reg_lambda': 4.43266608215127}
+Average MAP score: 0.0014602961338086085
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010710451044805452, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 200, 'reg_alpha': 7.076465371295102, 'reg_lambda': 2.8703153048602936}
+Average MAP score: 0.0026312006824482795
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.00124687015131985, 'max_depth': 7, 'max_leaves': 9, 'n_estimators': 100, 'reg_alpha': 9.757979935593244, 'reg_lambda': 5.312240523556195}
+Average MAP score: 0.0028297565731346883
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0033526562859296175, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 7.866447719083616, 'reg_lambda': 4.064303977264119}
+Average MAP score: 0.0027774121804831934
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001407585953283276, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 5, 'reg_alpha': 6.450917804660388, 'reg_lambda': 2.041346270548871}
+Average MAP score: 0.0018511744813088358
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010056193601900591, 'max_depth': 9, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.507827191221207, 'reg_lambda': 3.50287115106193}
+Average MAP score: 0.0029638546141425174
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0011393630158516934, 'max_depth': 1, 'max_leaves': 5, 'n_estimators': 20, 'reg_alpha': 9.016028148774941, 'reg_lambda': 3.1553134675034213}
+Average MAP score: 0.0012221612893397915
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0022439452879673936, 'max_depth': 7, 'max_leaves': 1, 'n_estimators': 50, 'reg_alpha': 9.958890346391897, 'reg_lambda': 4.685108597708004}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0015606888132821517, 'max_depth': 3, 'max_leaves': 3, 'n_estimators': 10, 'reg_alpha': 4.775713762209927, 'reg_lambda': 5.70123579901606}
+Average MAP score: 0.0013236023520092608
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001331535047701689, 'max_depth': 7, 'max_leaves': 9, 'n_estimators': 100, 'reg_alpha': 9.591451552067266, 'reg_lambda': 6.356509553409888}
+Average MAP score: 0.002841123602352005
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0026129091549873607, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.000469133691372, 'reg_lambda': 2.388217447376159}
+Average MAP score: 0.00281651890442677
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0016947654204059468, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 200, 'reg_alpha': 8.7927901050923, 'reg_lambda': 6.674058255605649}
+Average MAP score: 0.002833461292386432
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010795352227674611, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 3.7326149446068824, 'reg_lambda': 7.731080507196856}
+Average MAP score: 0.001909015019955517
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0012160602564611671, 'max_depth': 1, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 6.579425630436223, 'reg_lambda': 1.647059059110814}
+Average MAP score: 0.0012771288425798971
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001834866449177788, 'max_depth': 9, 'max_leaves': 1, 'n_estimators': 100, 'reg_alpha': 7.640320348376501, 'reg_lambda': 3.797943478578881}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0014738039806165314, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 5, 'reg_alpha': 6.099949487624011, 'reg_lambda': 5.472573784585026}
+Average MAP score: 0.0019579167047497153
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0011632187667179636, 'max_depth': 3, 'max_leaves': 3, 'n_estimators': 50, 'reg_alpha': 8.289555017627523, 'reg_lambda': 7.635499935423182}
+Average MAP score: 0.00150382049172836
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0030248465616416077, 'max_depth': 7, 'max_leaves': 9, 'n_estimators': 20, 'reg_alpha': 9.382664963156573, 'reg_lambda': 1.211544323769715}
+Average MAP score: 0.002729683453675772
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.00100867533858608, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 10, 'reg_alpha': 7.330075180140532, 'reg_lambda': 7.014475417571148}
+Average MAP score: 0.002459168875483651
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0016026084755995575, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 6.9264266489325275, 'reg_lambda': 4.585971681842307}
+Average MAP score: 0.002620881698808758
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0013598451152296875, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 200, 'reg_alpha': 1.9780013835285573, 'reg_lambda': 6.081518379474216}
+Average MAP score: 0.001570660817109952
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0020406356348413647, 'max_depth': 1, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 9.230262487506645, 'reg_lambda': 7.942128794180141}
+Average MAP score: 0.001294156536574962
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0012607908459853897, 'max_depth': 9, 'max_leaves': 1, 'n_estimators': 100, 'reg_alpha': 7.819469035167534, 'reg_lambda': 3.2405608913205692}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0035945299378453443, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.634299163000833, 'reg_lambda': 5.290891348859728}
+Average MAP score: 0.0028240532553392393
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0019044847847490176, 'max_depth': 3, 'max_leaves': 3, 'n_estimators': 5, 'reg_alpha': 8.090466860992949, 'reg_lambda': 6.793401334318176}
+Average MAP score: 0.0014902355055905908
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.005537693597176434, 'max_depth': 7, 'max_leaves': 9, 'n_estimators': 100, 'reg_alpha': 2.593102616423357, 'reg_lambda': 2.712633891230931}
+Average MAP score: 0.0016356213630685785
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0028563099623632186, 'max_depth': 5, 'max_leaves': 5, 'n_estimators': 50, 'reg_alpha': 5.127658646224242, 'reg_lambda': 7.353236781379911}
+Average MAP score: 0.002225728909606066
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.002368814980996211, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 20, 'reg_alpha': 5.469931841086774, 'reg_lambda': 4.861086198897041}
+Average MAP score: 0.0021222740151722853
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001091423532638108, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 10, 'reg_alpha': 7.161251391038549, 'reg_lambda': 6.387905970436772}
+Average MAP score: 0.0024908753008561027
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0017496151643117508, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 9.989734856075502, 'reg_lambda': 4.122309310973572}
+Average MAP score: 0.0027914115102214867
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001441313963777002, 'max_depth': 1, 'max_leaves': 1, 'n_estimators': 200, 'reg_alpha': 9.794451254070072, 'reg_lambda': 4.355205726683769}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001003310486569829, 'max_depth': 9, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 7.496133115093805, 'reg_lambda': 5.080299845778125}
+Average MAP score: 0.0028278128141851705
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010501331606165864, 'max_depth': 7, 'max_leaves': 3, 'n_estimators': 100, 'reg_alpha': 9.093295933815291, 'reg_lambda': 0.5012716915512403}
+Average MAP score: 0.0015105657618133613
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0011822110171262664, 'max_depth': 5, 'max_leaves': 9, 'n_estimators': 100, 'reg_alpha': 6.361879473716748, 'reg_lambda': 5.654190114624202}
+Average MAP score: 0.002421222922950367
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0013246296205575846, 'max_depth': 3, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.231455635605652, 'reg_lambda': 5.874562294580196}
+Average MAP score: 0.002983959418700297
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001128639252163685, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 5, 'reg_alpha': 5.806617448244824, 'reg_lambda': 6.565266965793022}
+Average MAP score: 0.001893266916491482
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001578117826511037, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 50, 'reg_alpha': 6.742689869075926, 'reg_lambda': 3.5628023976286305}
+Average MAP score: 0.0024628644548030307
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0012331812395717978, 'max_depth': 7, 'max_leaves': 7, 'n_estimators': 20, 'reg_alpha': 8.450352424911857, 'reg_lambda': 7.188921846617022}
+Average MAP score: 0.003002818145812383
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.003916373194018203, 'max_depth': 7, 'max_leaves': 7, 'n_estimators': 20, 'reg_alpha': 8.471421504244047, 'reg_lambda': 6.293439351099695}
+Average MAP score: 0.002897775949791301
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010027589627522634, 'max_depth': 1, 'max_leaves': 7, 'n_estimators': 20, 'reg_alpha': 9.523529264951428, 'reg_lambda': 8.202488808011232}
+Average MAP score: 0.001226295585412667
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.004643984524447954, 'max_depth': 9, 'max_leaves': 7, 'n_estimators': 20, 'reg_alpha': 4.50993615573131, 'reg_lambda': 9.221300300693514}
+Average MAP score: 0.002200621515400783
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.006082037758930617, 'max_depth': 7, 'max_leaves': 7, 'n_estimators': 20, 'reg_alpha': 8.903272373918014, 'reg_lambda': 7.107599674161818}
+Average MAP score: 0.0029224202540901155
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0012469130276567457, 'max_depth': 5, 'max_leaves': 7, 'n_estimators': 20, 'reg_alpha': 4.126317115959143, 'reg_lambda': 8.632171308177258}
+Average MAP score: 0.001888127227858512
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.007171324477122016, 'max_depth': 3, 'max_leaves': 7, 'n_estimators': 20, 'reg_alpha': 8.705538527156854, 'reg_lambda': 8.344520191395628}
+Average MAP score: 0.0028453553910367684
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0013849801233259244, 'max_depth': 7, 'max_leaves': 7, 'n_estimators': 20, 'reg_alpha': 7.757884001543141, 'reg_lambda': 7.180876065347937}
+Average MAP score: 0.0027287938335922943
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010936718613740557, 'max_depth': 7, 'max_leaves': 7, 'n_estimators': 20, 'reg_alpha': 6.973620600758518, 'reg_lambda': 7.397198404714813}
+Average MAP score: 0.0024754318618042184
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.002110863761455742, 'max_depth': 7, 'max_leaves': 7, 'n_estimators': 20, 'reg_alpha': 9.674412270777664, 'reg_lambda': 7.877246987623857}
+Average MAP score: 0.002971270145934249
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.003133737952402504, 'max_depth': 7, 'max_leaves': 7, 'n_estimators': 20, 'reg_alpha': 9.384959192395863, 'reg_lambda': 6.946564426823797}
+Average MAP score: 0.002960024982481792
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0012037456707181152, 'max_depth': 1, 'max_leaves': 7, 'n_estimators': 20, 'reg_alpha': 7.365086682424571, 'reg_lambda': 6.552955695540803}
+Average MAP score: 0.0012157298235993049
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0016844231854314532, 'max_depth': 9, 'max_leaves': 7, 'n_estimators': 10, 'reg_alpha': 7.936975362944731, 'reg_lambda': 7.5909518528104325}
+Average MAP score: 0.0027886451573591645
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0011342276692903545, 'max_depth': 7, 'max_leaves': 7, 'n_estimators': 150, 'reg_alpha': 9.12690269348184, 'reg_lambda': 6.130101564773519}
+Average MAP score: 0.002918919659994512
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0015394045808853447, 'max_depth': 3, 'max_leaves': 1, 'n_estimators': 20, 'reg_alpha': 8.338589765947427, 'reg_lambda': 9.57418609437833}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001287043360030986, 'max_depth': 5, 'max_leaves': 3, 'n_estimators': 200, 'reg_alpha': 6.113774336220263, 'reg_lambda': 8.063299976290299}
+Average MAP score: 0.00159850105109222
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001059537294780342, 'max_depth': 7, 'max_leaves': 9, 'n_estimators': 5, 'reg_alpha': 7.597851922905794, 'reg_lambda': 5.464911764466908}
+Average MAP score: 0.002418746001279587
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010019092243843156, 'max_depth': 7, 'max_leaves': 7, 'n_estimators': 50, 'reg_alpha': 8.583298136120009, 'reg_lambda': 5.7212926821621855}
+Average MAP score: 0.002922560399719704
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.007849280416369592, 'max_depth': 7, 'max_leaves': 7, 'n_estimators': 10, 'reg_alpha': 8.802001951682815, 'reg_lambda': 8.83942004172643}
+Average MAP score: 0.0029231636352557615
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.008609650681017912, 'max_depth': 7, 'max_leaves': 3, 'n_estimators': 20, 'reg_alpha': 6.57760220899106, 'reg_lambda': 8.459395695799081}
+Average MAP score: 0.0016954026140206541
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0014074309171370637, 'max_depth': 1, 'max_leaves': 1, 'n_estimators': 200, 'reg_alpha': 9.993247588614226, 'reg_lambda': 6.746831116295688}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.002273242241226679, 'max_depth': 9, 'max_leaves': 9, 'n_estimators': 150, 'reg_alpha': 7.172800712562874, 'reg_lambda': 5.22952825188247}
+Average MAP score: 0.0026516832708771256
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0019217147894667098, 'max_depth': 7, 'max_leaves': 7, 'n_estimators': 20, 'reg_alpha': 8.049565406766492, 'reg_lambda': 6.007430854670247}
+Average MAP score: 0.002815388599457693
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0016340992889091208, 'max_depth': 7, 'max_leaves': 7, 'n_estimators': 5, 'reg_alpha': 9.287298335650675, 'reg_lambda': 4.704889777541947}
+Average MAP score: 0.0029231819151204906
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0013211737229779973, 'max_depth': 5, 'max_leaves': 1, 'n_estimators': 50, 'reg_alpha': 5.31453872287177, 'reg_lambda': 5.855135145328201}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0026665345503990847, 'max_depth': 3, 'max_leaves': 3, 'n_estimators': 10, 'reg_alpha': 9.812579110545716, 'reg_lambda': 7.227411608086946}
+Average MAP score: 0.0012937939859245032
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0018127599440654547, 'max_depth': 7, 'max_leaves': 7, 'n_estimators': 200, 'reg_alpha': 5.9089481816257035, 'reg_lambda': 9.061193429770658}
+Average MAP score: 0.0026673734881028505
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0012158138441043611, 'max_depth': 7, 'max_leaves': 9, 'n_estimators': 20, 'reg_alpha': 8.971344199201857, 'reg_lambda': 4.92760805102439}
+Average MAP score: 0.002785641166255366
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0011621374307752008, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 150, 'reg_alpha': 4.971530260387522, 'reg_lambda': 6.228251292292416}
+Average MAP score: 0.002145888553758033
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0025009707971599903, 'max_depth': 1, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 9.526487891320759, 'reg_lambda': 7.723053243207362}
+Average MAP score: 0.0014231941016969794
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001492447518324691, 'max_depth': 7, 'max_leaves': 1, 'n_estimators': 100, 'reg_alpha': 5.6633037482547035, 'reg_lambda': 6.431068876214977}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.009662687280589376, 'max_depth': 9, 'max_leaves': 3, 'n_estimators': 5, 'reg_alpha': 6.283708286475056, 'reg_lambda': 5.488718905023532}
+Average MAP score: 0.0020601377083142892
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010483160373096886, 'max_depth': 7, 'max_leaves': 9, 'n_estimators': 100, 'reg_alpha': 6.918874527213447, 'reg_lambda': 5.135476100964285}
+Average MAP score: 0.002541668951649754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001755755304409782, 'max_depth': 5, 'max_leaves': 5, 'n_estimators': 50, 'reg_alpha': 8.493106401705935, 'reg_lambda': 6.774214892990322}
+Average MAP score: 0.0029548304542546338
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.006693674251034291, 'max_depth': 3, 'max_leaves': 7, 'n_estimators': 20, 'reg_alpha': 7.4714984372127216, 'reg_lambda': 3.980223309230664}
+Average MAP score: 0.002620123084422505
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0012745788315752019, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 10, 'reg_alpha': 7.742928947270556, 'reg_lambda': 4.468581092815661}
+Average MAP score: 0.002271986107302802
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001363417581028621, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 2.6252628353730914, 'reg_lambda': 6.938149451585757}
+Average MAP score: 0.0016583340949943622
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0011132645889092609, 'max_depth': 7, 'max_leaves': 7, 'n_estimators': 200, 'reg_alpha': 8.237914797394174, 'reg_lambda': 7.572232183660696}
+Average MAP score: 0.0029040794564786842
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0015339792299131822, 'max_depth': 1, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 6.760084668852145, 'reg_lambda': 5.640592396025179}
+Average MAP score: 0.0012908844407884706
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001420454768825119, 'max_depth': 7, 'max_leaves': 1, 'n_estimators': 150, 'reg_alpha': 7.236583640371486, 'reg_lambda': 7.329426738002077}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0020464052364973146, 'max_depth': 9, 'max_leaves': 5, 'n_estimators': 20, 'reg_alpha': 9.004247743595586, 'reg_lambda': 7.968615280136179}
+Average MAP score: 0.0028917618742954586
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010075855702595538, 'max_depth': 7, 'max_leaves': 3, 'n_estimators': 100, 'reg_alpha': 7.938123112993624, 'reg_lambda': 4.233399282723188}
+Average MAP score: 0.0016232580812235308
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.004869890264734717, 'max_depth': 3, 'max_leaves': 9, 'n_estimators': 100, 'reg_alpha': 8.709006488184528, 'reg_lambda': 9.402767431568536}
+Average MAP score: 0.002742585991530326
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0016985136941946128, 'max_depth': 5, 'max_leaves': 7, 'n_estimators': 5, 'reg_alpha': 9.215405160117895, 'reg_lambda': 3.7213887229689013}
+Average MAP score: 0.0029695213722085085
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001190874419947037, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 50, 'reg_alpha': 6.598335272372737, 'reg_lambda': 8.756405293635952}
+Average MAP score: 0.0026147579441245425
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010534586807587796, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 20, 'reg_alpha': 3.1748920731390298, 'reg_lambda': 5.918051883678883}
+Average MAP score: 0.0018945129939371766
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001605836049317156, 'max_depth': 7, 'max_leaves': 7, 'n_estimators': 100, 'reg_alpha': 9.659342202709356, 'reg_lambda': 9.85298976743692}
+Average MAP score: 0.002884608353898177
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0012464668692317256, 'max_depth': 1, 'max_leaves': 5, 'n_estimators': 10, 'reg_alpha': 7.610626923666941, 'reg_lambda': 6.603232366052044}
+Average MAP score: 0.0012596045455930283
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001000602729538568, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.36787715682869, 'reg_lambda': 4.740789916390571}
+Average MAP score: 0.0029832008043140434
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0019733956548002394, 'max_depth': 9, 'max_leaves': 1, 'n_estimators': 200, 'reg_alpha': 3.6915317418765223, 'reg_lambda': 5.303613383914165}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0013172150848878852, 'max_depth': 7, 'max_leaves': 3, 'n_estimators': 150, 'reg_alpha': 5.494290529375329, 'reg_lambda': 6.26086784551986}
+Average MAP score: 0.0015475550680924945
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010784347394431312, 'max_depth': 5, 'max_leaves': 9, 'n_estimators': 20, 'reg_alpha': 7.038480723569652, 'reg_lambda': 5.06515862153642}
+Average MAP score: 0.0023759650245254813
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0011413473738547445, 'max_depth': 3, 'max_leaves': 7, 'n_estimators': 100, 'reg_alpha': 0.7927544493428682, 'reg_lambda': 7.062743945146826}
+Average MAP score: 0.0014299972580202893
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0014558482662043667, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.066707748414947, 'reg_lambda': 4.565229826855489}
+Average MAP score: 0.003013015263687044
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0021338487993024214, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 5, 'reg_alpha': 6.1390881155657855, 'reg_lambda': 3.9810897296991947}
+Average MAP score: 0.0019255522042470196
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0018849978615892936, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 9.997793575651674, 'reg_lambda': 3.1084003854461346}
+Average MAP score: 0.0028104164762514047
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.002204910142310352, 'max_depth': 7, 'max_leaves': 7, 'n_estimators': 20, 'reg_alpha': 6.407092548550743, 'reg_lambda': 2.520462186961081}
+Average MAP score: 0.0021211010571855074
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0023849446467380537, 'max_depth': 1, 'max_leaves': 5, 'n_estimators': 50, 'reg_alpha': 7.293197437760449, 'reg_lambda': 4.567745543761341}
+Average MAP score: 0.0012470097187947467
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0015080150814148984, 'max_depth': 9, 'max_leaves': 1, 'n_estimators': 10, 'reg_alpha': 8.119402365506591, 'reg_lambda': 2.862892712020301}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0012051962383920671, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 7.844735893786538, 'reg_lambda': 4.332824791924176}
+Average MAP score: 0.002948392895225904
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0013481519312518364, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.561575994230383, 'reg_lambda': 4.948896052204556}
+Average MAP score: 0.0030077537092892126
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001457087053622949, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.896974068953769, 'reg_lambda': 3.5690890720870954}
+Average MAP score: 0.002959013496633454
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0013704627814850046, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 9.417718497399639, 'reg_lambda': 3.37235123663865}
+Average MAP score: 0.0029116991134265557
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0013113352590704472, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.46746551134694, 'reg_lambda': 3.8572178952703506}
+Average MAP score: 0.0029768972976266595
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001651981985834144, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.03399338795188, 'reg_lambda': 4.859745894066706}
+Average MAP score: 0.002980388751789898
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0018011764011563545, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.830058382266305, 'reg_lambda': 4.142348544207179}
+Average MAP score: 0.0029642415379459476
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0014206810917914098, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 7.514494524660639, 'reg_lambda': 4.592371269954713}
+Average MAP score: 0.0028217256192304132
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0012544856286457527, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 9.170446748498653, 'reg_lambda': 4.425184809342291}
+Average MAP score: 0.002949748651859971
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010901306349860227, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 7.7330633044964685, 'reg_lambda': 5.343800470394262}
+Average MAP score: 0.002934905401700023
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0015267772952890677, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.66613994364173, 'reg_lambda': 3.0122617793663924}
+Average MAP score: 0.0029837126405264547
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0013603993674301325, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.214778842670107, 'reg_lambda': 5.011736590444829}
+Average MAP score: 0.002961173567315597
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0016018794231281441, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.473626823059488, 'reg_lambda': 3.6600604658945852}
+Average MAP score: 0.0029481979100021275
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010017119218522917, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 7.4030850317861745, 'reg_lambda': 5.531251276934572}
+Average MAP score: 0.0028431496206928033
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0017064621010700362, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 9.82096903784011, 'reg_lambda': 3.251652261257938}
+Average MAP score: 0.0028061755476342766
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0011752275323309632, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 200, 'reg_alpha': 9.512899961981258, 'reg_lambda': 4.0420877518725975}
+Average MAP score: 0.0028219602108277685
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0011344762531077589, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 150, 'reg_alpha': 7.8759920391864195, 'reg_lambda': 4.815519585159564}
+Average MAP score: 0.002952164640648321
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0014771978899767787, 'max_depth': 5, 'max_leaves': 3, 'n_estimators': 20, 'reg_alpha': 7.0800161963086, 'reg_lambda': 5.824597097637663}
+Average MAP score: 0.0016371081253998704
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0012802857119341509, 'max_depth': 7, 'max_leaves': 7, 'n_estimators': 100, 'reg_alpha': 9.037228326885744, 'reg_lambda': 2.06982026387933}
+Average MAP score: 0.0029609938153124286
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010492630732605614, 'max_depth': 3, 'max_leaves': 9, 'n_estimators': 100, 'reg_alpha': 6.872802587644978, 'reg_lambda': 5.227958944041305}
+Average MAP score: 0.0025464003899704434
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0011833626711755516, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 5, 'reg_alpha': 8.632377481602648, 'reg_lambda': 4.2374464841763935}
+Average MAP score: 0.0026401821893184615
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0018536345164279436, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 9.27007496384456, 'reg_lambda': 4.447359850513022}
+Average MAP score: 0.002888690857020987
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0012432348883623392, 'max_depth': 7, 'max_leaves': 7, 'n_estimators': 20, 'reg_alpha': 8.220821252366722, 'reg_lambda': 3.7702746493896866}
+Average MAP score: 0.002681010267190685
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0011096537306697675, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 50, 'reg_alpha': 7.6315319601937635, 'reg_lambda': 5.648745883826692}
+Average MAP score: 0.0028533375986350995
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0014230245247450327, 'max_depth': 1, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.009381759181448, 'reg_lambda': 5.987064095968245}
+Average MAP score: 0.0012905980562410494
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0015658160472368716, 'max_depth': 9, 'max_leaves': 1, 'n_estimators': 10, 'reg_alpha': 8.406035230121345, 'reg_lambda': 4.746260039088862}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.002896691116091039, 'max_depth': 7, 'max_leaves': 3, 'n_estimators': 200, 'reg_alpha': 6.692173242164484, 'reg_lambda': 4.940331669054366}
+Average MAP score: 0.001660302227096851
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.00173197154333723, 'max_depth': 5, 'max_leaves': 7, 'n_estimators': 100, 'reg_alpha': 8.782672136605294, 'reg_lambda': 5.422584942597706}
+Average MAP score: 0.0029104956889985643
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.00202047760612862, 'max_depth': 3, 'max_leaves': 5, 'n_estimators': 150, 'reg_alpha': 7.243382068890917, 'reg_lambda': 2.8062199502368688}
+Average MAP score: 0.002683359229808362
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0013132227731614773, 'max_depth': 7, 'max_leaves': 9, 'n_estimators': 20, 'reg_alpha': 9.041218295610328, 'reg_lambda': 1.8123982377469425}
+Average MAP score: 0.002566977424367056
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010372081959427197, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 9.755949393844936, 'reg_lambda': 3.4645496626513586}
+Average MAP score: 0.0029061907808548837
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0013649832250464916, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 7.476046871928496, 'reg_lambda': 5.044037022185636}
+Average MAP score: 0.0028212076897297586
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0012278056533291729, 'max_depth': 7, 'max_leaves': 7, 'n_estimators': 5, 'reg_alpha': 0.3260644910498449, 'reg_lambda': 6.10642365017512}
+Average MAP score: 0.0011777594979130478
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0016170596063740513, 'max_depth': 1, 'max_leaves': 5, 'n_estimators': 20, 'reg_alpha': 7.8559333977305235, 'reg_lambda': 4.487081250508781}
+Average MAP score: 0.0011954148005971416
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0033348737865628608, 'max_depth': 9, 'max_leaves': 1, 'n_estimators': 50, 'reg_alpha': 9.379124760533347, 'reg_lambda': 4.24804354174881}
+Average MAP score: 0.0010536879627090754
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010869186018723051, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 4.549443216689224, 'reg_lambda': 2.4176486233644283}
+Average MAP score: 0.0018136733388172907
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0010010438079200885, 'max_depth': 7, 'max_leaves': 3, 'n_estimators': 10, 'reg_alpha': 5.94778760487473, 'reg_lambda': 3.9826330829440373}
+Average MAP score: 0.0015003595040063353
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0011669955018259021, 'max_depth': 5, 'max_leaves': 7, 'n_estimators': 100, 'reg_alpha': 6.486500159240979, 'reg_lambda': 4.644229476108573}
+Average MAP score: 0.0024302409895500072
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.004321966921260266, 'max_depth': 3, 'max_leaves': 9, 'n_estimators': 100, 'reg_alpha': 8.913654823080975, 'reg_lambda': 2.168199351818558}
+Average MAP score: 0.002768452000121862
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.002552343198024024, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 20, 'reg_alpha': 8.297311020241867, 'reg_lambda': 5.2170923079178}
+Average MAP score: 0.0028609968619565506
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.001935637973090868, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 200, 'reg_alpha': 9.9763250805068, 'reg_lambda': 6.4831000379083195}
+Average MAP score: 0.002653892087865212
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0014448235187634595, 'max_depth': 7, 'max_leaves': 5, 'n_estimators': 150, 'reg_alpha': 9.628856585074374, 'reg_lambda': 3.261492485692922}
+Average MAP score: 0.002832784937391459
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0022746785483315265, 'max_depth': 7, 'max_leaves': 7, 'n_estimators': 100, 'reg_alpha': 6.8672668716195675, 'reg_lambda': 3.7708427888255027}
+Average MAP score: 0.002597644944094077
+

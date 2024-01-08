@@ -18,19 +18,20 @@ def __main__():
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
-    URM_train_validation = sps.load_npz('../input_files/URM_train_plus_validation.npz')
-    URM_test = sps.load_npz('../input_files/URM_test.npz')
-    URM_validation = sps.load_npz('../input_files/URM_validation.npz')
-    URM_train = sps.load_npz('../input_files/URM_train.npz')
+    URM_train_validation = sps.load_npz('../input_files/new_URM_train_plus_validation.npz')
+    URM_test = sps.load_npz('../input_files/new_URM_test.npz')
+    URM_validation = sps.load_npz('../input_files/new_URM_validation.npz')
+    URM_train = sps.load_npz('../input_files/new_URM_train.npz')
 
     evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[10])
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "topK": Integer(low=10, high=100, prior='uniform'),
-        "lambda_i": Real(low=1e-4, high=10, prior='log-uniform'),
-        "lambda_j": Real(low=1e-4, high=10, prior='log-uniform'),
-        "learning_rate": Real(low=1e-6, high=1e-1, prior='log-uniform'),
+        "topK": Integer(low=5, high=10, prior='uniform'),
+        "epochs": Integer(low=100, high=150, prior='uniform'),
+        "lambda_i": Real(low=1e-3, high=1e-2, prior='log-uniform'),
+        "lambda_j": Real(low=1e-5, high=1e-4, prior='log-uniform'),
+        "learning_rate": Real(low=1e-3, high=1e-1, prior='log-uniform'),
     }
 
     recommender_class = SLIM_BPR_Python
@@ -60,7 +61,7 @@ def __main__():
     if not os.path.exists(output_folder_path):
         os.makedirs(output_folder_path)
 
-    n_cases = 100
+    n_cases = 40
     n_random_starts = int(n_cases * 0.3)
     metric_to_optimize = "MAP"
     cutoff_to_optimize = 10

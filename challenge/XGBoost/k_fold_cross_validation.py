@@ -2,10 +2,11 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sps
 import xgboost as xgb
-from hyperopt import hp
+from hyperopt import hp, STATUS_OK, Trials, fmin, tpe
 from sklearn.model_selection import GroupKFold, train_test_split
 from tqdm import tqdm
 from xgboost import plot_importance
+import time
 
 from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.EASE_R import EASE_R_Recommender
@@ -26,7 +27,6 @@ folder_path = "../result_experiments/"
 EASE80 = "EASE_R_Recommender_best_model80.zip"
 SLIM80 = "SLIMElasticNetRecommender_best_model80.zip"
 MultVAE80 = "Mult_VAE_Recommender_best_model80.zip"
-ALS80 = "ALSRecommender_best_model80.zip"
 IALS80 = "IALSRecommender_best_model80.zip"
 submission_file_path = '../output_files/XGBoostSubmission.csv'
 data_file_path = '../input_files/data_train.csv'
@@ -57,6 +57,8 @@ def cross_val_score_model(X, y, groups_fitting, params, n_splits=5):
     groups = X['UserID'].values
 
     for train_index, test_index in gkf.split(X, y, groups=groups):
+        start_time = time.time()
+
         X_train, X_val = X.iloc[train_index], X.iloc[test_index]
         y_train, y_val = y.iloc[train_index], y.iloc[test_index]
 
@@ -90,7 +92,18 @@ def cross_val_score_model(X, y, groups_fitting, params, n_splits=5):
         map_score = mean_average_precision(recommendations, relevancies, k=10)
         map_scores.append(map_score)
 
-    return np.mean(map_scores)
+        end_time = time.time()
+        print(f"Time: {end_time - start_time}")
+
+    average_map = np.mean(map_scores)
+
+    print(f"Parameters: {params}")
+
+    with open('cross_val_results.txt', 'a') as file:
+        file.write(f"Parameters: {params}\n")
+        file.write(f"Average MAP score: {average_map}\n\n")
+
+    return average_map
 
 
 def precision_at_k(recommended_list, relevant_list, k):
@@ -125,7 +138,22 @@ def avg_precision(recommended_list, relevant_list):
 
 
 def mean_average_precision(recommendations, relevancies, k):
-    return np.mean([avg_precision(rec[:k], rel) for rec, rel in zip(recommendations, relevancies)])
+    cumulative_map = 0.0
+    n_users = 0
+
+    for recommended_items, relevant_items in zip(recommendations, relevancies):
+        is_relevant = np.in1d(recommended_items[:k], relevant_items, assume_unique=True)
+
+        if len(is_relevant) > 0:
+            p_at_k = is_relevant * np.cumsum(is_relevant, dtype=np.float64) / (1 + np.arange(is_relevant.shape[0]))
+            a_p = np.sum(p_at_k) / is_relevant.shape[0]
+        else:
+            a_p = 0.0
+
+        cumulative_map += a_p
+        n_users += 1
+
+    return cumulative_map / n_users if n_users > 0 else 0
 
 
 def evaluate_model(model, X_val, y_val, groups_val, cutoff):
@@ -198,9 +226,6 @@ def train_recommenders(URM_train):
     SLIM_recommender = SLIMElasticNetRecommender.SLIMElasticNetRecommender(URM_train)
     SLIM_recommender.load_model(folder_path, SLIM80)
 
-    ALS = ALSRecommender.ALS(URM_train)
-    ALS.load_model(folder_path, ALS80)
-
     MultVAE = MultVAERecommender_PyTorch_OptimizerMask(URM_train)
     MultVAE.load_model(folder_path, MultVAE80)
 
@@ -224,14 +249,12 @@ def train_recommenders(URM_train):
         "User": User,
         "Item": item_recommender,
         "P3": P3_recommender,
-        "ALS": ALS,
         "IALS": IALS,
         "MultVAE": MultVAE,
         "SLIM": SLIM_recommender,
         "SVDitem": pureSVDitem,
         "RP3": RP3_recommender,
         "EASE_R": EASE_R,
-        "All": all_recommender,
     }
 
 
@@ -253,16 +276,16 @@ def __main__():
     URM_all = sps.load_npz('../input_files/URM_all.npz')
 
     space = {
-        'n_estimators': hp.choice('n_estimators', [10, 20, 50, 100, 150, 200]),
+        'n_estimators': hp.choice('n_estimators', [5, 10, 20, 50, 100, 150, 200]),
         'learning_rate': hp.loguniform('learning_rate', np.log(0.001), np.log(0.01)),
-        'reg_alpha': hp.uniform('reg_alpha', 4, 9),
-        'reg_lambda': hp.uniform('reg_lambda', 4, 9),
+        'reg_alpha': hp.uniform('reg_alpha', 0, 10),
+        'reg_lambda': hp.uniform('reg_lambda', 0, 10),
         'max_depth': hp.choice('max_depth', [1, 3, 5, 7, 9]),
-        'max_leaves': hp.choice('max_leaves', [5, 7, 9, 11, 13]),
+        'max_leaves': hp.choice('max_leaves', [1, 3, 5, 7, 9]),
         'grow_policy': hp.choice('grow_policy', ['depthwise']),
     }
 
-    n_estimators_choices = [3, 5, 10, 20, 50, 100]
+    n_estimators_choices = [5, 10, 20, 50, 100, 150, 200]
     max_depth_choices = [1, 3, 5, 7, 9]
     max_leaves_choices = [1, 3, 5, 7, 9]
     grow_policy_choices = ['depthwise', 'lossguide']
@@ -279,9 +302,9 @@ def __main__():
 
     recommenders = train_recommenders(URM_train)
 
-    all_recommender = recommenders["All"]
+    initial_recommender = recommenders["SLIM"]
     evaluate_on_validation_set(recommenders, URM_hidden, cutoff_list)
-    recommenders.pop("All")
+    recommenders.pop("SLIM")
 
     training_dataframe = pd.DataFrame(index=range(0, n_users), columns=["ItemID"])
     training_dataframe.index.name = 'UserID'
@@ -290,7 +313,7 @@ def __main__():
 
     recommendations = []
     for user_id in tqdm(range(n_users)):
-        recommended_items = all_recommender.recommend(user_id, cutoff=cutoff_xgb)
+        recommended_items = initial_recommender.recommend(user_id, cutoff=cutoff_xgb)
 
         if len(recommended_items) < cutoff_xgb:
             num_additional_items = cutoff_xgb - len(recommended_items)
@@ -360,12 +383,12 @@ def __main__():
 
     groups = X.groupby("UserID").size().values
 
-    '''def obj(params):
+    def obj(params):
         score = cross_val_score_model(X, y, groups, params)
         return {'loss': -score, 'status': STATUS_OK}
 
     trials = Trials()
-    best_indices = fmin(fn=obj, space=space, algo=tpe.suggest, max_evals=50, trials=trials)
+    best_indices = fmin(fn=obj, space=space, algo=tpe.suggest, max_evals=300, trials=trials)
 
     best_params = {
         'n_estimators': n_estimators_choices[best_indices['n_estimators']],
@@ -380,7 +403,7 @@ def __main__():
     print("Best Hyperparameters: ", best_params)
 
     with open("best_hyperparameters.txt", "a") as file:
-        file.write(str(best_params) + "\n")'''
+        file.write(str(best_params) + "\n")
 
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, shuffle=True)
     groups_train = groups[:10420]

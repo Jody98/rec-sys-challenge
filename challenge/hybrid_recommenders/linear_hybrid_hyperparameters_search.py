@@ -18,6 +18,7 @@ from Recommenders.MatrixFactorization import IALSRecommender
 from Recommenders.Neural.MultVAERecommender import MultVAERecommender_PyTorch_OptimizerMask
 from Recommenders.SLIM import SLIMElasticNetRecommender
 from Recommenders.MatrixFactorization import ALSRecommender
+from Recommenders.SLIM.SLIM_BPR_Python import SLIM_BPR_Python
 from challenge.utils.functions import read_data
 
 
@@ -87,20 +88,29 @@ def __main__():
     results, _ = evaluator.evaluateRecommender(MultVAE)
     print("MultVAE MAP: {}".format(results.loc[10]["MAP"]))
 
+    best_parameters = {'topK': 9, 'epochs': 114, 'lambda_i': 0.0025338350012924717, 'lambda_j': 1.5050017019467605e-05,
+                       'learning_rate': 0.009006704930203509}
+
+    BPR = SLIM_BPR_Python(URM_train)
+    BPR.fit(**best_parameters)
+
+    results, _ = evaluator.evaluateRecommender(BPR)
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
     recommenders = {
         "SLIM": SLIM_recommender,
         "MultVAE": MultVAE,
         "RP3": RP3_recommender,
         "Item": item_recommender,
-        "IALS": IALS,
+        "IALS": BPR,
     }
 
     hyperparameters_range_dictionary = {
-        "alpha": Real(low=0, high=10, prior='uniform'),
-        "beta": Real(low=0, high=10, prior='uniform'),
-        "gamma": Real(low=0, high=10, prior='uniform'),
-        "zeta": Real(low=0, high=10, prior='uniform'),
-        "eta": Real(low=0, high=20, prior='uniform'),
+        "alpha": Real(low=2, high=5, prior='uniform'),
+        "beta": Real(low=4, high=7, prior='uniform'),
+        "gamma": Real(low=-1, high=1, prior='uniform'),
+        "zeta": Real(low=4, high=7, prior='uniform'),
+        "eta": Real(low=38, high=42, prior='uniform'),
     }
 
     recommender_class = HybridLinear

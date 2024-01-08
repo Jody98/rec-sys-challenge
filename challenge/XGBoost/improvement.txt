@@ -75,3 +75,10 @@ P@K: 0.00010748560460652593
 R@K: 0.0010748560460652591
 
 
+Hyperparameters: {'n_estimators': 5, 'learning_rate': 0.0026072070993311837, 'reg_alpha': 8.842925592959542, 'reg_lambda': 7.780142430689461, 'max_depth': 7, 'max_leaves': 5, 'grow_policy': 'depthwise'}
+Improvement: -0.0001286841544039033
+MAP: 0.0407284526094512
+P@K: 0.07922456813819578
+R@K: 0.114743834554255
+
+

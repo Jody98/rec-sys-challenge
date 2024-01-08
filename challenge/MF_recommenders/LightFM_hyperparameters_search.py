@@ -10,7 +10,7 @@ from HyperparameterTuning.SearchAbstractClass import SearchInputRecommenderArgs
 from HyperparameterTuning.SearchBayesianSkopt import SearchBayesianSkopt
 from Recommenders.DataIO import DataIO
 from Recommenders.FactorizationMachines.LightFMRecommender import LightFMCFRecommender
-from utils.functions import read_data
+from challenge.utils.functions import read_data
 
 
 def __main__():
@@ -18,18 +18,18 @@ def __main__():
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
-    URM_all = sps.coo_matrix(
-        (URM_all_dataframe['Data'].values, (URM_all_dataframe['UserID'].values, URM_all_dataframe['ItemID'].values)))
-    URM_all = URM_all.tocsr()
-
-    URM_train_validation, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.8)
-    URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_train_validation, train_percentage=0.8)
+    URM_train_validation = sps.load_npz('../input_files/new_URM_train_plus_validation.npz')
+    URM_train = sps.load_npz('../input_files/new_URM_train.npz')
+    URM_test = sps.load_npz('../input_files/new_URM_test.npz')
+    URM_validation = sps.load_npz('../input_files/new_URM_validation.npz')
+    URM_all = sps.load_npz('../input_files/new_URM_all.npz')
 
     evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[10])
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     hyperparameters_range_dictionary = {
-        "loss": Categorical(["warp", "warp-kos"]),
+        "epochs": Integer(10, 100),
+        "loss": Categorical(["warp", "warp-kos", "bpr"]),
         "sgd_mode": Categorical(["adadelta"]),
         "n_components": Integer(50, 100),
         "item_alpha": Real(low=1e-6, high=1e-3, prior='log-uniform'),
