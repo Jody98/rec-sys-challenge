@@ -9,6 +9,8 @@ from sklearn.model_selection import GroupKFold, train_test_split
 from tqdm import tqdm
 from xgboost import plot_importance
 
+from Data_manager.split_functions.split_train_validation_random_holdout import \
+    split_train_in_two_percentage_global_sample
 from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.EASE_R import EASE_R_Recommender
 from Recommenders.GraphBased import P3alphaRecommender, RP3betaRecommender
@@ -183,9 +185,6 @@ def train_recommenders(URM_train):
     User = UserKNNCFRecommender.UserKNNCFRecommender(URM_train)
     User.fit(topK=400, shrink=8, similarity='jaccard', normalize=False, feature_weighting="TF-IDF")
 
-    pureSVD = PureSVDRecommender.PureSVDRecommender(URM_train)
-    pureSVD.fit(num_factors=43)
-
     pureSVDitem = PureSVDRecommender.PureSVDItemRecommender(URM_train)
     pureSVDitem.fit(num_factors=145, topK=28)
 
@@ -204,7 +203,7 @@ def train_recommenders(URM_train):
     RP3_Wsparse = RP3_recommender.W_sparse
 
     hybrid_recommender = ItemKNNSimilarityTripleHybridRecommender(URM_train, p3alpha_Wsparse, item_Wsparse, RP3_Wsparse)
-    hybrid_recommender.fit(topK=225, alpha=0.4976629488640914, beta=0.13017801200221196)
+    hybrid_recommender.fit(topK=100, alpha=0.4976629488640914, beta=0.13017801200221196)
 
     EASE_R = EASE_R_Recommender.EASE_R_Recommender(URM_train)
     EASE_R.load_model(folder_path, EASE80)
@@ -235,12 +234,8 @@ def train_recommenders(URM_train):
         "User": User,
         "Item": item_recommender,
         "P3": P3_recommender,
-        "IALS": IALS,
-        "MultVAE": MultVAE,
-        "SLIM": SLIM_recommender,
         "SVDitem": pureSVDitem,
         "RP3": RP3_recommender,
-        "EASE_R": EASE_R,
     }
 
 
@@ -257,9 +252,16 @@ def __main__():
     k = 10
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
-    URM_train = sps.load_npz('../input_files/URM_train_plus_validation.npz')
-    URM_hidden = sps.load_npz('../input_files/URM_test.npz')
     URM_all = sps.load_npz('../input_files/URM_all.npz')
+
+    train_val_data, test_data = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.80)
+    train_data, val_data = split_train_in_two_percentage_global_sample(train_val_data, train_percentage=0.80)
+
+    recommender_train_data, xgboost_train_data = split_train_in_two_percentage_global_sample(train_data,
+                                                                                             train_percentage=0.50)
+
+    sps.save_npz('../input_files/URM_train_xgboost.npz', recommender_train_data)
+    sps.save_npz('../input_files/URM_validation_xgboost.npz', val_data)
 
     space = {
         'n_estimators': hp.choice('n_estimators', [5, 10, 20, 50, 100, 150, 200, 500]),
@@ -280,17 +282,17 @@ def __main__():
 
     relevancies = []
     for user_id in range(n_users):
-        start_pos = URM_hidden.indptr[user_id]
-        end_pos = URM_hidden.indptr[user_id + 1]
+        start_pos = xgboost_train_data.indptr[user_id]
+        end_pos = xgboost_train_data.indptr[user_id + 1]
 
-        relevant_items = URM_hidden.indices[start_pos:end_pos]
+        relevant_items = xgboost_train_data.indices[start_pos:end_pos]
         relevancies.append(relevant_items)
 
-    recommenders = train_recommenders(URM_train)
+    recommenders = train_recommenders(recommender_train_data)
 
-    initial_recommender = recommenders["SLIM"]
-    evaluate_on_validation_set(recommenders, URM_hidden, cutoff_list)
-    recommenders.pop("SLIM")
+    initial_recommender = recommenders["RP3"]
+    evaluate_on_validation_set(recommenders, xgboost_train_data, cutoff_list)
+    recommenders.pop("RP3")
 
     training_dataframe = pd.DataFrame(index=range(0, n_users), columns=["ItemID"])
     training_dataframe.index.name = 'UserID'
@@ -317,7 +319,7 @@ def __main__():
 
     training_dataframe = training_dataframe.explode("ItemID")
 
-    URM_validation_coo = sps.coo_matrix(URM_hidden)
+    URM_validation_coo = sps.coo_matrix(xgboost_train_data)
 
     correct_recommendations = pd.DataFrame({"UserID": URM_validation_coo.row,
                                             "ItemID": URM_validation_coo.col})
@@ -350,7 +352,7 @@ def __main__():
     user_popularity = np.ediff1d(sps.csr_matrix(URM_all).indptr)
     training_dataframe['user_profile_len'] = user_popularity[training_dataframe["UserID"].values.astype(int)]
 
-    URM_csr = sps.csr_matrix(URM_all)
+    '''URM_csr = sps.csr_matrix(URM_all)
     item_co_occurrence_matrix = URM_csr.T.dot(URM_csr)
     item_co_occurrence_matrix.setdiag(0)
 
@@ -360,7 +362,7 @@ def __main__():
         co_occurrence_count = item_co_occurrence_matrix[item_id, user_interacted_items].sum()
         co_occurrences.append(co_occurrence_count)
 
-    training_dataframe['item_co_occurrence'] = co_occurrences
+    training_dataframe['item_co_occurrence'] = co_occurrences'''
 
     y = training_dataframe["Label"]
     X = training_dataframe.drop(columns=["Label"])
@@ -388,7 +390,7 @@ def __main__():
         return {'loss': -metric, 'status': STATUS_OK}
 
     trials = Trials()
-    best_indices = fmin(fn=evaluate, space=space, algo=tpe.suggest, max_evals=1000, trials=trials)
+    best_indices = fmin(fn=evaluate, space=space, algo=tpe.suggest, max_evals=1, trials=trials)
 
     best_params = {
         'n_estimators': n_estimators_choices[best_indices['n_estimators']],
@@ -405,6 +407,83 @@ def __main__():
     with open("best_hyperparameters.txt", "a") as file:
         file.write(str(best_params) + "\n")
 
+    recommenders_full = train_recommenders(URM_all)
+
+    initial_recommender = recommenders_full["RP3"]
+    evaluate_on_validation_set(recommenders_full, xgboost_train_data, cutoff_list)
+    recommenders_full.pop("RP3")
+
+    new_training_dataframe = pd.DataFrame(index=range(0, n_users), columns=["ItemID"])
+    new_training_dataframe.index.name = 'UserID'
+
+    popular_items = get_popular_items(URM_all)
+
+    recommendations = []
+    for user_id in tqdm(range(n_users)):
+        recommended_items = initial_recommender.recommend(user_id, cutoff=cutoff_xgb)
+
+        if len(recommended_items) < cutoff_xgb:
+            num_additional_items = cutoff_xgb - len(recommended_items)
+            additional_items = get_additional_recommendations(user_id, num_additional_items, URM_all, popular_items)
+            recommended_items.extend(additional_items)
+
+        new_training_dataframe.loc[user_id, "ItemID"] = recommended_items
+        recommendations.append(recommended_items)
+
+    new_training_dataframe = training_dataframe.explode("ItemID")
+
+    URM_validation_coo = sps.coo_matrix(xgboost_train_data)
+
+    correct_recommendations = pd.DataFrame({"UserID": URM_validation_coo.row,
+                                            "ItemID": URM_validation_coo.col})
+
+    new_training_dataframe = pd.merge(
+        new_training_dataframe,
+        correct_recommendations,
+        on=['UserID', 'ItemID'],
+        how='left',
+        indicator='Exist'
+    )
+
+    new_training_dataframe["Label"] = new_training_dataframe["Exist"] == "both"
+    new_training_dataframe.drop(columns=['Exist'], inplace=True)
+
+    new_training_dataframe = new_training_dataframe.set_index('UserID')
+
+    for user_id in tqdm(range(n_users)):
+        for rec_label, rec_instance in recommenders_full.items():
+            item_list = new_training_dataframe.loc[user_id, "ItemID"].values.tolist()
+            all_item_scores = rec_instance._compute_item_score([user_id], items_to_compute=item_list)
+            new_training_dataframe.loc[user_id, rec_label] = all_item_scores[0, item_list]
+
+    new_training_dataframe = new_training_dataframe.reset_index()
+    new_training_dataframe = new_training_dataframe.rename(columns={"index": "UserID"})
+
+    item_popularity = np.ediff1d(sps.csc_matrix(URM_all).indptr)
+    new_training_dataframe['item_popularity'] = item_popularity[new_training_dataframe["ItemID"].values.astype(int)]
+
+    user_popularity = np.ediff1d(sps.csr_matrix(URM_all).indptr)
+    new_training_dataframe['user_profile_len'] = user_popularity[new_training_dataframe["UserID"].values.astype(int)]
+
+    '''URM_csr = sps.csr_matrix(URM_all)
+    item_co_occurrence_matrix = URM_csr.T.dot(URM_csr)
+    item_co_occurrence_matrix.setdiag(0)
+
+    co_occurrences = []
+    for user_id, item_id in zip(new_training_dataframe["UserID"], new_training_dataframe["ItemID"]):
+        user_interacted_items = URM_csr[user_id].indices
+        co_occurrence_count = item_co_occurrence_matrix[item_id, user_interacted_items].sum()
+        co_occurrences.append(co_occurrence_count)
+
+    new_training_dataframe['item_co_occurrence'] = co_occurrences'''
+
+    y = new_training_dataframe["Label"]
+    X = new_training_dataframe.drop(columns=["Label"])
+    X["UserID"] = X["UserID"].astype("category")
+    X["ItemID"] = X["ItemID"].astype("category")
+
+    groups = X.groupby("UserID").size().values
+
     model_optimized = xgb.XGBRanker(
         objective='rank:pairwise',
         **best_params,
@@ -413,14 +492,11 @@ def __main__():
     )
 
     model_optimized.fit(
-        X_train,
-        y_train,
-        group=groups_train,
+        X,
+        y,
+        group=groups,
         verbose=True,
     )
-
-    reranked_df = pd.DataFrame(index=range(0, n_users), columns=["ItemID"])
-    reranked_df.index.name = 'UserID'
 
     predefined = [2, 4, 1, 7, 3, 6, 8, 15, 14, 10]
 
