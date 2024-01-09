@@ -103,3 +103,24 @@ P@K: 0.07295201535508637
 R@K: 0.0648582320140065
 
 
+Hyperparameters: {'n_estimators': 500, 'learning_rate': 0.00594626366496588, 'reg_alpha': 3.3878968808220558, 'reg_lambda': 6.5636905235329195, 'max_depth': 11, 'max_leaves': 5, 'grow_policy': 'lossguide'}
+Improvement: 0.026632201783009454
+MAP: 0.05213920596072721
+P@K: 0.07703646833013436
+R@K: 0.066861370487435
+
+
+Hyperparameters: {'n_estimators': 150, 'learning_rate': 0.008005789817872824, 'reg_alpha': 4.61178615051674, 'reg_lambda': 8.945016871422796, 'max_depth': 0, 'max_leaves': 0, 'grow_policy': 'depthwise'}
+Improvement: 0.04978534649703539
+MAP: 0.07601497408755821
+P@K: 0.08683301343570059
+R@K: 0.07752056232871042
+
+
+Hyperparameters: {'n_estimators': 150, 'learning_rate': 0.008884015771265453, 'reg_alpha': 5.535780133541823, 'reg_lambda': 9.816242834170088, 'max_depth': 3, 'max_leaves': 9, 'grow_policy': 'depthwise'}
+Improvement: 0.04566127010758844
+MAP: 0.07431075699657162
+P@K: 0.09065642994241845
+R@K: 0.09477712793210363
+
+

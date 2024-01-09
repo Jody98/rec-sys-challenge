@@ -15,14 +15,15 @@ def __main__():
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
-    URM_train= sps.load_npz('../input_files/URM_train_plus_validation.npz')
-    URM_test = sps.load_npz('../input_files/URM_test.npz')
-    URM_all = sps.load_npz('../input_files/URM_all.npz')
+    URM_train_xgboost = sps.load_npz("../input_files/URM_train_xgboost.npz")
+    URM_test_xgboost = sps.load_npz("../input_files/URM_validation_xgboost.npz")
 
-    EASE_R = EASE_R_Recommender.EASE_R_Recommender(URM_train)
-    EASE_R.load_model(folder_path, filename80)
+    EASE_R = EASE_R_Recommender.EASE_R_Recommender(URM_train_xgboost)
+    EASE_R.fit(topK=32, l2_norm=38, normalize_matrix=False)
 
-    evaluator = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
+    EASE_R.save_model(folder_path=folder_path, file_name='EASE_xgboost.zip')
+
+    evaluator = EvaluatorHoldout(URM_test_xgboost, cutoff_list=cutoff_list)
     results, _ = evaluator.evaluateRecommender(EASE_R)
 
     print("MAP: {}".format(results.loc[10]["MAP"]))
