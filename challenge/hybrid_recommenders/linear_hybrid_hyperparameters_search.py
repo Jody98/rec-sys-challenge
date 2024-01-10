@@ -25,21 +25,28 @@ from challenge.utils.functions import read_data
 def __main__():
     folder_path = "../result_experiments/"
     EASE64 = "EASE_R_Recommender_best_model64.zip"
-    SLIM64 = "new_SLIMElasticNetRecommender_best_model64.zip"
-    MultVAE64 = "new_MultVAERecommender_best_model64.zip"
-    IALS64 = "new_IALSRecommender_best_model64.zip"
+    SLIM64 = "SLIMElasticNetRecommender_best_model64.zip"
+    MultVAE64 = "MultVAERecommender_best_model64.zip"
+    IALS64 = "IALSRecommender_best_model64.zip"
     ALS64 = "ALSRecommender_best_model64.zip"
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
-    URM_train_validation = sps.load_npz('../input_files/new_URM_train_plus_validation.npz')
-    URM_test = sps.load_npz('../input_files/new_URM_test.npz')
-    URM_validation = sps.load_npz('../input_files/new_URM_validation.npz')
-    URM_train = sps.load_npz('../input_files/new_URM_train.npz')
+    URM_train_validation = sps.load_npz('../input_files/URM_train_plus_validation.npz')
+    URM_test = sps.load_npz('../input_files/URM_test.npz')
+    URM_validation = sps.load_npz('../input_files/URM_validation.npz')
+    URM_train = sps.load_npz('../input_files/URM_train.npz')
 
     evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[10])
     evaluator = EvaluatorHoldout(URM_test, cutoff_list=[10])
+
+    ials_recommender = IALSRecommender.IALSRecommender(URM_train)
+    ials_recommender.load_model(folder_path, IALS64)
+
+    results, _ = evaluator.evaluateRecommender(ials_recommender)
+    print("IALSRecommender")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
 
     item_recommender = ItemKNNCFRecommender.ItemKNNCFRecommender(URM_train)
     item_recommender.fit(topK=9, shrink=13, similarity='tversky', tversky_alpha=0.03642489209084876,
@@ -88,29 +95,20 @@ def __main__():
     results, _ = evaluator.evaluateRecommender(MultVAE)
     print("MultVAE MAP: {}".format(results.loc[10]["MAP"]))
 
-    best_parameters = {'topK': 9, 'epochs': 114, 'lambda_i': 0.0025338350012924717, 'lambda_j': 1.5050017019467605e-05,
-                       'learning_rate': 0.009006704930203509}
-
-    BPR = SLIM_BPR_Python(URM_train)
-    BPR.fit(**best_parameters)
-
-    results, _ = evaluator.evaluateRecommender(BPR)
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
     recommenders = {
         "SLIM": SLIM_recommender,
         "MultVAE": MultVAE,
         "RP3": RP3_recommender,
         "Item": item_recommender,
-        "IALS": BPR,
+        "IALS": ials_recommender,
     }
 
     hyperparameters_range_dictionary = {
-        "alpha": Real(low=2, high=5, prior='uniform'),
-        "beta": Real(low=4, high=7, prior='uniform'),
-        "gamma": Real(low=-1, high=1, prior='uniform'),
-        "zeta": Real(low=4, high=7, prior='uniform'),
-        "eta": Real(low=38, high=42, prior='uniform'),
+        "alpha": Real(low=3, high=3.2, prior='uniform'),
+        "beta": Real(low=2.9, high=3.1, prior='uniform'),
+        "gamma": Real(low=-0.8, high=-0.3, prior='uniform'),
+        "zeta": Real(low=0.9, high=1.1, prior='uniform'),
+        "eta": Real(low=15.1, high=15.3, prior='uniform'),
     }
 
     recommender_class = HybridLinear

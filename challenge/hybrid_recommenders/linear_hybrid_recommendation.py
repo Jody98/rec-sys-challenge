@@ -5,26 +5,25 @@ from Evaluation.Evaluator import EvaluatorHoldout
 from Recommenders.GraphBased import RP3betaRecommender
 from Recommenders.Hybrid.HybridLinear import HybridLinear
 from Recommenders.KNN import ItemKNNCFRecommender
-from Recommenders.MatrixFactorization import IALSRecommender
 from Recommenders.Neural.MultVAERecommender import MultVAERecommender_PyTorch_OptimizerMask
 from Recommenders.SLIM import SLIMElasticNetRecommender
-from Recommenders.SLIM.SLIM_BPR_Python import SLIM_BPR_Python
+from Recommenders.MatrixFactorization import IALSRecommender
 from challenge.utils.functions import read_data, generate_submission_csv
 
 
 def __main__():
     cutoff_list = [10]
     folder_path = "../result_experiments/"
-    SLIM80 = "SLIMElasticNetRecommender_best_model100.zip"
-    MultVAE80 = "Mult_VAE_Recommender_best_model100.zip"
-    IALS80 = "IALSRecommender_best_model100.zip"
+    SLIM80 = "SLIMElasticNetRecommender_best_model80.zip"
+    MultVAE80 = "Mult_VAE_Recommender_best_model80.zip"
+    IALS80 = "IALSRecommender_best_model80.zip"
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
     URM_test = sps.load_npz('../input_files/URM_test.npz')
     URM_train = sps.load_npz('../input_files/URM_train_plus_validation.npz')
-    URM_train = sps.load_npz('../input_files/URM_all.npz')
+    URM_all = sps.load_npz('../input_files/URM_all.npz')
 
     evaluator_train = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
 
@@ -66,39 +65,42 @@ def __main__():
     results, _ = evaluator_train.evaluateRecommender(MultVAE)
     print("MultVAE MAP: {}".format(results.loc[10]["MAP"]))
 
-    best_parameters = {'topK': 9, 'epochs': 114, 'lambda_i': 0.0025338350012924717, 'lambda_j': 1.5050017019467605e-05,
-                       'learning_rate': 0.009006704930203509}
-
-    BPR = SLIM_BPR_Python(URM_train)
-    BPR.fit(**best_parameters)
-
-    results, _ = evaluator_train.evaluateRecommender(BPR)
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
     recommenders = {
         "SLIM": SLIM_recommender,
         "MultVAE": MultVAE,
         "RP3": RP3_recommender,
         "Item": item_recommender,
-        "IALS": BPR,
+        "IALS": ials_recommender,
     }
 
-    best_parameters = {'alpha': 3.0982727638213836, 'beta': 4.022987500717411, 'gamma': -0.2, 'zeta': 2.1337724514664433,
-                       'eta': 22.0}
-
     all_recommender = HybridLinear(URM_train, recommenders)
-    all_recommender.fit(**best_parameters)
+    all_recommender.fit(eta=14.180249222221073, gamma=-0.38442274063330273,
+                        alpha=2.060407131177933, beta=2.945116702486108, zeta=0.9737256690221096)
 
     results, _ = evaluator_train.evaluateRecommender(all_recommender)
     print("MAP: {}".format(results.loc[10]["MAP"]))
 
-    recommended_items = all_recommender.recommend(users_list, cutoff=10)
-    recommendations = []
-    for i in tqdm(zip(users_list, recommended_items)):
-        recommendation = {"user_id": i[0], "item_list": i[1]}
-        recommendations.append(recommendation)
+    all_recommender = HybridLinear(URM_train, recommenders)
+    all_recommender.fit(eta=14.180249222221073, gamma=-0.58442274063330273,
+                        alpha=2.060407131177933, beta=2.945116702486108, zeta=0.9737256690221096)
 
-    generate_submission_csv("../output_files/BPRSubmission.csv", recommendations)
+    results, _ = evaluator_train.evaluateRecommender(all_recommender)
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    all_recommender = HybridLinear(URM_train, recommenders)
+    all_recommender.fit(eta=14.180249222221073, gamma=-0.58442274063330273,
+                        alpha=2.060407131177933, beta=3.945116702486108, zeta=0.9737256690221096)
+
+    results, _ = evaluator_train.evaluateRecommender(all_recommender)
+    print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    all_recommender = HybridLinear(URM_train, recommenders)
+    all_recommender.fit(eta=15.180249222221073, gamma=-0.68442274063330273,
+                        alpha=3.060407131177933, beta=2.995116702486108, zeta=0.9737256690221096)
+
+    results, _ = evaluator_train.evaluateRecommender(all_recommender)
+    print("BEST")
+    print("MAP: {}".format(results.loc[10]["MAP"]))
 
 
 if __name__ == '__main__':

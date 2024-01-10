@@ -14198,3 +14198,27 @@ Average MAP score: 0.14728703957590716
 Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.008632988875035302, 'max_depth': 3, 'max_leaves': 9, 'n_estimators': 150, 'reg_alpha': 5.2385426253221015, 'reg_lambda': 8.971899700146155}
 Average MAP score: 0.1420872558876398
 
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0014925371996646441, 'max_depth': 3, 'max_leaves': 1, 'n_estimators': 10, 'reg_alpha': 7.51032804633906, 'reg_lambda': 2.967779748475955}
+Average MAP score: 0.0
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.005299932091828363, 'max_depth': 5, 'max_leaves': 3, 'n_estimators': 100, 'reg_alpha': 8.581091931922343, 'reg_lambda': 8.057504003637696}
+Average MAP score: 0.0
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0038009473583441845, 'max_depth': 5, 'max_leaves': 5, 'n_estimators': 100, 'reg_alpha': 8.296406352820117, 'reg_lambda': 0.919411079271395}
+Average MAP score: 0.0
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0029505303445001474, 'max_depth': 7, 'max_leaves': 1, 'n_estimators': 10, 'reg_alpha': 3.1760145717898047, 'reg_lambda': 9.166259647407957}
+Average MAP score: 0.0
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0015109947918324404, 'max_depth': 1, 'max_leaves': 1, 'n_estimators': 150, 'reg_alpha': 5.713870617016267, 'reg_lambda': 3.643228038185433}
+Average MAP score: 0.0
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0015897352750046429, 'max_depth': 1, 'max_leaves': 7, 'n_estimators': 50, 'reg_alpha': 9.675520093514328, 'reg_lambda': 0.7978386262201653}
+Average MAP score: 0.0
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.003249357268971196, 'max_depth': 1, 'max_leaves': 9, 'n_estimators': 100, 'reg_alpha': 0.617362245520835, 'reg_lambda': 8.681421408940885}
+Average MAP score: 0.0
+
+Parameters: {'grow_policy': 'depthwise', 'learning_rate': 0.0029637805453045906, 'max_depth': 3, 'max_leaves': 1, 'n_estimators': 150, 'reg_alpha': 4.634653827618616, 'reg_lambda': 8.49804287408834}
+Average MAP score: 0.0
+
