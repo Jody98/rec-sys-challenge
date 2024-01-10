@@ -14,16 +14,16 @@ from challenge.utils.functions import read_data, generate_submission_csv
 def __main__():
     cutoff_list = [10]
     folder_path = "../result_experiments/"
-    SLIM80 = "SLIMElasticNetRecommender_best_model80.zip"
-    MultVAE80 = "Mult_VAE_Recommender_best_model80.zip"
-    IALS80 = "IALSRecommender_best_model80.zip"
+    SLIM80 = "SLIMElasticNetRecommender_best_model100.zip"
+    MultVAE80 = "Mult_VAE_Recommender_best_model100.zip"
+    IALS80 = "IALSRecommender_best_model100.zip"
     data_file_path = '../input_files/data_train.csv'
     users_file_path = '../input_files/data_target_users_test.csv'
     URM_all_dataframe, users_list = read_data(data_file_path, users_file_path)
 
     URM_test = sps.load_npz('../input_files/URM_test.npz')
     URM_train = sps.load_npz('../input_files/URM_train_plus_validation.npz')
-    URM_all = sps.load_npz('../input_files/URM_all.npz')
+    URM_train = sps.load_npz('../input_files/URM_all.npz')
 
     evaluator_train = EvaluatorHoldout(URM_test, cutoff_list=cutoff_list)
 
@@ -74,33 +74,20 @@ def __main__():
     }
 
     all_recommender = HybridLinear(URM_train, recommenders)
-    all_recommender.fit(eta=14.180249222221073, gamma=-0.38442274063330273,
-                        alpha=2.060407131177933, beta=2.945116702486108, zeta=0.9737256690221096)
-
-    results, _ = evaluator_train.evaluateRecommender(all_recommender)
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
-    all_recommender = HybridLinear(URM_train, recommenders)
-    all_recommender.fit(eta=14.180249222221073, gamma=-0.58442274063330273,
-                        alpha=2.060407131177933, beta=2.945116702486108, zeta=0.9737256690221096)
-
-    results, _ = evaluator_train.evaluateRecommender(all_recommender)
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
-    all_recommender = HybridLinear(URM_train, recommenders)
-    all_recommender.fit(eta=14.180249222221073, gamma=-0.58442274063330273,
-                        alpha=2.060407131177933, beta=3.945116702486108, zeta=0.9737256690221096)
-
-    results, _ = evaluator_train.evaluateRecommender(all_recommender)
-    print("MAP: {}".format(results.loc[10]["MAP"]))
-
-    all_recommender = HybridLinear(URM_train, recommenders)
     all_recommender.fit(eta=15.180249222221073, gamma=-0.68442274063330273,
                         alpha=3.060407131177933, beta=2.995116702486108, zeta=0.9737256690221096)
 
     results, _ = evaluator_train.evaluateRecommender(all_recommender)
     print("BEST")
     print("MAP: {}".format(results.loc[10]["MAP"]))
+
+    recommended_items = all_recommender.recommend(users_list, cutoff=10)
+    recommendations = []
+    for i in tqdm(zip(users_list, recommended_items)):
+        recommendation = {"user_id": i[0], "item_list": i[1]}
+        recommendations.append(recommendation)
+
+    generate_submission_csv("../output_files/LinearHybridBIGSubmission.csv", recommendations)
 
 
 if __name__ == '__main__':

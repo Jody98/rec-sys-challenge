@@ -104,11 +104,11 @@ def __main__():
     }
 
     hyperparameters_range_dictionary = {
-        "alpha": Real(low=3, high=3.2, prior='uniform'),
-        "beta": Real(low=2.9, high=3.1, prior='uniform'),
-        "gamma": Real(low=-0.8, high=-0.3, prior='uniform'),
-        "zeta": Real(low=0.9, high=1.1, prior='uniform'),
-        "eta": Real(low=15.1, high=15.3, prior='uniform'),
+        "alpha": Real(low=3.060407131177933, high=3.060407131178933, prior='uniform'),
+        "beta": Real(low=1, high=20, prior='uniform'),
+        "gamma": Real(low=-0.68442274063330273, high=-0.68442274063300273, prior='uniform'),
+        "zeta": Real(low=0.9737256690221096, high=0.9737256690222096, prior='uniform'),
+        "eta": Real(low=15.180249222221073, high=15.180249222222073, prior='uniform'),
     }
 
     recommender_class = HybridLinear
