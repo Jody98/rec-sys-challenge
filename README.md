@@ -1,4 +1,4 @@
-# Recommender Sysstems Challenge
+# Recommender Systems Challenge
 Challenge of the Reccomender System course @ PoliMi
 
 ### Implementation
