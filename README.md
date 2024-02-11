@@ -1,5 +1,5 @@
 # Recommender Systems Challenge
-Challenge of the Reccomender System course @ PoliMi
+Challenge of Recommender System Course @ PoliMi
 
 ### Implementation
 Our solutions combine five recommenders: SLIMElasticNet, MultVAE, ItemKNN, RP3Beta and iALS in a normalized weighted hybrid recommender.
